@@ -1,785 +1,752 @@
+// ============================================
+// FROM FREELANCER TO FOUNDER
+// An Interactive Story
+// ============================================
 
-// Increase/Decrease money
-var money = 0;
-function incMoney(number){
-  money = money + number;
-  document.getElementById("money").innerHTML = money;
-};
-function decMoney(number){
-  money = money - number;
-  document.getElementById("money").innerHTML = money;
-};
-
-// JOBS
-
-// First Job
-function jobOne(){
-  jobOneBtn.disabled = true;
-  setTimeout(function(jobOne){
-    money = money + 100;
-    document.getElementById('money').innerHTML = money;
-    jobOneBtn.disabled = false;
-  }, 10000);
-};
-
-// Second Job
-function jobTwo(){
-  jobTwoBtn.disabled = true;
-  setTimeout(function(jobTwo){
-    money = money + 500;
-    document.getElementById('money').innerHTML = money;
-    jobTwoBtn.disabled = false;
-  }, 30000);
+// Game State
+const gameState = {
+  money: 0,
+  reputation: 50,
+  happiness: 75,
+  teamSize: 0,
+  currentScene: 'start',
+  choices: {},
+  achievements: [],
+  employees: {
+    webDesigner: 0,
+    webDeveloper: 0,
+    seoSpecialist: 0,
+    uiuxDesigner: 0,
+    fullstackDeveloper: 0
+  },
+  contracts: [],
+  building: 'none'
 };
 
-// Third Job
-function jobThree(){
-  jobThreeBtn.disabled = true;
-  setTimeout(function(jobThree){
-    money = money + 1200;
-    document.getElementById('money').innerHTML = money;
-    jobThreeBtn.disabled = false;
-  }, 60000);
+// Achievements
+const achievements = {
+  firstJob: { name: 'First Steps', desc: 'Completed your first job', icon: '💼' },
+  firstHire: { name: 'Team Builder', desc: 'Hired your first employee', icon: '👥' },
+  firstOffice: { name: 'Office Space', desc: 'Moved into your first office', icon: '🏢' },
+  millionaire: { name: 'Success!', desc: 'Earned £10,000', icon: '💰' },
+  happyEnding: { name: 'Work-Life Balance', desc: 'Maintained high happiness', icon: '😊' },
+  empireBuilder: { name: 'Empire Builder', desc: 'Built a team of 10+', icon: '👑' }
 };
 
-// Fourth Job
-function jobFour(){
-  jobFourBtn.disabled = true;
-  setTimeout(function(jobFour){
-    money = money + 2500;
-    document.getElementById('money').innerHTML = money;
-    jobFourBtn.disabled = false;
-  }, 120000);
-};
+// Story Scenes
+const scenes = {
+  start: {
+    title: 'The Beginning',
+    subtitle: 'Your journey starts here',
+    text: `You stare at your laptop screen in your cramped studio apartment. The rent is due in two weeks, and your freelance career isn't exactly taking off.
 
+    Your email inbox pings. Three new job opportunities. Each one different, each one a potential turning point.
 
+    What kind of developer do you want to be?`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Take the microbrewery landing page (£100, quick and easy)',
+        action: () => {
+          updateStats({ money: 100, reputation: 5 });
+          unlockAchievement('firstJob');
+          return 'firstJobEasy';
+        }
+      },
+      {
+        text: 'Take the hotel booking site (£500, challenging but rewarding)',
+        action: () => {
+          updateStats({ money: 500, reputation: 15, happiness: -5 });
+          unlockAchievement('firstJob');
+          return 'firstJobMedium';
+        }
+      },
+      {
+        text: 'Take the eCommerce project (£1200, risky but lucrative)',
+        action: () => {
+          updateStats({ money: 1200, reputation: 25, happiness: -15 });
+          unlockAchievement('firstJob');
+          return 'firstJobHard';
+        }
+      }
+    ]
+  },
 
+  firstJobEasy: {
+    title: 'Playing It Safe',
+    subtitle: 'Building confidence',
+    text: `The microbrewery landing page took you just a few hours. Simple HTML, CSS, and a contact form. The client was thrilled.
 
-// WORKERS
-var workerNum = 0;
-var maxWorkerNum = 4;
+    "You made our beer look amazing!" they say, paying you £100 on the spot.
 
-// Web Designer
-var webDesignerNumber = 0;
-const webDesignerCost = 100;
-const webDesignerMoney = 10;
-const webDesignerWage = 200;
-document.getElementById('webdesWage').innerHTML = "£" + webDesignerWage;
-document.getElementById('webdesEarns').innerHTML = "£" + webDesignerMoney;
-document.getElementById('webDesignerCost').innerHTML = "£" + webDesignerCost;
-function buyWebDesigner(){
-  if(money >= webDesignerCost){
-    money = money - webDesignerCost;
-    webDesignerNumber = webDesignerNumber + 1;
-    workerNum = workerNum + 1;
-    document.getElementById('webDesignerNumber').innerHTML = webDesignerNumber;
-    document.getElementById('workerNum').innerHTML = workerNum;
-    if(workerNum === maxWorkerNum){
-      var btn = document.getElementsByClassName("worker-btn");
-      for(var i = 0; i < btn.length; i++){
-      btn[i].disabled = true;
-      btn[i].innerHTML = "Upgrade Building";
-      };
-    };
-  } else {
-    alert("You do not have enough money, earn some more and try again.")
-  };
-};
+    It wasn't much, but it was honest work. You have options now...`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Take on more small jobs to build a steady income',
+        action: () => {
+          updateStats({ money: 300, reputation: 10 });
+          return 'steadyPath';
+        }
+      },
+      {
+        text: 'Use the money to invest in learning new skills',
+        action: () => {
+          updateStats({ money: -50, happiness: 10, reputation: 5 });
+          return 'learningPath';
+        }
+      },
+      {
+        text: 'Start looking for someone to partner with',
+        action: () => {
+          return 'partnershipPath';
+        }
+      }
+    ]
+  },
 
-// Web Developer
-var webDeveloperNumber = 0;
-const webDeveloperCost = 200;
-const webDeveloperMoney = 15;
-const webDeveloperWage = 300;
-document.getElementById('webdevWage').innerHTML = "£" + webDeveloperWage;
-document.getElementById('webdevEarns').innerHTML = "£" + webDeveloperMoney;
-document.getElementById('webDeveloperCost').innerHTML = "£" + webDeveloperCost;
-function buyWebDeveloper(){
-  if(money >= webDeveloperCost){
-    money = money - webDeveloperCost;
-    webDeveloperNumber = webDeveloperNumber + 1;
-    workerNum = workerNum + 1;
-    document.getElementById('webDeveloperNumber').innerHTML = webDeveloperNumber;
-    document.getElementById('workerNum').innerHTML = workerNum;
-    if(workerNum === maxWorkerNum){
-      var btn = document.getElementsByClassName("worker-btn");
-      for(var i = 0; i < btn.length; i++){
-      btn[i].disabled = true;
-      btn[i].innerHTML = "Upgrade Building";
-      };
-    };
-  } else {
-    alert("You do not have enough money, earn some more and try again.");
-  };
-};
+  firstJobMedium: {
+    title: 'Rising to the Challenge',
+    subtitle: 'Proving yourself',
+    text: `The hotel website was a marathon. Three sleepless nights, countless cups of coffee, and a booking system that finally worked.
 
-// SEO Specialist
-var seoSpecNumber = 0;
-const seoSpecCost = 400;
-const seoSpecMoney = 20;
-const seoSpecWage = 400;
-document.getElementById('seoWage').innerHTML = "£" + seoSpecWage;
-document.getElementById('seoEarns').innerHTML = "£" + seoSpecMoney;
-document.getElementById('seoSpecCost').innerHTML = "£" + seoSpecCost;
-function buySeoSpec(){
-  if(money >= seoSpecCost){
-    money = money - seoSpecCost;
-    seoSpecNumber = seoSpecNumber + 1;
-    workerNum = workerNum + 1;
-    document.getElementById('seoSpecNumber').innerHTML = seoSpecNumber;
-    document.getElementById('workerNum').innerHTML = workerNum;
-    if(workerNum === maxWorkerNum){
-      var btn = document.getElementsByClassName("worker-btn");
-      for(var i = 0; i < btn.length; i++){
-      btn[i].disabled = true;
-      btn[i].innerHTML = "Upgrade Building";
-      };
-    };
-  } else {
-    alert("You do not have enough money, earn some more and try again.");
-  };
-};
+    The hotel owner was impressed. "You've got talent," she says, handing you a check for £500. "We'll recommend you to others."
 
-// UI/UX Designer
-var uiuxDesNumber = 0;
-const uiuxDesCost = 600;
-const uiuxDesMoney = 25;
-const uiuxDesWage = 500;
-document.getElementById('uiuxWage').innerHTML = "£" + uiuxDesWage;
-document.getElementById('uiuxEarns').innerHTML = "£" + uiuxDesMoney;
-document.getElementById('uiuxDesCost').innerHTML = "£" + uiuxDesCost;
-function buyUiuxDes(){
-  if(money >= uiuxDesCost){
-    money = money - uiuxDesCost;
-    uiuxDesNumber = uiuxDesNumber + 1;
-    workerNum = workerNum + 1;
-    document.getElementById('uiuxDesNumber').innerHTML = uiuxDesNumber;
-    document.getElementById('workerNum').innerHTML = workerNum;
-    if(workerNum === maxWorkerNum){
-      var btn = document.getElementsByClassName("worker-btn");
-      for(var i = 0; i < btn.length; i++){
-      btn[i].disabled = true;
-      btn[i].innerHTML = "Upgrade Building";
-      };
-    };
-  } else {
-    alert("You do not have enough money, earn some more and try again.");
-  };
-};
+    You're exhausted but proud. What's your next move?`,
+    image: 'img/jobs/jobtwo.png',
+    choices: [
+      {
+        text: 'Take a break and recharge (preserve your happiness)',
+        action: () => {
+          updateStats({ happiness: 15 });
+          return 'balancePath';
+        }
+      },
+      {
+        text: 'Strike while the iron is hot and take more projects',
+        action: () => {
+          updateStats({ money: 800, reputation: 20, happiness: -10 });
+          return 'hustlePath';
+        }
+      },
+      {
+        text: 'Invest in an office space to look more professional',
+        action: () => {
+          if (gameState.money >= 250) {
+            updateStats({ money: -250, reputation: 15 });
+            gameState.building = 'shed';
+            unlockAchievement('firstOffice');
+            return 'officePathEarly';
+          } else {
+            return 'notEnoughMoney';
+          }
+        }
+      }
+    ]
+  },
 
-// Fullstack Developer
-var fullstackDevNumber = 0;
-const fullstackDevCost = 750;
-const fullstackDevMoney = 30;
-const fullstackDevWage = 600;
-document.getElementById('fullstackWage').innerHTML = "£" + fullstackDevWage;
-document.getElementById('fullstackEarns').innerHTML = "£" + fullstackDevMoney;
-document.getElementById('fullstackDevCost').innerHTML = "£" + fullstackDevCost;
-function buyFullstackDev(){
-  if(money >= uiuxDesCost){
-    money = money - fullstackDevCost;
-    fullstackDevNumber = fullstackDevNumber + 1;
-    workerNum = workerNum + 1;
-    document.getElementById('fullstackDevNumber').innerHTML = fullstackDevNumber;
-    document.getElementById('workerNum').innerHTML = workerNum;
-    if(workerNum === maxWorkerNum){
-      var btn = document.getElementsByClassName("worker-btn");
-      for(var i = 0; i < btn.length; i++){
-      btn[i].disabled = true;
-      btn[i].innerHTML = "Upgrade Building";
-      };
-    };
-  } else {
-    alert("You do not have enough money, earn some more and try again.");
-  };
-};
+  firstJobHard: {
+    title: 'Baptism by Fire',
+    subtitle: 'Learning the hard way',
+    text: `The jewelry eCommerce site nearly broke you. Payment integration, inventory management, responsive design...
 
-// BUILDING UPGRADES
+    You worked 18-hour days for two weeks straight. Your friends stopped calling. But you delivered.
 
-// Building upgrade one
+    The jeweler was ecstatic. £1,200 in your account. You're talented, but is this sustainable?`,
+    image: 'img/jobs/jobthree.png',
+    choices: [
+      {
+        text: 'This is unsustainable. Hire help immediately.',
+        action: () => {
+          if (gameState.money >= 200) {
+            return 'hireFirstEmployee';
+          } else {
+            return 'notEnoughMoney';
+          }
+        }
+      },
+      {
+        text: 'Keep grinding solo. You can handle it.',
+        action: () => {
+          updateStats({ money: 1500, reputation: 30, happiness: -20 });
+          return 'soloGrindPath';
+        }
+      },
+      {
+        text: 'Take a week off to recover (you need it)',
+        action: () => {
+          updateStats({ happiness: 20 });
+          return 'recoveryPath';
+        }
+      }
+    ]
+  },
 
-const buildingOneRent = 500;
-const buildingOneCost = 250;
-var buildingOneState = false;
-document.getElementById('buildingOnePrice').innerHTML = buildingOneCost;
-document.getElementById('buildingOneRental').innerHTML = buildingOneRent;
-function buildingUpgradeOne(){
-  if(money >= buildingOneCost){
-      money = money - buildingOneCost;
-      maxWorkerNum = maxWorkerNum + 10;
-      buildingOneState = true;
-      document.getElementById('money').innerHTML = money;
-      document.getElementById('maxWorkerNum').innerHTML = maxWorkerNum;
-      document.getElementById('buildingUpgradeOneBtn').disabled = true;
-      document.getElementById('buildingUpgradeOneBtn').innerHTML = "Owned";
-      if(workerNum < maxWorkerNum){
-        var btn = document.getElementsByClassName("worker-btn");
-        for(var i = 0; i < btn.length; i++){
-        btn[i].disabled = false;
-        btn[i].innerHTML = "Hire";
-        };
-      };
-  } else {
-    alert("You do not have enough money, earn some more and try again.");
-  };
-};
+  hireFirstEmployee: {
+    title: 'Your First Hire',
+    subtitle: 'Building a team',
+    text: `You post a job ad. Three candidates respond:
 
-// Building upgrade two
-  const buildingTwoRent = 3000;
-  const buildingTwoCost = 1500;
-  var buildingTwoState = false;
-  document.getElementById('buildingTwoPrice').innerHTML = buildingTwoCost;
-  document.getElementById('buildingTwoRental').innerHTML = buildingTwoRent;
-  function buildingUpgradeTwo(){
-    if(money >= buildingTwoCost){
-        money = money - buildingTwoCost;
-        maxWorkerNum = maxWorkerNum + 10;
-        var buildingTwoState = true;
-        document.getElementById('money').innerHTML = money;
-        document.getElementById('maxWorkerNum').innerHTML = maxWorkerNum;
-        document.getElementById('buildingUpgradeTwoBtn').disabled = true;
-        document.getElementById('buildingUpgradeTwoBtn').innerHTML = "Owned";
-        if(workerNum < maxWorkerNum){
-          var btn = document.getElementsByClassName("worker-btn");
-          for(var i = 0; i < btn.length; i++){
-          btn[i].disabled = false;
-          btn[i].innerHTML = "Hire";
-          };
-        };
-    } else {
-      alert("You do not have enough money, earn some more and try again.");
-    };
-  };
+    **Sarah** - A talented web designer, fresh out of design school. Hungry and creative. (£200 to hire, £200/month wage)
 
-  // Building upgrade three
-  const buildingThreeRent = 8000;
-  const buildingThreeCost = 4000;
-  var buildingThreeState = false;
-  document.getElementById('buildingThreePrice').innerHTML = buildingThreeCost;
-  document.getElementById('buildingThreeRental').innerHTML = buildingThreeRent;
-  function buildingUpgradeThree(){
-      if(money >= buildingThreeCost){
-          money = money - buildingThreeCost;
-          maxWorkerNum = maxWorkerNum + 10;
-          var buildingThreeState = true;
-          document.getElementById('money').innerHTML = money;
-          document.getElementById('maxWorkerNum').innerHTML = maxWorkerNum;
-          document.getElementById('buildingUpgradeThreeBtn').disabled = true;
-          document.getElementById('buildingUpgradeThreeBtn').innerHTML = "Owned";
-          if(workerNum < maxWorkerNum){
-            var btn = document.getElementsByClassName("worker-btn");
-            for(var i = 0; i < btn.length; i++){
-            btn[i].disabled = false;
-            btn[i].innerHTML = "Hire";
-            };
-          };
-      } else {
-        alert("You do not have enough money, earn some more and try again.");
-      };
-    };
+    **Marcus** - An experienced web developer, reliable but expensive. (£200 to hire, £300/month wage)
 
-    // Building upgrade four
-    const buildingFourRent = 17000;
-    const buildingFourCost = 8500;
-    var buildingFourState = false;
-    document.getElementById('buildingFourPrice').innerHTML = buildingFourCost;
-    document.getElementById('buildingFourRental').innerHTML = buildingFourRent;
-    function buildingUpgradeFour(){
-        if(money >= buildingFourCost){
-            money = money - buildingFourCost;
-            maxWorkerNum = maxWorkerNum + 10;
-            var buildingFourState = false;
-            document.getElementById('money').innerHTML = money;
-            document.getElementById('maxWorkerNum').innerHTML = maxWorkerNum;
-            document.getElementById('buildingUpgradeFourBtn').disabled = true;
-            document.getElementById('buildingUpgradeFourBtn').innerHTML = "Owned";
-            if(workerNum < maxWorkerNum){
-              var btn = document.getElementsByClassName("worker-btn");
-              for(var i = 0; i < btn.length; i++){
-              btn[i].disabled = false;
-              btn[i].innerHTML = "Hire";
-              };
-            };
-        } else {
-          alert("You do not have enough money, earn some more and try again.");
-        };
-      };
+    **Priya** - An SEO specialist who promises to get you more clients. (£400 to hire, £400/month wage)
 
-// Display worker number and max worker number
-document.getElementById('maxWorkerNum').innerHTML = maxWorkerNum;
-document.getElementById('workerNum').innerHTML = workerNum;
+    Who do you hire?`,
+    image: 'img/employees/webdes.png',
+    choices: [
+      {
+        text: 'Hire Sarah the Web Designer',
+        action: () => {
+          if (gameState.money >= 200) {
+            updateStats({ money: -200, teamSize: 1 });
+            gameState.employees.webDesigner++;
+            unlockAchievement('firstHire');
+            return 'withSarah';
+          }
+          return 'notEnoughMoney';
+        }
+      },
+      {
+        text: 'Hire Marcus the Web Developer',
+        action: () => {
+          if (gameState.money >= 200) {
+            updateStats({ money: -200, teamSize: 1 });
+            gameState.employees.webDeveloper++;
+            unlockAchievement('firstHire');
+            return 'withMarcus';
+          }
+          return 'notEnoughMoney';
+        }
+      },
+      {
+        text: 'Hire Priya the SEO Specialist',
+        action: () => {
+          if (gameState.money >= 400) {
+            updateStats({ money: -400, teamSize: 1 });
+            gameState.employees.seoSpecialist++;
+            unlockAchievement('firstHire');
+            return 'withPriya';
+          }
+          return 'notEnoughMoney';
+        }
+      },
+      {
+        text: 'Actually, I can\'t afford this yet',
+        action: () => {
+          return 'steadyPath';
+        }
+      }
+    ]
+  },
 
+  withSarah: {
+    title: 'Creative Partnership',
+    subtitle: 'Design meets code',
+    text: `Sarah brings an energy you didn't know you needed. Her designs are stunning, and clients notice.
 
-// CONTRACTS
+    "I love working with you," she says over coffee. "We make a great team."
 
-// Contract One
-var contractOne = " ";
-var contractOneState = false;
-const contractOneIncome = 500;
-const contractOneCost = 250;
-document.getElementById('contractOneCost').innerHTML = "£" + contractOneCost;
-function buyContractOne(){
-  if(money >= contractOneCost){
-    contractOne = "Contract Owned";
-    contractOneState = true;
-    money = money - contractOneCost;
-    document.getElementById('contractOne').innerHTML = contractOne;
-    document.getElementById('money').innerHTML = money;
-    document.getElementById('contractOneBtn').disabled = true;
-  };
-  if(contractOneState === true){
-    document.getElementById('contractOneBtn').innerHTML = contractOne;
-  };
-};
+    Within a month, you've landed three new contracts. Sarah handles design, you handle development. It's perfect.
 
-// Contract Two
-var contractTwo = " ";
-var contractTwoState = false;
-const contractTwoIncome = 1000;
-const contractTwoCost = 250;
-document.getElementById('contractTwoCost').innerHTML = "£" + contractTwoCost;
-function buyContractTwo(){
-  if(money >= contractTwoCost && webDesignerNumber >= 1 && webDeveloperNumber >= 1){
-    contractTwo = "Contract Owned";
-    contractTwoState = true;
-    money = money - contractTwoCost;
-    document.getElementById('contractTwo').innerHTML = contractTwo;
-    document.getElementById('money').innerHTML = money;
-  } else if (webDesignerNumber < 1) {
-    alert("Hire More Designers and Try Again");
-  } else if (webDeveloperNumber < 1){
-    alert("Hire More Developers and Try Again");
-  };
-  if(contractTwoState === true){
-    document.getElementById('contractTwoBtn').disabled = true;
-    document.getElementById('contractTwoBtn').innerHTML = contractTwo;
-  };
-};
+    A local startup approaches you with an offer: "We need a full website redesign. £2,000. But we need it in two weeks."`,
+    image: 'img/employees/webdes.png',
+    choices: [
+      {
+        text: 'Accept the challenge. You and Sarah can do this.',
+        action: () => {
+          updateStats({ money: 2000, reputation: 25, happiness: -5 });
+          return 'growingTeam';
+        }
+      },
+      {
+        text: 'Negotiate for three weeks and better terms',
+        action: () => {
+          updateStats({ money: 2500, reputation: 20, happiness: 5 });
+          return 'growingTeam';
+        }
+      },
+      {
+        text: 'Decline. You want to maintain work-life balance.',
+        action: () => {
+          updateStats({ happiness: 10, reputation: -5 });
+          return 'balancedGrowth';
+        }
+      }
+    ]
+  },
 
-// Contract Three
-var contractThree = " ";
-var contractThreeState = false;
-const contractThreeIncome = 2000;
-const contractThreeCost = 250;
-document.getElementById('contractThreeCost').innerHTML = "£" + contractThreeCost;
+  withMarcus: {
+    title: 'Professional Partnership',
+    subtitle: 'Experience matters',
+    text: `Marcus is a machine. Reliable, professional, efficient. He ships code faster than you ever could alone.
 
-function buyContractThree(){
-  if(money >= contractThreeCost && webDesignerNumber >= 2 && webDeveloperNumber >= 2 && seoSpecNumber >= 1){
-    contractThree = "Contract Owned";
-    contractThreeState = true;
-    money = money - contractThreeCost;
-    document.getElementById('contractThree').innerHTML = contractThree;
-    document.getElementById('money').innerHTML = money;
-  } else if (webDesignerNumber < 2) {
-    alert("Hire More Designers and Try Again");
-  } else if (webDeveloperNumber < 2){
-    alert("Hire More Developers and Try Again");
-  } else if (seoSpecNumber < 1){
-    alert("Hire More SEO Specialists and Try Again")
+    "Listen," he says after your first month together. "We're good. Really good. We should formalize this. Register as a company. Get serious."
+
+    He's right. You're making £3,000/month together. But incorporating means commitments, contracts, responsibilities.`,
+    image: 'img/employees/webdev.png',
+    choices: [
+      {
+        text: 'Register as a company. Let\'s build something real.',
+        action: () => {
+          updateStats({ money: -500, reputation: 30, happiness: 5 });
+          return 'companyPath';
+        }
+      },
+      {
+        text: 'Stay freelance for now. Keep it flexible.',
+        action: () => {
+          updateStats({ happiness: 10 });
+          return 'freelanceTeam';
+        }
+      },
+      {
+        text: 'Hire another person first, then formalize',
+        action: () => {
+          return 'expandFirst';
+        }
+      }
+    ]
+  },
+
+  withPriya: {
+    title: 'Marketing Magic',
+    subtitle: 'Getting noticed',
+    text: `Priya was worth every penny. Within two weeks, your website ranks on the first page for "web development services."
+
+    Clients flood in. You're booking projects months in advance.
+
+    "You need to scale," Priya says, showing you the analytics. "You're turning away £10,000 worth of work per month. Hire more people or burn out trying to do it all."
+
+    She's right. You're at a crossroads.`,
+    image: 'img/employees/seo.png',
+    choices: [
+      {
+        text: 'Hire a development team immediately',
+        action: () => {
+          if (gameState.money >= 1000) {
+            updateStats({ money: -1000, teamSize: 3 });
+            gameState.employees.webDeveloper += 2;
+            gameState.employees.webDesigner++;
+            return 'rapidGrowth';
+          }
+          return 'notEnoughMoney';
+        }
+      },
+      {
+        text: 'Hire selectively and grow sustainably',
+        action: () => {
+          if (gameState.money >= 400) {
+            updateStats({ money: -400, teamSize: 1 });
+            gameState.employees.webDeveloper++;
+            return 'sustainableGrowth';
+          }
+          return 'notEnoughMoney';
+        }
+      },
+      {
+        text: 'Raise prices instead of hiring more people',
+        action: () => {
+          updateStats({ reputation: -10, happiness: 10 });
+          return 'premiumPath';
+        }
+      }
+    ]
+  },
+
+  growingTeam: {
+    title: 'Momentum Building',
+    subtitle: 'Your reputation grows',
+    text: `Word spreads. You're the team that delivers quality work on time.
+
+    You now have ${gameState.teamSize} people and £${gameState.money} in the bank.
+
+    A corporate client approaches with a massive contract: £5,000 upfront, £1,000/month ongoing. But they need:
+    - 2 web designers
+    - 2 web developers
+    - 1 SEO specialist
+    - Dedicated office space
+
+    This could transform your business... or overwhelm it.`,
+    image: 'img/contracts/contracttwo.png',
+    choices: [
+      {
+        text: 'Accept and hire the team you need',
+        action: () => {
+          const hiringCost = 1200;
+          const officeCost = 250;
+          if (gameState.money >= hiringCost + officeCost) {
+            updateStats({ money: -hiringCost - officeCost });
+            gameState.building = 'office';
+            gameState.contracts.push('corporate');
+            unlockAchievement('empireBuilder');
+            return 'corporateSuccess';
+          }
+          return 'notEnoughMoney';
+        }
+      },
+      {
+        text: 'Negotiate a smaller scope to match your current capacity',
+        action: () => {
+          updateStats({ money: 2500, reputation: 10 });
+          return 'modestSuccess';
+        }
+      },
+      {
+        text: 'Decline. Focus on smaller clients you can serve well.',
+        action: () => {
+          updateStats({ happiness: 10, reputation: 5 });
+          return 'boutiquePath';
+        }
+      }
+    ]
+  },
+
+  corporateSuccess: {
+    title: 'Corporate Player',
+    subtitle: 'You made it',
+    text: `Six months later, you're running a proper company. Team of ${gameState.teamSize + 5} people. Real office. Regular income of £${1000 + gameState.teamSize * 100}/month.
+
+    £${gameState.money} in the bank. Reputation at ${gameState.reputation}%.
+
+    Sarah asks you at the company dinner: "Are you happy? We've built something amazing, but you look exhausted."
+
+    Are you?`,
+    image: 'img/buildings/buildingthree.png',
+    choices: [
+      {
+        text: 'This is exactly what I wanted. Let\'s keep growing!',
+        action: () => {
+          updateStats({ money: 5000, teamSize: 5, reputation: 20, happiness: -10 });
+          return 'empireEnding';
+        }
+      },
+      {
+        text: 'I need to step back and delegate more',
+        action: () => {
+          updateStats({ happiness: 20, money: 3000 });
+          return 'balancedEnding';
+        }
+      },
+      {
+        text: 'Actually, I miss the simple days. Let\'s downsize.',
+        action: () => {
+          updateStats({ happiness: 30, teamSize: -3, reputation: -10 });
+          return 'simpleEnding';
+        }
+      }
+    ]
+  },
+
+  // Endings
+  empireEnding: {
+    title: 'The Empire Builder',
+    subtitle: 'ENDING',
+    text: `Five years later, you're running a 50-person agency. £500K annual revenue. Industry awards. Speaking at conferences.
+
+    **Final Stats:**
+    - Money: £${gameState.money}
+    - Reputation: ${gameState.reputation}%
+    - Team: ${gameState.teamSize} people
+    - Happiness: ${gameState.happiness}%
+
+    You built an empire. But at what cost?
+
+    ${gameState.happiness > 60 ? 'Somehow, you managed to stay happy through it all. That\'s the real achievement.' : 'You wonder sometimes if it was worth the sleepless nights and missed moments.'}
+
+    **THE END**`,
+    image: 'img/buildings/buildingfour.png',
+    choices: [
+      {
+        text: 'Play Again',
+        action: () => {
+          restartStory();
+          return 'start';
+        }
+      }
+    ]
+  },
+
+  balancedEnding: {
+    title: 'The Balanced Leader',
+    subtitle: 'ENDING',
+    text: `You learned to let go. Hired a COO. Delegated. Took vacations.
+
+    **Final Stats:**
+    - Money: £${gameState.money}
+    - Reputation: ${gameState.reputation}%
+    - Team: ${gameState.teamSize} people
+    - Happiness: ${gameState.happiness}%
+
+    The company still grows, but you're not killing yourself anymore. You work 30 hours a week. You have hobbies again.
+
+    This is what success actually looks like.
+
+    **THE END**`,
+    image: 'img/buildings/buildingtwo.png',
+    choices: [
+      {
+        text: 'Play Again',
+        action: () => {
+          restartStory();
+          return 'start';
+        }
+      }
+    ]
+  },
+
+  simpleEnding: {
+    title: 'Back to Basics',
+    subtitle: 'ENDING',
+    text: `You scaled back to a team of 5. Turned down the big contracts. Focused on work you love.
+
+    **Final Stats:**
+    - Money: £${gameState.money}
+    - Reputation: ${gameState.reputation}%
+    - Team: ${gameState.teamSize} people
+    - Happiness: ${gameState.happiness}%
+
+    You're not rich, but you're happy. You know everyone on your team. You care about every project.
+
+    Sometimes the best path isn't forward—it's finding where you belong.
+
+    **THE END**`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Play Again',
+        action: () => {
+          restartStory();
+          return 'start';
+        }
+      }
+    ]
+  },
+
+  notEnoughMoney: {
+    title: 'Not Enough Funds',
+    subtitle: 'Check your budget',
+    text: `You check your bank account: £${gameState.money}. Not enough for this option right now.
+
+    Maybe take on some more work first?`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Go back and choose differently',
+        action: () => {
+          return gameState.lastScene || 'start';
+        }
+      }
+    ]
+  },
+
+  // Additional paths for variety
+  steadyPath: {
+    title: 'Steady Progress',
+    subtitle: 'Building your foundation',
+    text: `You take on project after project. £100 here, £300 there. It's not glamorous, but it's working.
+
+    After three months, you have £${gameState.money} saved up and a growing list of happy clients.
+
+    Time to make your next move.`,
+    image: 'img/jobs/jobtwo.png',
+    choices: [
+      {
+        text: 'Hire your first employee',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      },
+      {
+        text: 'Invest in better equipment and tools',
+        action: () => {
+          updateStats({ money: -200, reputation: 10, happiness: 5 });
+          return 'soloSuccess';
+        }
+      },
+      {
+        text: 'Take on a bigger project to level up',
+        action: () => {
+          updateStats({ money: 1200, reputation: 15, happiness: -10 });
+          return 'levelUp';
+        }
+      }
+    ]
+  },
+
+  soloSuccess: {
+    title: 'The Solo Success',
+    subtitle: 'ENDING',
+    text: `You never hired anyone. You stayed small, stayed nimble, stayed true to yourself.
+
+    **Final Stats:**
+    - Money: £${gameState.money}
+    - Reputation: ${gameState.reputation}%
+    - Team: Solo
+    - Happiness: ${gameState.happiness}%
+
+    You're a respected freelancer who gets to choose your projects. You make enough to live well. You answer to no one.
+
+    Some people build empires. You built a life.
+
+    **THE END**`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Play Again',
+        action: () => {
+          restartStory();
+          return 'start';
+        }
+      }
+    ]
   }
-  if(contractThreeState === true){
-    document.getElementById('contractThreeBtn').disabled = true;
-    document.getElementById('contractThreeBtn').innerHTML = contractThree;
-  };
 };
 
-// Contract Four
-var contractFour = " ";
-var contractFourState = 0;
-const contractFourIncome = 3500;
-const contractFourCost = 250;
-document.getElementById('contractFourCost').innerHTML = "£" + contractFourCost;
+// ============================================
+// CORE FUNCTIONS
+// ============================================
 
-function buyContractFour(){
-  if(money >= contractFourCost && webDesignerNumber >= 2 && webDeveloperNumber >= 2 && seoSpecNumber >= 1 && uiuxDesNumber >= 1){
-    contractFour = "Contract Owned";
-    contractFourState = 1;
-    money = money - contractFourCost;
-    document.getElementById('contractFour').innerHTML = contractFour;
-    document.getElementById('money').innerHTML = money;
-  } else if (webDesignerNumber < 2) {
-    alert("Hire More Designers and Try Again");
-  } else if (webDeveloperNumber < 2){
-    alert("Hire More Developers and Try Again");
-  } else if (seoSpecNumber < 1){
-    alert("Hire More SEO Specialists and Try Again")
-  } else if (uiuxDesNumber < 1){
-    alert("Hire More UI/UX Designers and Try Again")
+function updateStats(changes) {
+  if (changes.money !== undefined) gameState.money += changes.money;
+  if (changes.reputation !== undefined) {
+    gameState.reputation = Math.max(0, Math.min(100, gameState.reputation + changes.reputation));
   }
-  if(contractFourState === true){
-    document.getElementById('contractFourBtn').disabled = true;
-    document.getElementById('contractFourBtn').innerHTML = contractFour;
-  };
-};
-
-
-// Upgrades
-
-// Train Developers
-var webDeveloperNumber = webDeveloperNumber;
-var upgradeIncr = 20;
-var trainDevelopersIncr = 0;
-var trainDeveloperActive = false;
-const trainDevelopersCost = 500;
-document.getElementById('trainDevsCost').innerHTML = "£" + trainDevelopersCost;
-document.getElementById('trainDevsMoneyIncr').innerHTML = "£" + upgradeIncr + " Per Month Per Developer";
-function trainDevelopers(){
-  if(webDeveloperNumber >= 1 && money >= trainDevelopersCost){
-    money = money - trainDevelopersCost;
-    trainDevelopersIncr = upgradeIncr * webDeveloperNumber;
-    trainDeveloperActive = true;
-    document.getElementById('trainDevsBtn').disabled = true;
-    document.getElementById('trainDevsBtn').innerHTML = "Upgraded";
+  if (changes.happiness !== undefined) {
+    gameState.happiness = Math.max(0, Math.min(100, gameState.happiness + changes.happiness));
   }
-  else if(webDeveloperNumber < 1) {
-    alert("Hire some developers then try training them");
+  if (changes.teamSize !== undefined) gameState.teamSize += changes.teamSize;
+
+  // Check for achievements
+  if (gameState.money >= 10000 && !gameState.achievements.includes('millionaire')) {
+    unlockAchievement('millionaire');
   }
-  else if(money < trainDevelopersCost){
-    alert("You dont have enough money, earn some more and try again.");
-  };
-};
-
-// Train Designers
-var webDesignerNumber = webDesignerNumber;
-var upgradeIncr = 20;
-var trainDesignersIncr = 0;
-var trainDesignersActive = false;
-const trainDesignersCost = 500;
-document.getElementById('trainDesCost').innerHTML = "£" + trainDesignersCost;
-document.getElementById('trainDesMoneyIncr').innerHTML = "£" + upgradeIncr + " Per Month Per Designer";
-function trainDesigners(){
-  if(webDesignerNumber >= 1 && money >= trainDesignersCost){
-    money = money - trainDevelopersCost;
-    trainDesignersIncr = upgradeIncr * webDesignerNumber;
-    trainDesignersActive = true;
-    document.getElementById('trainDesBtn').disabled = true;
-    document.getElementById('trainDesBtn').innerHTML = "Upgraded";
+  if (gameState.teamSize >= 10 && !gameState.achievements.includes('empireBuilder')) {
+    unlockAchievement('empireBuilder');
   }
-  else if(webDesignerNumber < 1) {
-    alert("Hire some designers then try training them");
-  }
-  else if(money < trainDesignersCost){
-    alert("You dont have enough money, earn some more and try again.");
-  };
-};
 
-// Train SEO
-var seoSpecNumber = seoSpecNumber;
-var upgradeIncr = 20;
-var trainSeoIncr = 0;
-var trainSeoActive = false;
-const trainSeoCost = 500;
-document.getElementById('trainSeoCost').innerHTML = "£" + trainSeoCost;
-document.getElementById('trainSeoMoneyIncr').innerHTML = "£" + upgradeIncr + " Per Month Per Specialist";
-function trainSeo(){
-  if(seoSpecNumber >= 1 && money >= trainSeoCost){
-    money = money - trainSeoCost;
-    trainSeoIncr = upgradeIncr * seoSpecNumber;
-    trainSeoActive = true;
-    document.getElementById('trainSeoBtn').disabled = true;
-    document.getElementById('trainSeoBtn').innerHTML = "Upgraded";
-  }
-  else if(seoSpecNumber < 1) {
-    alert("Hire some SEO Specialists then try training them");
-  }
-  else if(money < trainSeoCost){
-    alert("You dont have enough money, earn some more and try again.");
-  };
-};
-
-// Train UIUX
-var uiuxDesNumber = uiuxDesNumber;
-var upgradeIncr = 20;
-var trainUiuxIncr = 0;
-var trainUiuxActive = false;
-const trainUiuxCost = 500;
-document.getElementById('trainUiuxCost').innerHTML = "£" + trainUiuxCost;
-document.getElementById('trainUiuxMoneyIncr').innerHTML = "£" + upgradeIncr + " Per Month Per Designer";
-function trainUiux(){
-  if(uiuxDesNumber >= 1 && money >= trainUiuxCost){
-    money = money - trainUiuxCost;
-    trainUiuxIncr = upgradeIncr * uiuxDesNumber;
-    trainUiuxActive = true;
-    document.getElementById('trainUiuxBtn').disabled = true;
-    document.getElementById('trainUiuxBtn').innerHTML = "Upgraded";
-  }
-  else if(uiuxDesNumber < 1) {
-    alert("Hire some SEO Specialists then try training them");
-  }
-  else if(money < trainUiuxCost){
-    alert("You dont have enough money, earn some more and try again.");
-  };
-};
-
-
-
-// INCREASE / DECREASE MONEY
-var day = 0;
-var month = 0;
-var year = 0;
-// Per Day
-window.setInterval(function(){
-  day = day + 1;
-  document.getElementById("day").innerHTML = day;
-
-  var webDesignerAmount = webDesignerMoney * webDesignerNumber;
-  var webDeveloperAmount = webDeveloperMoney * webDeveloperNumber;
-  var seoSpecAmount = seoSpecMoney * seoSpecNumber;
-  var uiuxDesAmount = uiuxDesMoney * uiuxDesNumber;
-  var fullstackDevAmount = fullstackDevMoney * fullstackDevNumber;
-
-  if(webDesignerNumber >= 1){
-    incMoney(webDesignerAmount);
-  };
-  if(webDeveloperNumber >= 1){
-    incMoney(webDeveloperAmount);
-  };
-  if(seoSpecNumber >= 1){
-    incMoney(seoSpecAmount);
-  };
-  if(uiuxDesNumber >= 1){
-    incMoney(uiuxDesAmount);
-  };
-  if(fullstackDevNumber >= 1){
-    incMoney(fullstackDevAmount);
-  };
-  if(trainDeveloperActive === true){
-    incMoney(trainDevelopersIncr);
-  };
-
-  var income = fullstackDevAmount * 31 + uiuxDesAmount * 31 + seoSpecAmount * 31 + webDeveloperAmount * 31 + webDesignerAmount * 31;
-  document.getElementById("income").innerHTML = "Monthly Income: &pound" + income;
-}, 1000);
-
-// Per Month
-window.setInterval(function(){
-
-  day = 0;
-  month = month + 1;
-  document.getElementById("day").innerHTML = day;
-  document.getElementById("month").innerHTML = month;
-
-  if(contractOneState >= 1){
-    incMoney(contractOneIncome);
-  };
-  if(webDesignerNumber >= 1){
-    decMoney(webDesignerWage * webDesignerNumber);
-  };
-  if(webDeveloperNumber >= 1){
-    decMoney(webDeveloperWage * webDeveloperNumber);
-  };
-  if(seoSpecNumber >= 1){
-    decMoney(seoSpecWage * seoSpecNumber);
-  };
-  if(uiuxDesNumber >= 1){
-    decMoney(uiuxDesWage * uiuxDesNumber);
-  };
-  if(fullstackDevNumber >= 1){
-    decMoney(fullstackDevWage * fullstackDevNumber);
-  };
-}, 31000);
-
-// Per Year
-window.setInterval(function(){
-
-  month = 0;
-  year = year + 1;
-  document.getElementById("month").innerHTML = month;
-  document.getElementById("year").innerHTML = year;
-
-  if(buildingOneState === true){
-    decMoney(buildingOneRent)
-  };
-  if(buildingTwoState === true){
-    decMoney(buildingTwoRent)
-  };
-  if(buildingThreeState === true){
-    decMoney(buildingThreeRent)
-  };
-  if(buildingFourState === true){
-    decMoney(buildingFourRent)
-  };
-}, 403000);
-
-
-// Left-Game Display Functions
-
-  $('#btn0').click(function() {
-    $('#content1, #content2, #content3, #content4').fadeOut(200).delay(200);
-    $('#content0').delay(200).fadeIn(200);
-    $('#btn0').addClass("active");
-    $('#btn1, #btn2, #btn3, #btn4').removeClass("active");
-     return false;
-  });
-
-  $('#btn1').click(function() {
-    $('#content0, #content2, #content3, #content4').fadeOut(200).delay(200);
-    $('#content1').delay(200).fadeIn(200);
-    $('#btn1').addClass("active");
-    $('#btn0, #btn2, #btn3, #btn4').removeClass("active");
-     return false;
-  });
-
-  $('#btn2').click(function() {
-    $('#content0, #content1, #content3, #content4').fadeOut(200).delay(200);
-    $('#content2').delay(200).fadeIn(200);
-    $('#btn2').addClass("active");
-    $('#btn0, #btn1, #btn3, #btn4').removeClass("active");
-     return false;
-  });
-
-  $('#btn3').click(function() {
-    $('#content0, #content1, #content2, #content4').fadeOut(200).delay(200);
-    $('#content3').delay(200).fadeIn(200);
-    $('#btn3').addClass("active");
-    $('#btn0, #btn2, #btn1, #btn4').removeClass("active");
-     return false;
-  });
-
-  $('#btn4').click(function() {
-    $('#content0, #content1, #content2, #content3').fadeOut(200).delay(200);
-    $('#content4').delay(200).fadeIn(200);
-    $('#btn4').addClass("active");
-    $('#btn0, #btn2, #btn3, #btn1').removeClass("active");
-     return false;
-  });
-
-// SAVE GAME
-
-function saveGame(){
-  var gameData = {
-    day: day,
-    month: month,
-    year: year,
-    money: money,
-    workerNum: workerNum,
-    maxWorkerNum: maxWorkerNum,
-    webDesignerNumber: webDesignerNumber,
-    webDeveloperNumber: webDeveloperNumber,
-    seoSpecNumber: seoSpecNumber,
-    uiuxDesNumber: uiuxDesNumber,
-    fullstackDevNumber: fullstackDevNumber,
-    buildingOneState: buildingOneState,
-    buildingTwoState: buildingTwoState,
-    buildingThreeState: buildingThreeState,
-    buildingFourState: buildingFourState,
-    contractOneState: contractOneState,
-    contractTwoState: contractTwoState,
-    contractThreeState: contractThreeState,
-    contractFourState: contractFourState,
-    trainDeveloperActive: trainDeveloperActive,
-    trainDesignersActive: trainDesignersActive,
-    trainSeoActive: trainSeoActive,
-    trainUiuxActive: trainUiuxActive
-  };
-  alert("Game Saved");
-  localStorage.setItem("gameData", JSON.stringify(gameData));
-};
-
-
-// LOAD GAME
-
-function loadGame(){
-  var loadGameData = JSON.parse(localStorage.getItem('gameData'))
-  day = loadGameData.day;
-  month = loadGameData.month;
-  year = loadGameData.year;
-  money = loadGameData.money;
-  workerNum = loadGameData.workerNum;
-  maxWorkerNum = loadGameData.maxWorkerNum;
-  webDesignerNumber = loadGameData.webDesignerNumber;
-  webDeveloperNumber = loadGameData.webDeveloperNumber;
-  seoSpecNumber = loadGameData.seoSpecNumber;
-  uiuxDesNumber = loadGameData.uiuxDesNumber;
-  fullstackDevNumber = loadGameData.fullstackDevNumber;
-  buildingOneState = loadGameData.buildingOneState;
-  buildingTwoState = loadGameData.buildingTwoState;
-  buildingThreeState = loadGameData.buildingThreeState;
-  buildingFourState = loadGameData.buildingFourState;
-  contractOneState = loadGameData.contractOneState;
-  contractTwoState = loadGameData.contractTwoState;
-  contractThreeState = loadGameData.contractThreeState;
-  contractFourState = loadGameData.contractFourState;
-  trainDeveloperActive = loadGameData.trainDeveloperActive;
-  trainDesignersActive = loadGameData.trainDesignersActive;
-  trainSeoActive = loadGameData.trainSeoActive;
-  trainUiuxActive = loadGameData.trainUiuxActive;
-
-  document.getElementById("day").innerHTML = day;
-  document.getElementById("month").innerHTML = month;
-  document.getElementById("year").innerHTML = year;
-  document.getElementById("money").innerHTML = money;
-  document.getElementById("workerNum").innerHTML = workerNum;
-  document.getElementById("maxWorkerNum").innerHTML = maxWorkerNum;
-  document.getElementById("webDesignerNumber").innerHTML = webDesignerNumber;
-  document.getElementById("webDeveloperNumber").innerHTML = webDeveloperNumber;
-  document.getElementById("seoSpecNumber").innerHTML = seoSpecNumber;
-  document.getElementById("uiuxDesNumber").innerHTML = uiuxDesNumber;
-  document.getElementById("fullstackDevNumber").innerHTML = fullstackDevNumber;
-
-  if(workerNum === maxWorkerNum){
-    var btn = document.getElementsByClassName("worker-btn");
-    for(var i = 0; i < btn.length; i++){
-    btn[i].disabled = true;
-    btn[i].innerHTML = "Upgrade Building";
-    };
-  };
-
-  if(buildingOneState === true){
-    document.getElementById('buildingUpgradeOneBtn').disabled = true;
-    document.getElementById('buildingUpgradeOneBtn').innerHTML = "Owned";
-  };
-
-  if(buildingTwoState === true){
-    document.getElementById('buildingUpgradeTwoBtn').disabled = true;
-    document.getElementById('buildingUpgradeTwoBtn').innerHTML = "Owned";
-  };
-
-  if(buildingThreeState === true){
-    document.getElementById('buildingUpgradeThreeBtn').disabled = true;
-    document.getElementById('buildingUpgradeThreeBtn').innerHTML = "Owned";
-  };
-
-  if(buildingFourState === true){
-    document.getElementById('buildingUpgradeFourBtn').disabled = true;
-    document.getElementById('buildingUpgradeFourBtn').innerHTML = "Owned";
-  };
-  if(trainDeveloperActive === true){
-    document.getElementById('trainDevsBtn').disabled = true;
-    document.getElementById('trainDevsBtn').innerHTML = "Upgraded";
-  };
-  if(trainDesignersActive === true){
-  document.getElementById('trainDesBtn').disabled = true;
-  document.getElementById('trainDesBtn').innerHTML = "Upgraded";
-  };
-  if(trainSeoActive === true){
-  document.getElementById('trainSeoBtn').disabled = true;
-  document.getElementById('trainSeoBtn').innerHTML = "Upgraded";
-  };
-  if(trainUiuxActive === true){
-  document.getElementById('trainUiuxBtn').disabled = true;
-  document.getElementById('trainUiuxBtn').innerHTML = "Upgraded";
-  };
-
-  if(contractOneState === true){
-    document.getElementById('contractOneBtn').innerHTML = "Contract Owned";
-    document.getElementById('contractOneBtn').disabled = true;
-  };
-  if(contractTwoState === true){
-    document.getElementById('contractTwoBtn').innerHTML = "Contract Owned";
-    document.getElementById('contractTwoBtn').disabled = true;
-  };
-  if(contractThreeState === true){
-    document.getElementById('contractThreeBtn').innerHTML = "Contract Owned";
-    document.getElementById('contractThreeBtn').disabled = true;
-  };
-  if(contractFourState === true){
-    document.getElementById('contractFourBtn').innerHTML = "Contract Owned";
-    document.getElementById('contractFourBtn').disabled = true;
-  };
-};
-function restart(){
-  localStorage.removeItem("gameData");
-  location.reload();
+  updateUI();
 }
-window.onload = loadGame();
+
+function unlockAchievement(key) {
+  if (!gameState.achievements.includes(key)) {
+    gameState.achievements.push(key);
+    const achievement = achievements[key];
+    showNotification(`🏆 Achievement Unlocked: ${achievement.name}`, achievement.desc);
+    updateAchievementsDisplay();
+  }
+}
+
+function showNotification(title, message) {
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.innerHTML = `<strong>${title}</strong><br>${message}`;
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 100);
+
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
+function updateUI() {
+  document.getElementById('money').textContent = gameState.money;
+  document.getElementById('reputation').textContent = gameState.reputation;
+  document.getElementById('happiness').textContent = gameState.happiness;
+  document.getElementById('workerNum').textContent = gameState.teamSize;
+}
+
+function updateAchievementsDisplay() {
+  const achievementsList = document.getElementById('achievements-list');
+  achievementsList.innerHTML = gameState.achievements.map(key => {
+    const achievement = achievements[key];
+    return `<div class="achievement">${achievement.icon} ${achievement.name}</div>`;
+  }).join('');
+}
+
+function renderScene(sceneKey) {
+  gameState.lastScene = gameState.currentScene;
+  gameState.currentScene = sceneKey;
+  const scene = scenes[sceneKey];
+
+  if (!scene) {
+    console.error('Scene not found:', sceneKey);
+    return;
+  }
+
+  // Update header
+  document.getElementById('chapter-title').textContent = scene.title;
+  document.getElementById('chapter-subtitle').textContent = scene.subtitle;
+
+  // Update story text
+  const storyText = document.getElementById('story-text');
+  storyText.innerHTML = `<p>${scene.text.replace(/\n\n/g, '</p><p>')}</p>`;
+
+  // Update image
+  const storyImage = document.getElementById('story-image');
+  if (scene.image) {
+    storyImage.innerHTML = `<img src="${scene.image}" alt="${scene.title}">`;
+    storyImage.style.display = 'block';
+  } else {
+    storyImage.style.display = 'none';
+  }
+
+  // Update choices
+  const choicesContainer = document.getElementById('story-choices');
+  choicesContainer.innerHTML = scene.choices.map((choice, index) => {
+    return `<button class="choice-button" onclick="makeChoice(${index})">${choice.text}</button>`;
+  }).join('');
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function makeChoice(choiceIndex) {
+  const currentScene = scenes[gameState.currentScene];
+  const choice = currentScene.choices[choiceIndex];
+
+  if (choice.action) {
+    const nextScene = choice.action();
+    if (nextScene) {
+      renderScene(nextScene);
+    }
+  }
+}
+
+function saveStory() {
+  localStorage.setItem('storyGameState', JSON.stringify(gameState));
+  showNotification('💾 Progress Saved', 'Your story has been saved');
+}
+
+function loadStory() {
+  const saved = localStorage.getItem('storyGameState');
+  if (saved) {
+    const loadedState = JSON.parse(saved);
+    Object.assign(gameState, loadedState);
+    updateUI();
+    updateAchievementsDisplay();
+    renderScene(gameState.currentScene);
+    return true;
+  }
+  return false;
+}
+
+function restartStory() {
+  if (confirm('Are you sure you want to start a new story? Your current progress will be lost.')) {
+    localStorage.removeItem('storyGameState');
+    location.reload();
+  }
+}
+
+// Initialize game on load
+window.onload = function() {
+  if (!loadStory()) {
+    renderScene('start');
+    updateUI();
+  }
+};

@@ -6,455 +6,73 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <title></> WebDev Tycoon | </title>
+  <title>From Freelancer to Founder - An Interactive Story</title>
 </head>
 <body>
 
+  <div class="story-container">
 
-
-  <div class="game-container">
-
-    <div class="game-left">
+    <div class="story-sidebar">
 
       <div class="logo">
         <img src="img/logo.png">
       </div>
 
-
-      <div class="money-counter">
-        <h2>Money: &pound;<span id="money">0</span></h2>
-      </div>
-
-        <div class="date-counter">
-          <h2>Day: <span id="day">0</span></h2>
-          <h2>Month: <span id="month">0</span></h2>
-          <h2>Year: <span id="year">0</span></h2>
+      <div class="stats-panel">
+        <h2>Your Journey</h2>
+        <div class="stat-item">
+          <span class="stat-label">Money:</span>
+          <span class="stat-value">&pound;<span id="money">0</span></span>
         </div>
-        <h3 id="income">Monthly Income: <span id="monthly-income">0</span></h3>
-        <h2 class="left-heading">Employees <span id="workerNum">0</span> / <span id="maxWorkerNum">0</span></h2>
-        <h3>Web Designers: <span id="webDesignerNumber">0</span></h3>
-        <h3>SEO Specialists: <span id="seoSpecNumber">0</span></h3>
-        <h3>Web Developers: <span id="webDeveloperNumber">0</span></h3>
-        <h3>UI/UX Designers: <span id="uiuxDesNumber">0</span></h3>
-        <h3>Fullstack Developers: <span id="fullstackDevNumber">0</span></h3>
-
-
-        <button class="side-button" onclick="saveGame()">Save Game</button>
-        <button class="side-button" onclick="restart()">Restart Game</button>
-
-        <center><p><small>Created By Jdeed.co.uk</small></p></center>
-
-    </div><!--Game-left finish-->
-
-
-    <div class="game-right">
-
-      <div class="game-right-menu">
-        <ul>
-          <a href="#" id="btn0" class="active"><i class="fa fa-briefcase" aria-hidden="true"></i><br>Jobs</li></a>
-          <a href="#" id="btn1"><li><i class="fa fa-users" aria-hidden="true"></i><br>Employees</li></a>
-          <a href="#" id="btn2"><li><i class="fa fa-building" aria-hidden="true"></i><br>Building</li></a>
-          <a href="#" id="btn3"><li><i class="fa fa-cogs" aria-hidden="true"></i><br>Upgrades</li></a>
-          <a href="#" id="btn4"><li><i class="fa fa-file-text" aria-hidden="true"></i><br>Contracts</li></a>
-        </ul>
+        <div class="stat-item">
+          <span class="stat-label">Reputation:</span>
+          <span class="stat-value"><span id="reputation">50</span>%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Happiness:</span>
+          <span class="stat-value"><span id="happiness">75</span>%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Team Size:</span>
+          <span class="stat-value"><span id="workerNum">0</span></span>
+        </div>
       </div>
 
-      <div class="game-right-container">
+      <div class="achievements-panel">
+        <h3>Achievements</h3>
+        <div id="achievements-list"></div>
+      </div>
 
-        <div id="content0">
+      <div class="controls">
+        <button class="side-button" onclick="saveStory()">Save Progress</button>
+        <button class="side-button" onclick="restartStory()">New Story</button>
+      </div>
 
-          <div class="content-info">
-            <h2>Do Jobs</h2>
-            <p>You can do jobs to earn some extra money or money to start hiring your employees, each job takes a set amount of time and pays out once the timer is up.</p>
-          </div>
+      <center><p><small>Interactive Story Adaptation</small></p></center>
 
-          <div class="content-box">
+    </div><!--story-sidebar finish-->
 
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/jobs/jobone.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Create A Landing Page</h3>
-                <p>A microbrewery has tasked you with creating a landing page for their new line of beer.<br><strong>Takes 10 Seconds</strong><br></p>
-                  <center><h3>Earns &pound;100</h3></center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="jobOne()" id="jobOneBtn">Do Job</button>
-              </div>
-            </div>
 
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/jobs/jobtwo.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Create A Booking Website</h3>
-                <p>A local hotel has asked you to redesign &amp; develop their new website to inform potential clients and allow them to book rooms.<br><strong>Takes 30 Seconds</strong></p><center><h3>Earns &pound;500</h3></center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="jobTwo()" id="jobTwoBtn">Do Job</button>
-              </div>
-            </div>
+    <div class="story-main">
 
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/jobs/jobthree.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Create An eCommerce Website</h3>
-                <p>A local jeweller wants to start selling their wares to a global audience and have asked you to set up a portal to do so.<br><strong>Takes 1 Minute</strong></p><center><h3>Earns &pound;1200</h3></center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="jobThree()" id="jobThreeBtn">Do Job</button>
-              </div>
-            </div>
+      <div class="story-header">
+        <h1 id="chapter-title">From Freelancer to Founder</h1>
+        <p id="chapter-subtitle">Your journey begins...</p>
+      </div>
 
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/jobs/jobfour.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Create the backend for a large company</h3>
-                <p>A large import/export business has asked you to create a framework to track their imports and exports.<br><strong>Takes 2 Minutes</strong></p><center><h3>Earns &pound;2500</h3></center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="jobFour()" id="jobFourBtn">Do Job</button>
-              </div>
-            </div>
+      <div class="story-content">
 
-          </div>
-        </div><!--END CONTENT 0-->
+        <div id="story-text" class="story-text">
+          <!-- Story text will be dynamically loaded here -->
+        </div>
 
-        <div id="content1">
+        <div id="story-image" class="story-image">
+          <!-- Story images will be dynamically loaded here -->
+        </div>
 
-          <div class="content-info">
-            <h2>Hire Employees</h2>
-            <p>Hire employees to build your empire, each employee earns a daily amount and takes a monthly wage.  Some contracts also require that you have a certain amount of certain employees.</p>
-          </div>
-
-          <div class="content-box">
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/employees/webdes.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Web Designer</h3>
-                <p><strong>Earns <span id="webdesEarns">0</span> Per Day</strong></p>
-                <p><strong>Wage <span id="webdesWage">0</span> Per Month</strong></p>
-                <center>
-                  <h3 class="cost">Cost: <span id="webDesignerCost">0</span></h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button worker-btn" onclick="buyWebDesigner()">Hire</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/employees/webdev.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Web Developer</h3>
-                <p><strong>Earns <span id="webdevEarns">0</span> Per Day</strong></p>
-                <p><strong>Wage <span id="webdevWage">0</span> Per Month</strong></p>
-                <center>
-                  <h3 class="cost">Cost: <span id="webDeveloperCost">0</span></h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button worker-btn" onclick="buyWebDeveloper()">Hire</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/employees/seo.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>SEO Specialist</h3>
-                <p><strong>Earns <span id="seoEarns">0</span> Per Day</strong></p>
-                <p><strong>Wage <span id="seoWage">0</span> Per Month</strong></p>
-                <center>
-                  <h3 class="cost">Cost: <span id="seoSpecCost">0</span></h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button worker-btn" onclick="buySeoSpec()">Hire</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/employees/uiux.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>UI/UX Designer</h3>
-                <p><strong>Earns <span id="uiuxEarns">0</span> Per Day</strong></p>
-                <p><strong>Wage <span id="uiuxWage">0</span> Per Month</strong></p>
-                <center>
-                  <h3 class="cost">Cost: <span id="uiuxDesCost">0</span></h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button worker-btn" onclick="buyUiuxDes()">Hire</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/employees/fullstack.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Fullstack Developer</h3>
-                <p><strong>Earns <span id="fullstackEarns">0</span> Per Day</strong></p>
-                <p><strong>Wage <span id="fullstackWage">0</span> Per Month</strong></p>
-                <center>
-                  <h3 class="cost">Cost: <span id="fullstackDevCost">0</span></h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button worker-btn" onclick="buyFullstackDev()">Hire</button>
-              </div>
-            </div>
-
-          </div>
-        </div><!--END CONTENT 1-->
-
-        <div id="content2">
-
-          <div class="content-info">
-            <h2>Upgrade Offices</h2>
-            <p>Upgrade your building to be able to hire more employees, each building increases the amount of employees you can hire by 10.</p>
-          </div>
-
-          <div class="content-box">
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/buildings/buildingone.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Someones Large Shed</h3>
-                <center>
-                  <h3 class="cost">Cost: &pound;<span id="buildingOnePrice">0</span></h3>
-                  <h3 class="cost">Rent: &pound;<span id="buildingOneRental">0</span> Per Year</h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buildingUpgradeOne()" id="buildingUpgradeOneBtn">Buy</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/buildings/buildingtwo.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>An Office House</h3>
-                <center>
-                  <h3 class="cost">Cost: &pound;<span id="buildingTwoPrice">0</span></h3>
-                  <h3 class="cost">Rent: &pound;<span id="buildingTwoRental">0</span> Per Year</h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buildingUpgradeTwo()" id="buildingUpgradeTwoBtn">Buy</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/buildings/buildingthree.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>An Office Block</h3>
-                <center>
-                  <h3 class="cost">Cost: &pound;<span id="buildingThreePrice">0</span></h3>
-                  <h3 class="cost">Rent: &pound;<span id="buildingThreeRental">0</span> Per Year</h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buildingUpgradeThree()" id="buildingUpgradeThreeBtn">Buy</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/buildings/buildingfour.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>A Mansion</h3>
-                <center>
-                  <h3 class="cost">Cost: &pound;<span id="buildingFourPrice">0</span></h3>
-                  <h3 class="cost">Rent: &pound;<span id="buildingFourRental">0</span> Per Year</h3>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buildingUpgradeFour()" id="buildingUpgradeFourBtn">Buy</button>
-              </div>
-            </div>
-
-          </div>
-        </div><!--END CONTENT 2-->
-
-        <div id="content3">
-
-          <div class="content-info">
-            <h2>Buy Upgrades</h2>
-            <p>You can buy upgrades to increase your income, this can either be through equipment upgrades or by training your staff.</p>
-          </div>
-
-          <div class="content-box">
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/upgrades/webdes.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Train Your Designers</h3>
-                <p><strong>Cost: <span id="trainDesCost">0</span> Per Day</strong></p>
-                <p><strong>Money Increase: <span id="trainDesMoneyIncr">0</span></strong></p>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" id="trainDesBtn" onclick="trainDesigners()">Train Designers</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/upgrades/webdev.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Train Your Developers</h3>
-                <p><strong>Cost: <span id="trainDevsCost">0</span> Per Day</strong></p>
-                <p><strong>Money Increase: <span id="trainDevsMoneyIncr">0</span></strong></p>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" id="trainDevsBtn" onclick="trainDevelopers()">Train Developers</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/upgrades/seo.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Train Your SEO Specialists</h3>
-                <p><strong>Cost: <span id="trainSeoCost">0</span> Per Day</strong></p>
-                <p><strong>Money Increase: <span id="trainSeoMoneyIncr">0</span></strong></p>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" id="trainSeoBtn" onclick="trainSeo()">Train SEO Specialists</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/upgrades/uiux.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Train Your UI / UX Designers</h3>
-                <p><strong>Cost: <span id="trainUiuxCost">0</span> Per Day</strong></p>
-                <p><strong>Money Increase: <span id="trainUiuxMoneyIncr">0</span></strong></p>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" id="trainUiuxBtn" onclick="trainUiux()">Train UI / UX Designers</button>
-              </div>
-            </div>
-
-          </div>
-        </div><!--END CONTENT 3-->
-
-        <div id="content4">
-
-          <div class="content-info">
-            <h2>Buy Contracts</h2>
-            <p>Purchase contracts to earn a monthly income, some contracts require certain workers / buildings &amp; equipment upgrades to purchase but may be more lucretive than contracts that don't.</p>
-          </div>
-
-          <div class="content-box">
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/contracts/contractone.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Contract One</h3>
-                <p>No Requirements</p>
-                <center>
-                  <h3 class="cost">Cost: <span id="contractOneCost">0</span></h3>
-                  <p><strong><span id="contractOne"></span></strong></p>
-                </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buyContractOne()" id="contractOneBtn">Buy</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/contracts/contracttwo.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Contract Two</h3>
-                <p>Requirements:</p>
-                  <p><strong>1 x Web Designer</strong></p>
-                  <p><strong>1 x Web Developer</strong></p>
-                  <center>
-                    <h3 class="cost">Cost: <span id="contractTwoCost">0</span></h3>
-                    <p><strong><span id="contractTwo"></span></strong></p>
-                  </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buyContractTwo()" id="contractTwoBtn">Buy</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/contracts/contractthree.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Contract Three</h3>
-                <p>Requirements:</p>
-                  <p><strong>2 x Web Designer</strong></p>
-                  <p><strong>2 x Web Developer</strong></p>
-                  <p><strong>1 x SEO Specialist</strong></p>
-                  <center>
-                    <h3 class="cost">Cost: <span id="contractThreeCost">0</span></h3>
-                    <p><strong><span id="contractThree"></span></strong></p>
-                  </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buyContractThree()" id="contractThreeBtn">Buy</button>
-              </div>
-            </div>
-
-            <div class="inner-box">
-              <div class="inner-box-image">
-                <img src="img/contracts/contractfour.png">
-              </div>
-              <div class="inner-box-text">
-                <h3>Contract Four</h3>
-                <p>Requirements:</p>
-                  <p><strong>2 x Web Designer</strong></p>
-                  <p><strong>2 x Web Developer</strong></p>
-                  <p><strong>1 x SEO Specialist</strong></p>
-                  <p><strong>1 x UI / UX Designer</strong></p>
-                  <center>
-                    <h3 class="cost">Cost: <span id="contractFourCost">0</span></h3>
-                    <p><strong><span id="contractFour"></span></strong></p>
-                  </center>
-              </div>
-              <div class="inner-box-button">
-                <button class="inner-button" onclick="buyContractFour()" id="contractFourBtn">Buy</button>
-              </div>
-            </div>
-
-          </div>
-        </div><!--END CONTENT 4-->
+        <div id="story-choices" class="story-choices">
+          <!-- Choices will be dynamically loaded here -->
+        </div>
 
       </div>
 

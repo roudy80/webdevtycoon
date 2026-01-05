@@ -1,300 +1,440 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway|Share+Tech');
-body{
-  margin: 0px;
-  padding: 0px;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,600,700|Share+Tech');
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+* {
+  box-sizing: border-box;
 }
 
-@media only screen and (min-width : 768px){
-  body{
-    overflow: hidden;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Raleway', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
-h2{
-  padding: 0px;
-  margin: 0px 0px 0px 0px;
+
+h1 {
+  font-family: 'Share Tech', sans-serif;
+  font-size: 42px;
+  color: #2c3e50;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
   font-family: 'Share Tech', sans-serif;
   font-size: 28px;
   color: #3e3e3e;
+  margin: 0;
+  padding: 0;
 }
-h3{
-  padding: 0px;
-  margin: 0px;
+
+h3 {
   font-family: 'Share Tech', sans-serif;
   font-size: 20px;
   color: #5b5b5b;
+  margin: 0;
+  padding: 0;
 }
-p{
-  padding: 0px;
-  margin: 0px;
+
+p {
   font-family: 'Raleway', sans-serif;
-  font-size: 12px;
-  color: #615f5f;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #2c3e50;
+  margin: 0 0 1em 0;
 }
 
-
-.logo{
-  padding: 0px;
-  margin: 0px;
-  width: 100%;
+/* ============================================
+   LAYOUT
+   ============================================ */
+.story-container {
+  display: flex;
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
 }
-.logo img{
-  padding: 0px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
 
-
-
-/*GAME CONTAINER*/
-.game-container{
-  height: 100%;
-}
-@media only screen and (min-width : 768px){
-  .game-container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    height: 100vh;
+@media only screen and (max-width: 768px) {
+  .story-container {
+    flex-direction: column;
   }
 }
 
-#content0{
-  height: 85vh;
-  overflow: auto;
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px 10px;
-}
-#content1{
-  display: none;
-  height: 85vh;
-  overflow: auto;
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px 10px;
-}
-#content2{
-  display: none;
-  height: 85vh;
-  overflow: auto;
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px 10px;
-}
-#content3{
-  display: none;
-  height: 85vh;
-  overflow: auto;
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px 10px;
-}
-#content4{
-  display: none;
-  height: 85vh;
-  overflow: auto;
-  box-sizing: border-box;
-  margin: 0px;
-  padding: 0px 10px;
-}
-.content-box{
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.story-sidebar {
+  flex: 0 0 300px;
+  background: linear-gradient(180deg, #34495e 0%, #2c3e50 100%);
+  color: white;
+  padding: 20px;
+  border-right: 3px solid #667eea;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  float: left;
-  justify-content: space-around;
+  flex-direction: column;
 }
-@media only screen and (min-width : 768px){
 
+@media only screen and (max-width: 768px) {
+  .story-sidebar {
+    flex: none;
+    border-right: none;
+    border-bottom: 3px solid #667eea;
+  }
 }
-.content-info{
-  margin-bottom:10px;
+
+.logo {
+  margin-bottom: 30px;
   text-align: center;
 }
 
-
-.inner-box{
-  flex: 1;
-  background: #f6f7f6;
-  margin-bottom: 5px;
-  position: relative;
-  max-width: 300px;
-  min-width: 300px;
-  margin: 10px 10px;
-  float: left;
-}
-.inner-box-image{
-  margin: 0px;
-  padding: 0px;
-}
-.inner-box-image img{
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-}
-.inner-box-text{
-  padding: 5px 10px;
-  border: 1px solid #bdc3c7;
-  height: 200px;
-  box-sizing: border-box;
-}
-.inner-box-text .cost{
-  margin: 20px 0;
-}
-.inner-box-button{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  border: 1px solid #bdc3c7;
-  box-sizing: border-box;
+.logo img {
+  max-width: 100%;
+  height: auto;
 }
 
-.inner-button{
-  height: 100%;
-  width: 100%;
+.stats-panel {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.stats-panel h2 {
+  color: #ecf0f1;
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  color: #bdc3c7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
   font-family: 'Share Tech', sans-serif;
   font-size: 20px;
-  color: #3e3e3e;
-  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+}
+
+.achievements-panel {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.achievements-panel h3 {
+  color: #ecf0f1;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 10px;
+}
+
+#achievements-list {
+  min-height: 50px;
+}
+
+.achievement {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #ecf0f1;
+  border-left: 3px solid #f39c12;
+}
+
+.controls {
+  margin-top: auto;
+}
+
+.side-button {
+  width: 100%;
+  font-family: 'Share Tech', sans-serif;
+  font-size: 16px;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  background: #ffffff;
-  background: -webkit-linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  background: -o-linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  background: linear-gradient(#ffffff 0%, #e2e2e2 100%);
-}
-.inner-button:hover{
-  background: #fff;
-}
-.inner-button:disabled{
-  background: #fff;
-  cursor:default;
-}
-
-/* RIGHT SIDE STYLES */
-.game-right{
-  flex:2;
-  background-color: #fff;
-  height: 100%;
-  max-width: 75%;
-  box-sizing: border-box;
-}
-@media only screen and (max-width : 768px){
-  .game-right{
-    max-width: 100%;
-  }
-}
-.game-right-container{
-  padding:20px 0px;
-}
-.game-right-menu{
-  height: 10vh;
-}
-@media only screen and (max-width : 768px){
-  .game-right-menu{
-    border-top: 1px solid #bdc3c7;
-  }
-}
-.game-right-menu ul{
-  margin: 0px;
-  padding: 0px;
-  background-color: #ecf0f1;
-  display: flex;
-  flex-direction: row;
-}
-.game-right-menu a:last-child{
-  border:none;
-}
-.game-right-menu a{
-  margin: 0px;
-  padding: 20px 0px;
-  list-style: none;
-  text-align: center;
-  width: 20%;
-  flex: 1;
-  font-size: 12px;
-  font-family: 'Raleway' sans-serif;
-  text-decoration: none;
-  color: #000;
-  border-right: 1px solid #bdc3c7;
-  background: #ffffff;
-  background: -webkit-linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  background: -o-linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  background: linear-gradient(#ffffff 0%, #e2e2e2 100%);
-}
-.game-right-menu a:hover{
-  background: #fff;
-}
-.active{
-  background: #fff !important;
-}
-
-/* GAME LEFT STYLES */
-.game-left{
-  flex:1;
-  background-color: #fff;
-  height: 100%;
-  max-width: 25%;
-  border-right: 1px solid #bdc3c7;
-  box-sizing: border-box;
-}
-@media only screen and (max-width : 768px){
-  .game-left{
-    max-width: 100%;
-    border-right: none !important;
-  }
-}
-.game-left h3{
-  padding: 5px 5px;
-  border-bottom: 1px solid #bdc3c7;
-}
-.money-counter{
-  text-align: center;
-  border-bottom: 1px solid #bdc3c7;
-  padding: 10px 0;
-}
-.date-counter{
-  text-align: center;
-  border-bottom: 1px solid #bdc3c7;
-  padding: 10px 0;
-}
-#income{
-  color: #27ae60;
-}
-#outgoings{
-  color: #c0392b;
-}
-.money-counter h2{
-  display: inline;
-}
-.date-counter h2{
-  display: inline;
-  margin: 0px 10px;
-}
-.left-heading{
-  padding: 5px;
-  margin: 15px 0px 5px 0px;
-  width: 100%;
-  background-color: #f6f7f6;
-  box-sizing: border-box;
-}
-.side-button{
-  width: 90%;
-  font-family: 'Share Tech', sans-serif;
-  font-size: 20px;
-  color: #3e3e3e;
+  border-radius: 5px;
+  padding: 12px 20px;
+  margin: 8px 0;
   cursor: pointer;
-  border: 1px solid #bdc3c7;
-  background: #ffffff;
-  background: -webkit-linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  background: -o-linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  background: linear-gradient(#ffffff 0%, #e2e2e2 100%);
-  padding: 10px 0px;
-  margin: 10px 5%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
-.side-button:hover{
-  background: #fff;
+
+.side-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.side-button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   MAIN STORY AREA
+   ============================================ */
+.story-main {
+  flex: 1;
+  background: #f8f9fa;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+@media only screen and (max-width: 768px) {
+  .story-main {
+    max-height: none;
+  }
+}
+
+.story-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.story-header h1 {
+  color: white;
+  font-size: 42px;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#chapter-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.story-content {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .story-content {
+    padding: 20px;
+  }
+}
+
+.story-text {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.story-text p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #2c3e50;
+  margin-bottom: 1.2em;
+}
+
+.story-text p:last-child {
+  margin-bottom: 0;
+}
+
+.story-image {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.story-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.story-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.choice-button {
+  background: white;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  padding: 20px 25px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.choice-button::before {
+  content: '→';
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: #667eea;
+  transition: all 0.3s ease;
+}
+
+.choice-button:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.choice-button:hover::before {
+  color: white;
+  right: 20px;
+}
+
+.choice-button:active {
+  transform: translateX(2px);
+}
+
+/* ============================================
+   NOTIFICATIONS
+   ============================================ */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: -400px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  max-width: 350px;
+  transition: right 0.3s ease;
+}
+
+.notification.show {
+  right: 20px;
+}
+
+.notification strong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-family: 'Share Tech', sans-serif;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media only screen and (max-width: 768px) {
+  .story-header h1 {
+    font-size: 32px;
+  }
+
+  #chapter-subtitle {
+    font-size: 14px;
+  }
+
+  .story-text {
+    padding: 20px;
+  }
+
+  .story-text p {
+    font-size: 16px;
+  }
+
+  .choice-button {
+    padding: 15px 20px;
+    font-size: 14px;
+  }
+
+  .notification {
+    max-width: 280px;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-center {
+  text-align: center;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-text,
+.story-image,
+.choice-button {
+  animation: fadeIn 0.5s ease;
+}
+
+/* ============================================
+   SPECIAL STYLES FOR ENDING SCREENS
+   ============================================ */
+.story-text strong {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.story-text em {
+  font-style: italic;
+  color: #764ba2;
 }
