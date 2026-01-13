@@ -601,6 +601,502 @@ const scenes = {
         }
       }
     ]
+  },
+
+  // Additional story paths
+  hustlePath: {
+    title: 'The Hustle',
+    subtitle: 'Working hard',
+    text: `You take on project after project. Your calendar is packed. You're making money hand over fist.
+
+    £${gameState.money} in the bank and climbing. But you haven't slept properly in weeks.
+
+    Your phone rings. It's a friend you haven't talked to in months. "You disappeared," they say. "Everything okay?"`,
+    image: 'img/jobs/jobthree.png',
+    choices: [
+      {
+        text: 'Keep hustling. Success requires sacrifice.',
+        action: () => {
+          updateStats({ money: 2000, reputation: 25, happiness: -20 });
+          return 'burnoutPath';
+        }
+      },
+      {
+        text: 'Slow down and hire help',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      },
+      {
+        text: 'Take a break and reassess',
+        action: () => {
+          updateStats({ happiness: 15 });
+          return 'balancePath';
+        }
+      }
+    ]
+  },
+
+  balancePath: {
+    title: 'Finding Balance',
+    subtitle: 'Taking care of yourself',
+    text: `You take a week off. Actually off. No emails. No Slack. You read books, see friends, remember what life feels like.
+
+    When you return, you're refreshed. Ideas flow easier. Code comes faster.
+
+    Maybe there's something to this balance thing.`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Maintain this balance going forward',
+        action: () => {
+          updateStats({ money: 500, reputation: 10, happiness: 10 });
+          return 'balancedGrowth';
+        }
+      },
+      {
+        text: 'Build a sustainable business model',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      }
+    ]
+  },
+
+  burnoutPath: {
+    title: 'Burning Out',
+    subtitle: 'ENDING',
+    text: `Six months of non-stop work. You hit £${gameState.money} in earnings.
+
+    Then one morning, you can't get out of bed. Not won't. Can't.
+
+    Burnout isn't a metaphor. It's a diagnosis.
+
+    **Final Stats:**
+    - Money: £${gameState.money}
+    - Reputation: ${gameState.reputation}%
+    - Happiness: ${gameState.happiness}%
+
+    You made money. But you lost yourself.
+
+    **THE END**`,
+    image: 'img/jobs/jobfour.png',
+    choices: [
+      {
+        text: 'Play Again',
+        action: () => {
+          restartStory();
+          return 'start';
+        }
+      }
+    ]
+  },
+
+  balancedGrowth: {
+    title: 'Balanced Growth',
+    subtitle: 'Smart progress',
+    text: `You grow, but carefully. Good projects, not all projects. Time for life, not just work.
+
+    A year passes. You've built something sustainable.
+
+    £${gameState.money} saved. Reputation solid. And you're still happy.`,
+    image: 'img/jobs/jobtwo.png',
+    choices: [
+      {
+        text: 'Stay solo and keep this pace',
+        action: () => {
+          updateStats({ money: 1000, reputation: 15, happiness: 10 });
+          return 'soloSuccess';
+        }
+      },
+      {
+        text: 'Hire someone to scale up',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      }
+    ]
+  },
+
+  officePathEarly: {
+    title: 'Professional Image',
+    subtitle: 'Investing in perception',
+    text: `The shed isn't glamorous, but it's yours. A dedicated space. Clients are impressed.
+
+    "You're serious about this," one says, signing a £1,500 contract.
+
+    The office is paying for itself.`,
+    image: 'img/buildings/buildingone.png',
+    choices: [
+      {
+        text: 'Use this credibility to land bigger clients',
+        action: () => {
+          updateStats({ money: 1500, reputation: 20 });
+          return 'growingTeam';
+        }
+      },
+      {
+        text: 'Hire your first employee now',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      }
+    ]
+  },
+
+  soloGrindPath: {
+    title: 'The Solo Grind',
+    subtitle: 'Pushing your limits',
+    text: `You keep taking big projects solo. The money is incredible. The stress is unbearable.
+
+    £${gameState.money} in the bank. But you're exhausted.
+
+    How long can you keep this up?`,
+    image: 'img/jobs/jobfour.png',
+    choices: [
+      {
+        text: 'Finally hire help',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      },
+      {
+        text: 'Push through. You can handle it.',
+        action: () => {
+          updateStats({ money: 2000, reputation: 30, happiness: -25 });
+          return 'burnoutPath';
+        }
+      },
+      {
+        text: 'Downshift to smaller projects',
+        action: () => {
+          updateStats({ happiness: 20, reputation: -10 });
+          return 'balancedGrowth';
+        }
+      }
+    ]
+  },
+
+  recoveryPath: {
+    title: 'Recovery',
+    subtitle: 'Healing',
+    text: `The week off does wonders. You sleep. You exercise. You remember who you were before code consumed your life.
+
+    £${gameState.money} in savings gives you options.
+
+    What kind of career do you actually want?`,
+    image: 'img/jobs/jobone.png',
+    choices: [
+      {
+        text: 'Build something sustainable',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      },
+      {
+        text: 'Stay solo but work less',
+        action: () => {
+          updateStats({ happiness: 15 });
+          return 'balancedGrowth';
+        }
+      }
+    ]
+  },
+
+  learningPath: {
+    title: 'Investing in Skills',
+    subtitle: 'Level up',
+    text: `You spend the money on courses. React. Node.js. Cloud architecture.
+
+    Two months later, you're dangerous. Clients notice.
+
+    "We need someone who knows this stack," a startup founder says. "£2,000 for the project."`,
+    image: 'img/upgrades/webdev.png',
+    choices: [
+      {
+        text: 'Take the project',
+        action: () => {
+          updateStats({ money: 2000, reputation: 20 });
+          return 'growingTeam';
+        }
+      },
+      {
+        text: 'Use skills to raise your rates',
+        action: () => {
+          updateStats({ money: 1000, reputation: 15, happiness: 10 });
+          return 'premiumPath';
+        }
+      }
+    ]
+  },
+
+  partnershipPath: {
+    title: 'Looking for Partners',
+    subtitle: 'Finding your people',
+    text: `You start networking. Coffee meetings. Local tech meetups. Online communities.
+
+    Three people catch your attention as potential partners...`,
+    image: 'img/employees/webdes.png',
+    choices: [
+      {
+        text: 'Actually, let me hire employees instead',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      },
+      {
+        text: 'Keep working solo for now',
+        action: () => {
+          updateStats({ money: 400, reputation: 10 });
+          return 'steadyPath';
+        }
+      }
+    ]
+  },
+
+  companyPath: {
+    title: 'Incorporating',
+    subtitle: 'Making it official',
+    text: `You file the paperwork. Register the company. Set up proper accounting.
+
+    It feels real now. This isn't a side hustle anymore. This is a business.
+
+    Marcus raises his coffee. "To the company," he says.
+
+    "To the company," you echo.`,
+    image: 'img/buildings/buildingone.png',
+    choices: [
+      {
+        text: 'Grow aggressively',
+        action: () => {
+          updateStats({ money: 2000, reputation: 25 });
+          return 'growingTeam';
+        }
+      },
+      {
+        text: 'Grow sustainably',
+        action: () => {
+          updateStats({ money: 1500, reputation: 20, happiness: 10 });
+          return 'balancedGrowth';
+        }
+      }
+    ]
+  },
+
+  freelanceTeam: {
+    title: 'Freelance Collective',
+    subtitle: 'Flexible collaboration',
+    text: `You and Marcus stay freelance but work together regularly. The flexibility is amazing.
+
+    Projects come and go. You collaborate when it makes sense. Otherwise, you do your own thing.
+
+    It's working.`,
+    image: 'img/employees/webdev.png',
+    choices: [
+      {
+        text: 'Eventually formalize into a company',
+        action: () => {
+          updateStats({ money: 1000, reputation: 15 });
+          return 'companyPath';
+        }
+      },
+      {
+        text: 'Keep this flexible arrangement',
+        action: () => {
+          updateStats({ money: 1500, happiness: 15 });
+          return 'soloSuccess';
+        }
+      }
+    ]
+  },
+
+  expandFirst: {
+    title: 'Building the Team',
+    subtitle: 'Growing before formalizing',
+    text: `You hire a designer to complement you and Marcus. The three of you work beautifully together.
+
+    "Now we formalize?" Marcus asks.
+
+    You have £${gameState.money} and a team that works. Time to make it official?`,
+    image: 'img/employees/webdes.png',
+    choices: [
+      {
+        text: 'Yes, incorporate now',
+        action: () => {
+          updateStats({ money: -500, reputation: 25, teamSize: 2 });
+          gameState.employees.webDesigner++;
+          gameState.employees.webDeveloper++;
+          return 'companyPath';
+        }
+      },
+      {
+        text: 'Stay informal a bit longer',
+        action: () => {
+          updateStats({ money: 1000, happiness: 10, teamSize: 2 });
+          return 'freelanceTeam';
+        }
+      }
+    ]
+  },
+
+  rapidGrowth: {
+    title: 'Rapid Expansion',
+    subtitle: 'Scaling fast',
+    text: `You hire three people in one month. The office is buzzing. Projects are flowing.
+
+    You're managing people now, not just code. It's exhilarating and terrifying.
+
+    Team of ${gameState.teamSize}. £${gameState.money} in the bank. This is happening.`,
+    image: 'img/buildings/buildingtwo.png',
+    choices: [
+      {
+        text: 'Keep growing aggressively',
+        action: () => {
+          updateStats({ money: 3000, teamSize: 3, reputation: 30, happiness: -15 });
+          return 'corporateSuccess';
+        }
+      },
+      {
+        text: 'Stabilize before growing more',
+        action: () => {
+          updateStats({ money: 2000, happiness: 5 });
+          return 'balancedGrowth';
+        }
+      }
+    ]
+  },
+
+  sustainableGrowth: {
+    title: 'Sustainable Growth',
+    subtitle: 'Building carefully',
+    text: `You hire one person at a time. Train them properly. Integrate them into the culture.
+
+    It's slower, but it feels right. Team of ${gameState.teamSize} people who all know what they're doing.
+
+    Quality over quantity.`,
+    image: 'img/employees/webdev.png',
+    choices: [
+      {
+        text: 'Continue this measured approach',
+        action: () => {
+          updateStats({ money: 1500, reputation: 20, happiness: 10 });
+          return 'balancedEnding';
+        }
+      },
+      {
+        text: 'Speed up the hiring',
+        action: () => {
+          updateStats({ money: 2000, teamSize: 2 });
+          return 'rapidGrowth';
+        }
+      }
+    ]
+  },
+
+  premiumPath: {
+    title: 'Premium Positioning',
+    subtitle: 'Raising your value',
+    text: `You double your rates. Half the clients ghost. The other half pay without blinking.
+
+    You're working less and earning more. £${gameState.money} and counting.
+
+    This is the dream, isn't it?`,
+    image: 'img/jobs/jobthree.png',
+    choices: [
+      {
+        text: 'Keep this high-value solo practice',
+        action: () => {
+          updateStats({ money: 2000, reputation: 20, happiness: 15 });
+          return 'soloSuccess';
+        }
+      },
+      {
+        text: 'Build a premium agency',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      }
+    ]
+  },
+
+  modestSuccess: {
+    title: 'Modest Success',
+    subtitle: 'Finding your level',
+    text: `The negotiated contract is perfect. £2,500 for work you can handle with your current team.
+
+    No stress. Good money. Happy clients.
+
+    Sometimes the best move is knowing your limits.`,
+    image: 'img/contracts/contractone.png',
+    choices: [
+      {
+        text: 'Stay at this comfortable level',
+        action: () => {
+          updateStats({ money: 1500, happiness: 15 });
+          return 'balancedEnding';
+        }
+      },
+      {
+        text: 'Slowly expand capabilities',
+        action: () => {
+          updateStats({ money: 1000, teamSize: 1 });
+          return 'sustainableGrowth';
+        }
+      }
+    ]
+  },
+
+  boutiquePath: {
+    title: 'Boutique Agency',
+    subtitle: 'Small and excellent',
+    text: `You focus on being the best, not the biggest. Small team. Great work. Happy clients.
+
+    Team of ${gameState.teamSize}. Everyone knows everyone. Every project matters.
+
+    You've built something special.`,
+    image: 'img/buildings/buildingone.png',
+    choices: [
+      {
+        text: 'This is perfect. Stay here.',
+        action: () => {
+          updateStats({ money: 2000, happiness: 20 });
+          return 'balancedEnding';
+        }
+      },
+      {
+        text: 'Actually, let\'s grow bigger',
+        action: () => {
+          updateStats({ money: 1000, teamSize: 2 });
+          return 'corporateSuccess';
+        }
+      }
+    ]
+  },
+
+  levelUp: {
+    title: 'Leveling Up',
+    subtitle: 'New challenges',
+    text: `The big project pushes you. You learn new skills. Solve hard problems. Ship something you're proud of.
+
+    £${gameState.money} in the bank and newfound confidence.
+
+    You're ready for what's next.`,
+    image: 'img/jobs/jobthree.png',
+    choices: [
+      {
+        text: 'Hire a team to do bigger projects',
+        action: () => {
+          return 'hireFirstEmployee';
+        }
+      },
+      {
+        text: 'Stay solo but charge premium rates',
+        action: () => {
+          updateStats({ reputation: 20 });
+          return 'premiumPath';
+        }
+      }
+    ]
   }
 };
 
