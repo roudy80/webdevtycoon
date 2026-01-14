@@ -116,18 +116,25 @@ const scenes = {
   nameEntry: {
     title: 'Your Name',
     subtitle: 'Identity',
-    text: `The warrant in your trunk bears your name. What name did your mother give you?`,
+    text: `The warrant in your trunk bears your name. What name did your mother give you?
+
+    <div class="name-entry-container">
+      <input type="text" id="player-name-input" placeholder="Enter your name (e.g., William Turner)" class="name-input" autocomplete="off" />
+    </div>`,
 
     choices: [
       {
-        text: 'Enter your name',
+        text: 'Confirm Name and Continue',
         action: () => {
-          const name = prompt('Enter your name (first and last):');
-          if (name && name.trim()) {
-            gameState.playerName = name.trim();
+          const nameInput = document.getElementById('player-name-input');
+          const name = nameInput ? nameInput.value.trim() : '';
+          if (name && name.length > 0) {
+            gameState.playerName = name;
             return 'shipAssignment';
+          } else {
+            showNotification('Name Required', 'Please enter your name before continuing');
+            return 'nameEntry';
           }
-          return 'nameEntry';
         }
       }
     ]
