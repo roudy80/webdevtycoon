@@ -782,33 +782,54 @@ function updateUI() {
 }
 
 function renderScene(sceneKey) {
+  console.log('Rendering scene:', sceneKey);
   const scene = scenes[sceneKey];
+
   if (!scene) {
     console.error('Scene not found:', sceneKey);
+    alert('Error: Scene "' + sceneKey + '" not found. This is a bug.');
     return;
   }
 
   gameState.currentScene = sceneKey;
 
-  // Update header
-  document.getElementById('chapter-title').textContent = scene.title;
-  document.getElementById('chapter-subtitle').textContent = scene.subtitle;
+  try {
+    // Update header
+    const titleEl = document.getElementById('chapter-title');
+    const subtitleEl = document.getElementById('chapter-subtitle');
 
-  // Update story text - preserve formatting
-  const storyText = document.getElementById('story-text');
-  storyText.innerHTML = scene.text;
+    if (titleEl) titleEl.textContent = scene.title;
+    if (subtitleEl) subtitleEl.textContent = scene.subtitle;
 
-  // Hide image for now (we'll add naval imagery later)
-  document.getElementById('story-image').style.display = 'none';
+    // Update story text - preserve formatting
+    const storyText = document.getElementById('story-text');
+    if (storyText) {
+      storyText.innerHTML = scene.text;
+    } else {
+      console.error('story-text element not found');
+    }
 
-  // Update choices
-  const choicesContainer = document.getElementById('story-choices');
-  choicesContainer.innerHTML = scene.choices.map((choice, index) => {
-    return `<button class="choice-button" onclick="makeChoice(${index})">${choice.text}</button>`;
-  }).join('');
+    // Hide image for now
+    const imageEl = document.getElementById('story-image');
+    if (imageEl) imageEl.style.display = 'none';
 
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Update choices
+    const choicesContainer = document.getElementById('story-choices');
+    if (choicesContainer) {
+      choicesContainer.innerHTML = scene.choices.map((choice, index) => {
+        return `<button class="choice-button" onclick="makeChoice(${index})">${choice.text}</button>`;
+      }).join('');
+      console.log('Rendered', scene.choices.length, 'choices');
+    } else {
+      console.error('story-choices element not found');
+    }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (error) {
+    console.error('Error rendering scene:', error);
+    alert('Error rendering scene. Check console.');
+  }
 }
 
 function makeChoice(choiceIndex) {
@@ -862,8 +883,17 @@ function showNotification(title, message) {
 
 // Initialize
 window.onload = function() {
-  if (!loadStory()) {
-    renderScene('characterCreation');
-    updateUI();
+  console.log('Game loading...');
+  try {
+    if (!loadStory()) {
+      console.log('No saved game found, starting new career');
+      renderScene('characterCreation');
+      updateUI();
+    } else {
+      console.log('Loaded saved game');
+    }
+  } catch (error) {
+    console.error('Error loading game:', error);
+    alert('Error loading game. Check console for details.');
   }
 };
