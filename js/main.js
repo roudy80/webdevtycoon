@@ -356,13 +356,299 @@ const scenes = {
     ]
   },
 
-  // TO BE CONTINUED - This sets up the first chapter
-  // Next scenes will include:
-  // - First day learning the ropes
-  // - First sail (leaving harbor)
-  // - First storm
-  // - First action (Spanish merchant or privateer)
-  // - First test of character
+  cockpitIntro: {
+    title: 'Welcome to the Service',
+    subtitle: 'The Cockpit',
+    text: `Pelham intervenes before the tension escalates.
+
+    "Belay that, Carruthers. We were all new once." He turns to you. "The young gentleman with the sharp tongue is the Honorable Timothy Carruthers, third son of Lord Pemberton. He's been at sea six months and thinks that makes him Horatio Nelson."
+
+    Carruthers flushes but says nothing.
+
+    "Now then, ${gameState.playerName}, let me explain how this works. You're the sixth midshipman on this ship. Three of us berth here in the cockpit—you, me, and young Lord Timothy. The other three are in the gunroom with the master's mates. You'll stand watches, take sights, relay orders, and learn your trade."
+
+    He pulls out a pocket watch—expensive, well-made.
+
+    "It's three bells of the afternoon watch. The Captain comes aboard tomorrow morning, and when he does, this ship will come alive. We sail on the evening tide. That gives you tonight to settle in and perhaps learn where the important things are: the head, the galley, and the spirit room."
+
+    "The spirit room?" you ask.
+
+    Pelham grins. "Where they keep the rum. You're not allowed in there, of course. Which is why you should know exactly where it is—so you can avoid it properly."
+
+    Even Carruthers cracks a smile at that.
+
+    "Right then. Stow your gear, sling your hammock, and report topside in an hour. The First Lieutenant will want to see you about your watch duties. And ${gameState.playerName}—" he pauses at the ladder. "Welcome to the Service. You'll either love it or hate it, but either way, it'll change you."`,
+
+    choices: [
+      {
+        text: 'Ask Pelham about the Captain',
+        action: () => {
+          return 'askAboutCaptain';
+        }
+      },
+      {
+        text: 'Ask Carruthers why he\'s so hostile',
+        action: () => {
+          updateStats({ socialStanding: -2, discipline: 3 });
+          return 'confrontCarruthers';
+        }
+      },
+      {
+        text: 'Stow your gear and explore the ship',
+        action: () => {
+          updateStats({ seamanship: 3 });
+          advanceTime(0, 0, 0);
+          return 'exploreShip';
+        }
+      },
+      {
+        text: 'Rest in your hammock - tomorrow begins your career',
+        action: () => {
+          updateStats({ discipline: 2 });
+          advanceTime(1, 0, 0);
+          return 'firstWatch';
+        }
+      }
+    ]
+  },
+
+  cockpitChallenge: {
+    title: 'First Blood',
+    subtitle: 'The Cockpit',
+    text: `The words hang in the air.
+
+    Carruthers' face darkens. For a moment you think he might strike you—and in this confined space, a fight would be brutal and brief.
+
+    But Pelham laughs. A real laugh, not forced.
+
+    "Oh, I like this one already! Fire and salt, Carruthers. The new fish has teeth." He claps you on the shoulder. "Mind you keep that spirit when the Spanish start throwing iron at us."
+
+    Carruthers' expression shifts from anger to something more calculating. You've made an impression—whether good or bad remains to be seen.
+
+    "We'll see how clever you are when you're aloft in a gale, new fish," Carruthers mutters, but the venom is gone. It's more of a challenge now than a threat.
+
+    Pelham explains the routines: watches, duties, the pecking order. You'll stand with him, learning the trade. Carruthers will undoubtedly make things difficult, but you've earned a grudging respect.
+
+    "Right then," Pelham says. "Stow your dunnage and report topside in an hour. The Captain comes aboard tomorrow, and when he does, this ship becomes a different beast. Sleep while you can, gentlemen. The sea doesn't care how tired you are."
+
+    Your first test passed. You've shown you won't be pushed around. But the real tests—the ones that matter—still wait ahead.`,
+
+    choices: [
+      {
+        text: 'Try to make peace with Carruthers',
+        action: () => {
+          updateStats({ socialStanding: 2, officerRespect: 3 });
+          return 'makeAmends';
+        }
+      },
+      {
+        text: 'Stow your gear and explore the ship',
+        action: () => {
+          updateStats({ seamanship: 3 });
+          return 'exploreShip';
+        }
+      },
+      {
+        text: 'Rest - you\'ll need your strength',
+        action: () => {
+          updateStats({ discipline: 2 });
+          advanceTime(1, 0, 0);
+          return 'firstWatch';
+        }
+      }
+    ]
+  },
+
+  askAboutCaptain: {
+    title: 'The Captain',
+    subtitle: 'Know Your Commander',
+    text: `Pelham's expression becomes more serious.
+
+    "Captain James Cathcart. Forty-two years old, twenty-seven years in the Service. He made post at thirty—that's young, very young. Fought at Porto Bello under Vernon, took three prizes in the last year alone."
+
+    He lowers his voice.
+
+    "He's a fighting captain, ${gameState.playerName}. Not one of these political admirals who got their command through family connections. He earned his way up, and he expects his officers to do the same. Fair but exacting. He'll notice if you know your business, and he'll notice faster if you don't."
+
+    Carruthers adds, grudgingly, "He flogged a midshipman last month for drunkenness. Twelve lashes. The boy couldn't sit for a week."
+
+    "Aye," Pelham confirms. "The Captain holds his officers to a higher standard than the men. 'Privilege demands responsibility,' he says. You're gentry, so you get a berth in the cockpit and the right to walk the quarterdeck. But fail in your duty, and he'll make you wish you'd never been born."
+
+    The weight of it settles on you. This is real. The Navy is not a gentleman's club or a path to easy advancement. It's a brotherhood forged in iron and salt, and you must prove yourself worthy.`,
+
+    choices: [
+      {
+        text: 'Stow your gear and explore the ship',
+        action: () => {
+          updateStats({ seamanship: 3 });
+          return 'exploreShip';
+        }
+      },
+      {
+        text: 'Rest in your hammock - you need to be sharp tomorrow',
+        action: () => {
+          updateStats({ discipline: 3 });
+          advanceTime(1, 0, 0);
+          return 'firstWatch';
+        }
+      }
+    ]
+  },
+
+  confrontCarruthers: {
+    title: 'Clearing the Air',
+    subtitle: 'The Cockpit',
+    text: `After Pelham climbs topside, you turn to Carruthers.
+
+    "Why the hostility? We're shipmates. We should be allies, not enemies."
+
+    Carruthers looks at you for a long moment. Then, surprisingly, his shoulders relax slightly.
+
+    "You want honesty? Fine. I've been here six months. Six months of being the youngest, the greenest, the one they send aloft in the worst weather because I'm small and quick. I finally started earning some respect, and then you show up—another new midshipman for them to mock."
+
+    He sits on his sea chest.
+
+    "My father is Lord Pemberton. Third son means nothing—no inheritance, no estate. The Navy or the Church, those were my choices. So here I am, thirteen years old, trying to prove I'm not just another useless lordling." He meets your eyes. "Sound familiar?"
+
+    You realize you may have more in common with Carruthers than you thought.
+
+    "Truce?" you offer.
+
+    He considers, then nods. "Truce. But only if you prove you're not dead weight. This ship can't carry passengers."
+
+    Fair enough.`,
+
+    choices: [
+      {
+        text: 'Explore the ship together',
+        action: () => {
+          updateStats({ seamanship: 3, socialStanding: 2 });
+          return 'exploreShip';
+        }
+      },
+      {
+        text: 'Rest - tomorrow's a big day',
+        action: () => {
+          updateStats({ discipline: 2 });
+          advanceTime(1, 0, 0);
+          return 'firstWatch';
+        }
+      }
+    ]
+  },
+
+  makeAmends: {
+    title: 'Olive Branch',
+    subtitle: 'The Cockpit',
+    text: `You extend a hand to Carruthers.
+
+    "We got off on the wrong foot. I'm ${gameState.playerName}, and I suspect we'll be living in this hole together for months or years. Might as well not be enemies."
+
+    Carruthers looks at your hand as if it might be a trap. Then, grudgingly, he shakes it.
+
+    "Timothy Carruthers. Third son of Lord Pemberton, which means absolutely nothing at sea." His tone is bitter. "Six months I've been here. Six months of proving I'm not just another useless aristocrat. And just when I start to earn respect, they send me another midshipman to nursemaid."
+
+    You understand now. It's not personal—it's fear. Fear of being replaced, fear of losing status, fear of failure.
+
+    "I don't need a nursemaid," you say. "And from what I've seen, neither do you. How about we just help each other stay alive?"
+
+    A ghost of a smile crosses his face. "That might be the first sensible thing I've heard all day."
+
+    Perhaps you've made your first real ally.`,
+
+    choices: [
+      {
+        text: 'Explore the ship together',
+        action: () => {
+          updateStats({ seamanship: 3, officerRespect: 2 });
+          return 'exploreShip';
+        }
+      },
+      {
+        text: 'Rest - you both need it',
+        action: () => {
+          updateStats({ discipline: 2 });
+          advanceTime(1, 0, 0);
+          return 'firstWatch';
+        }
+      }
+    ]
+  },
+
+  exploreShip: {
+    title: 'The Wooden World',
+    subtitle: `${gameState.currentVessel.name}`,
+    text: `You spend the next hour exploring your new home.
+
+    The ${gameState.currentVessel.name} is a wooden world unto herself—300 feet from stem to stern, a forest of masts reaching toward heaven, and below decks, a labyrinth that would baffle a Cretan architect.
+
+    You learn the geography of survival: The galley where the cook prepares meals for 300 men. The magazine where powder kegs sit in darkness, one spark from disaster. The orlop deck where the surgeon will work when battle comes—you don't linger there.
+
+    On the gundeck, you run your hand along a 24-pounder cannon. Three tons of iron that can send a ball through oak at half a mile. ${gameState.currentVessel.guns} of these monsters line the ship, and you will learn to command them.
+
+    A grizzled able seaman notices you examining the gun.
+
+    "First time aboard a ship, sir?" No mockery in his voice, just curiosity.
+
+    "First time on a warship," you admit.
+
+    "She's a beauty, ain't she? Been aboard three years meself. Treat her right, and she'll bring you home. Treat her wrong—" he shrugs. "Well, the sea keeps her secrets, sir."
+
+    Wisdom from the lower deck. You file it away.
+
+    As evening falls, you return to the cockpit. Tomorrow, the Captain boards. Tomorrow, your career truly begins.`,
+
+    choices: [
+      {
+        text: 'Sleep - the Captain boards at dawn',
+        action: () => {
+          advanceTime(1, 0, 0);
+          return 'captainBoards';
+        }
+      }
+    ]
+  },
+
+  firstWatch: {
+    title: 'Standing Watch',
+    subtitle: `First Night, ${getDateString()}`,
+    text: `[SCENE IN PROGRESS - To Be Continued]
+
+    Your first watch is uneventful but educational. Pelham talks you through the ropes—literally. Every line has a name, every sail a purpose.
+
+    More scenes coming in next update...`,
+
+    choices: [
+      {
+        text: 'Continue to Captain boarding scene',
+        action: () => {
+          advanceTime(1, 0, 0);
+          return 'captainBoards';
+        }
+      }
+    ]
+  },
+
+  captainBoards: {
+    title: 'The Captain',
+    subtitle: `Morning, ${getDateString()}`,
+    text: `[SCENE IN PROGRESS - To Be Continued]
+
+    The bosun's pipes shriek. "Captain aboard!"
+
+    Captain James Cathcart comes over the rail like a force of nature...
+
+    More scenes coming in next update. This completes the current available content.`,
+
+    choices: [
+      {
+        text: 'More content coming soon!',
+        action: () => {
+          return 'captainBoards';
+        }
+      }
+    ]
+  }
 
 };
 
