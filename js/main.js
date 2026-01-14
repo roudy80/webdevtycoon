@@ -4,6 +4,9 @@
 // Royal Navy, 18th Century
 // ============================================
 
+console.log('=== JAVASCRIPT FILE LOADED ===');
+console.log('Starting His Majesty\'s Service...');
+
 // Game State - Full Career Tracking
 const gameState = {
   // Personal Info
@@ -883,17 +886,24 @@ function showNotification(title, message) {
 
 // Initialize
 window.onload = function() {
-  console.log('Game loading...');
+  console.log('=== WINDOW.ONLOAD FIRED ===');
+  alert('Game is initializing...'); // You should see this popup!
+
   try {
-    if (!loadStory()) {
+    console.log('Attempting to load saved game...');
+    const hasSave = loadStory();
+
+    if (!hasSave) {
       console.log('No saved game found, starting new career');
+      alert('Starting new career at characterCreation scene');
       renderScene('characterCreation');
       updateUI();
     } else {
-      console.log('Loaded saved game');
+      console.log('Loaded saved game successfully');
+      alert('Loaded saved game');
     }
   } catch (error) {
-    console.error('Error loading game:', error);
-    alert('Error loading game. Check console for details.');
+    console.error('ERROR:', error);
+    alert('ERROR: ' + error.message + '\n\nCheck browser console for details.');
   }
 };
