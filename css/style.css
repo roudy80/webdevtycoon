@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,600,700|Share+Tech');
+@import url('https://fonts.googleapis.com/css?family=Cinzel:400,700|Gentium+Basic:400,700');
 
 /* ============================================
-   RESET & BASE STYLES
+   HIS MAJESTY'S SERVICE
+   Naval Theme - 18th Century
    ============================================ */
+
 * {
   box-sizing: border-box;
 }
@@ -10,42 +12,51 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Raleway', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Gentium Basic', Georgia, serif;
+  background: linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
   min-height: 100vh;
   overflow-x: hidden;
+  color: #e8dcc4;
 }
 
 h1 {
-  font-family: 'Share Tech', sans-serif;
+  font-family: 'Cinzel', serif;
   font-size: 42px;
-  color: #2c3e50;
+  color: #e8dcc4;
   margin: 0;
   padding: 0;
+  letter-spacing: 2px;
 }
 
 h2 {
-  font-family: 'Share Tech', sans-serif;
+  font-family: 'Cinzel', serif;
   font-size: 28px;
-  color: #3e3e3e;
+  color: #e8dcc4;
   margin: 0;
   padding: 0;
 }
 
 h3 {
-  font-family: 'Share Tech', sans-serif;
-  font-size: 20px;
-  color: #5b5b5b;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  color: #d4c4a8;
   margin: 0;
   padding: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 p {
-  font-family: 'Raleway', sans-serif;
-  font-size: 16px;
-  line-height: 1.8;
-  color: #2c3e50;
-  margin: 0 0 1em 0;
+  font-family: 'Gentium Basic', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.9;
+  color: #e8dcc4;
+  margin: 0 0 1.2em 0;
+}
+
+em {
+  font-style: italic;
+  color: #c9b896;
 }
 
 /* ============================================
@@ -56,8 +67,10 @@ p {
   min-height: 100vh;
   max-width: 1400px;
   margin: 0 auto;
-  background: white;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+  background: #1a1a1a;
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
+  border-left: 2px solid #8b7355;
+  border-right: 2px solid #8b7355;
 }
 
 @media only screen and (max-width: 768px) {
@@ -67,58 +80,71 @@ p {
 }
 
 /* ============================================
-   SIDEBAR
+   SIDEBAR - Naval Officer's Log Style
    ============================================ */
 .story-sidebar {
-  flex: 0 0 300px;
-  background: linear-gradient(180deg, #34495e 0%, #2c3e50 100%);
-  color: white;
+  flex: 0 0 320px;
+  background: linear-gradient(180deg, #2a1f1a 0%, #1a1410 100%);
+  color: #e8dcc4;
   padding: 20px;
-  border-right: 3px solid #667eea;
+  border-right: 3px solid #8b7355;
   display: flex;
   flex-direction: column;
+  box-shadow: inset -10px 0 30px rgba(0, 0, 0, 0.5);
 }
 
 @media only screen and (max-width: 768px) {
   .story-sidebar {
     flex: none;
     border-right: none;
-    border-bottom: 3px solid #667eea;
+    border-bottom: 3px solid #8b7355;
   }
 }
 
-.logo {
-  margin-bottom: 30px;
+.naval-header {
   text-align: center;
-}
-
-.logo img {
-  max-width: 100%;
-  height: auto;
-}
-
-.stats-panel {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 20px;
+  padding: 20px 0;
+  border-bottom: 2px solid #8b7355;
   margin-bottom: 20px;
 }
 
-.stats-panel h2 {
-  color: #ecf0f1;
+.naval-header h2 {
   font-size: 24px;
+  margin-bottom: 5px;
+  color: #d4a574;
+}
+
+.naval-header .subtitle {
+  font-size: 14px;
+  color: #a8947c;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 5px 0;
+}
+
+.stats-panel {
+  background: rgba(139, 115, 85, 0.1);
+  border: 1px solid #8b7355;
+  border-radius: 4px;
+  padding: 15px;
   margin-bottom: 15px;
-  text-align: center;
-  border-bottom: 2px solid #667eea;
-  padding-bottom: 10px;
+}
+
+.stats-panel h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #8b7355;
+  color: #d4a574;
 }
 
 .stat-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+  font-size: 14px;
 }
 
 .stat-item:last-child {
@@ -126,79 +152,65 @@ p {
 }
 
 .stat-label {
-  font-family: 'Raleway', sans-serif;
-  font-size: 14px;
-  color: #bdc3c7;
+  font-family: 'Gentium Basic', serif;
+  font-size: 13px;
+  color: #a8947c;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .stat-value {
-  font-family: 'Share Tech', sans-serif;
-  font-size: 20px;
-  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  color: #d4a574;
   font-weight: bold;
 }
 
-.achievements-panel {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.achievements-panel h3 {
-  color: #ecf0f1;
-  font-size: 18px;
-  margin-bottom: 15px;
-  text-align: center;
-  border-bottom: 2px solid #667eea;
-  padding-bottom: 10px;
-}
-
-#achievements-list {
-  min-height: 50px;
-}
-
-.achievement {
-  background: rgba(255, 255, 255, 0.15);
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #ecf0f1;
-  border-left: 3px solid #f39c12;
+.stat-value-small {
+  font-family: 'Gentium Basic', serif;
+  font-size: 13px;
+  color: #d4a574;
+  max-width: 180px;
+  text-align: right;
 }
 
 .controls {
   margin-top: auto;
+  padding-top: 20px;
 }
 
 .side-button {
   width: 100%;
-  font-family: 'Share Tech', sans-serif;
-  font-size: 16px;
-  color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: #e8dcc4;
+  background: linear-gradient(135deg, #5a4a3a 0%, #3a2a1a 100%);
+  border: 2px solid #8b7355;
+  border-radius: 3px;
   padding: 12px 20px;
   margin: 8px 0;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .side-button:hover {
+  background: linear-gradient(135deg, #6a5a4a 0%, #4a3a2a 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  border-color: #a88965;
 }
 
 .side-button:active {
   transform: translateY(0);
+}
+
+.credits {
+  margin-top: 15px;
+  color: #a8947c;
+  font-size: 12px;
 }
 
 /* ============================================
@@ -206,7 +218,7 @@ p {
    ============================================ */
 .story-main {
   flex: 1;
-  background: #f8f9fa;
+  background: #0f0f0f;
   overflow-y: auto;
   max-height: 100vh;
 }
@@ -218,31 +230,33 @@ p {
 }
 
 .story-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #2a1f1a 0%, #1a1410 100%);
+  color: #e8dcc4;
   padding: 40px;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+  border-bottom: 3px solid #8b7355;
 }
 
 .story-header h1 {
-  color: white;
+  color: #d4a574;
   font-size: 42px;
   margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 #chapter-subtitle {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  color: #a8947c;
   font-style: italic;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  font-family: 'Gentium Basic', serif;
 }
 
 .story-content {
   padding: 40px;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -253,22 +267,35 @@ p {
 }
 
 .story-text {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #1a1410 0%, #0f0a08 100%);
+  padding: 40px;
+  border-radius: 4px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
   margin-bottom: 30px;
+  border: 1px solid #8b7355;
+  border-left: 4px solid #8b7355;
 }
 
 .story-text p {
-  font-size: 18px;
-  line-height: 1.8;
-  color: #2c3e50;
-  margin-bottom: 1.2em;
+  font-size: 17px;
+  line-height: 1.9;
+  color: #e8dcc4;
+  margin-bottom: 1.4em;
+  text-align: justify;
 }
 
 .story-text p:last-child {
   margin-bottom: 0;
+}
+
+.story-text em {
+  color: #c9b896;
+  font-style: italic;
+}
+
+.story-text strong {
+  color: #d4a574;
+  font-weight: bold;
 }
 
 .story-image {
@@ -279,8 +306,9 @@ p {
 .story-image img {
   max-width: 100%;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  border: 2px solid #8b7355;
 }
 
 .story-choices {
@@ -290,42 +318,44 @@ p {
 }
 
 .choice-button {
-  background: white;
-  border: 2px solid #667eea;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #2a1f1a 0%, #1a1410 100%);
+  border: 2px solid #8b7355;
+  border-radius: 4px;
   padding: 20px 25px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Gentium Basic', serif;
   font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
+  font-weight: normal;
+  color: #e8dcc4;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  line-height: 1.6;
 }
 
 .choice-button::before {
-  content: '→';
+  content: '▸';
   position: absolute;
   right: 25px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 24px;
-  color: #667eea;
+  color: #8b7355;
   transition: all 0.3s ease;
 }
 
 .choice-button:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #3a2f2a 0%, #2a1f1a 100%);
+  border-color: #a88965;
+  color: #f4e8d4;
   transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 16px rgba(139, 115, 85, 0.4);
 }
 
 .choice-button:hover::before {
-  color: white;
+  color: #d4a574;
   right: 20px;
 }
 
@@ -340,11 +370,12 @@ p {
   position: fixed;
   top: 20px;
   right: -400px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #2a1f1a 0%, #1a1410 100%);
+  color: #e8dcc4;
   padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 2px solid #8b7355;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
   z-index: 1000;
   max-width: 350px;
   transition: right 0.3s ease;
@@ -358,7 +389,8 @@ p {
   display: block;
   font-size: 18px;
   margin-bottom: 5px;
-  font-family: 'Share Tech', sans-serif;
+  font-family: 'Cinzel', serif;
+  color: #d4a574;
 }
 
 /* ============================================
@@ -370,11 +402,12 @@ p {
   }
 
   #chapter-subtitle {
-    font-size: 14px;
+    font-size: 13px;
+    letter-spacing: 2px;
   }
 
   .story-text {
-    padding: 20px;
+    padding: 25px;
   }
 
   .story-text p {
@@ -383,27 +416,12 @@ p {
 
   .choice-button {
     padding: 15px 20px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .notification {
     max-width: 280px;
   }
-}
-
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
-.text-center {
-  text-align: center;
-}
-
-.mb-20 {
-  margin-bottom: 20px;
-}
-
-.mt-20 {
-  margin-top: 20px;
 }
 
 /* ============================================
@@ -423,18 +441,27 @@ p {
 .story-text,
 .story-image,
 .choice-button {
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.6s ease;
 }
 
 /* ============================================
-   SPECIAL STYLES FOR ENDING SCREENS
+   SCROLLBAR STYLING
    ============================================ */
-.story-text strong {
-  color: #667eea;
-  font-weight: 700;
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-.story-text em {
-  font-style: italic;
-  color: #764ba2;
+::-webkit-scrollbar-track {
+  background: #1a1410;
+  border-left: 1px solid #8b7355;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5a4a3a;
+  border-radius: 6px;
+  border: 2px solid #1a1410;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6a5a4a;
 }

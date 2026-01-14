@@ -1,87 +1,110 @@
-# From Freelancer to Founder
-### An Interactive Story Experience
+# His Majesty's Service
+### An Interactive Naval Novel
 
 ## Overview
 
-**From Freelancer to Founder** is an interactive narrative game set in the web development industry. What started as a simple idle game has been transformed into a choice-driven story where your decisions shape your journey from a struggling freelancer to a potential tech mogul.
+**His Majesty's Service** is a choice-driven interactive novel set in the Royal Navy during the 18th century. Experience the authentic life of a naval officer from midshipman to (potentially) admiral, making decisions that shape your career, reputation, and survival.
 
-## Story
+## The Experience
 
-You're a developer with rent due in two weeks and a career that's going nowhere. Your inbox pings with job opportunities, each one a potential turning point. Will you play it safe with small projects? Take risks on bigger contracts? Build a team or stay solo? Every choice matters.
+This is not a game with short text snippets. This is a **novel** you play through—immersive prose (600-1000 words per scene), complex characters, technical naval detail, and decisions that matter across years of your character's life.
+
+You are fifteen years old. The year is 1750. Your warrant as a Midshipman awaits. Whether you rise to command a ship of the line or end your career on half-pay depends entirely on your choices.
 
 ## Features
 
-### Choice-Driven Narrative
-- Multiple story paths based on your decisions
-- Meaningful choices that affect your stats and outcomes
-- Character interactions with unique personalities
-- Several different endings depending on your journey
+### Full Novel-Length Prose
+- Rich, literary writing in first-person perspective
+- Detailed sensory descriptions (smell of tar, sound of rigging, feel of the deck)
+- Authentic 18th century naval atmosphere
+- Technical accuracy with historical terminology
 
-### Dynamic Stats System
-- **Money**: Track your earnings and spending
-- **Reputation**: Build your professional standing
-- **Happiness**: Maintain work-life balance or burn out trying
-- **Team Size**: Grow from solo to managing dozens
+### Deep Character Simulation
+Choose your background:
+- **The Yellow Admiral's Son**: Wealth and connections, but the crew knows you bought your position
+- **The Tar-Born Midshipman**: Promoted from the ranks—exceptional skills, but low social standing
+- **The Mathematical Prodigy**: Brilliant navigator, but untested at sea
 
-### Achievements
-- Unlock achievements for key milestones
-- Track your progress through the story
-- Multiple achievements across different playthroughs
+### Complex Stats System
+- **Seamanship**: Knowledge of ropes, sails, and ship handling
+- **Gunnery**: Artillery tactics and cannon management
+- **Navigation**: Celestial navigation and pilotage
+- **Discipline**: Leadership and command presence
+- **Social Standing**: Reputation with the Admiralty and society
 
-### Save System
-- Save your progress at any point
-- Continue your story across sessions
-- Restart to explore different paths
+### Career Progression
+- Track days at sea
+- Build reputation with crew, officers, and the Admiralty
+- Face examinations for promotion
+- Navigate patronage and politics
+- Risk permadeath (court martial, killed in action, or "beached" on half-pay)
 
-## Story Paths
+### Time Dilation
+- Day-by-day progression during important events
+- Ability to skip calm periods with embedded choices
+- Career spans decades while keeping the story moving
 
-Explore different routes:
-- **The Solo Success**: Stay small, stay independent
-- **The Empire Builder**: Build a massive agency
-- **The Balanced Leader**: Find success without sacrificing happiness
-- **The Cautious Path**: Steady, sustainable growth
-- **The Risk Taker**: Go big or go home
+### Authentic Naval Life
+- Real ship classes (Frigates, Ships of the Line, Schooners)
+- Historical accuracy in procedures and terminology
+- Period-appropriate challenges (impressment, prize money, mutiny, disease)
+- Technical naval combat (weather gage, raking fire, boarding actions)
 
-## Characters
+## Story Structure
 
-Meet interesting characters along your journey:
-- **Sarah**: Creative web designer fresh out of school
-- **Marcus**: Experienced developer who values professionalism
-- **Priya**: SEO specialist with marketing magic
-- And more as your story unfolds...
+### Chapter One: First Voyage
+- Character creation and background selection
+- First day aboard ship
+- Learning the ropes and establishing your reputation
+- First action at sea
+- Ends with your first real test of character and skill
+
+### Future Chapters (To Be Written)
+- First promotion examination
+- First command
+- Major naval engagement
+- Career-defining choices
+- Multiple possible endings based on your path
+
+## Technical Details
+
+- Pure HTML/CSS/JavaScript
+- No external dependencies
+- Mobile-optimized for iPhone
+- Save/load system using localStorage
+- Works perfectly on GitHub Pages
 
 ## How to Play
 
-1. Open `index.html` in your browser
-2. Read the story and make choices
-3. Watch your stats change based on decisions
-4. Unlock achievements and discover different endings
-5. Save your progress or restart to try new paths
+1. Open `index.html` in any modern browser
+2. Choose your character background
+3. Read the story and make choices
+4. Watch your stats evolve based on decisions
+5. Save your progress anytime
+6. Restart to explore different career paths
 
-## Technology
+## Writing Style
 
-- Pure JavaScript (no frameworks)
-- HTML5 & CSS3
-- LocalStorage for save system
-- Fully responsive design
+Accessible but authentic—think Patrick O'Brian meets Choice of Games. Naval terms are explained in context. You'll feel the world, know the characters, and remember scenes like you watched them in a movie.
 
-## Multiple Endings
+## Development Status
 
-Your choices lead to different conclusions:
-- Will you build a 50-person empire?
-- Or find happiness as a solo freelancer?
-- Can you balance growth with personal wellbeing?
-- What kind of founder will you become?
+**Currently Implemented:**
+- Full character creation system
+- Opening scenes with novel-length prose
+- Stat tracking and choice consequences
+- Save/load functionality
+- Naval-themed UI
 
-## Credits
-
-**Original Game Concept**: John Deed @ Jdeed.co.uk
-**Interactive Story Adaptation**: Transformed into a narrative-driven experience
+**In Progress:**
+- Completing Chapter One through first action
+- Additional story branches
+- More character interactions
 
 ## License
 
-This is a learning project created to explore JavaScript game development and interactive storytelling.
+Created as an interactive fiction experiment exploring 18th century Royal Navy life.
 
 ---
 
-*Your journey from freelancer to founder begins now. What kind of story will you write?*
+*"The sea is the same as it has been since before men ever went on it in boats."*
