@@ -11,6 +11,7 @@
 
   <div class="story-container">
 
+    <!-- Sidebar with stats -->
     <div class="story-sidebar">
 
       <div class="naval-header">
@@ -27,14 +28,6 @@
         <div class="stat-item">
           <span class="stat-label">Ship:</span>
           <span class="stat-value-small" id="ship">-</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Date:</span>
-          <span class="stat-value-small" id="date">-</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Sea Time:</span>
-          <span class="stat-value" id="seatime">0</span> days
         </div>
       </div>
 
@@ -63,15 +56,15 @@
       </div>
 
       <div class="controls">
-        <button class="side-button" onclick="saveStory()">Save Progress</button>
-        <button class="side-button" onclick="restartStory()">New Career</button>
+        <button class="side-button" id="save-btn">Save Progress</button>
+        <button class="side-button" id="restart-btn">New Career</button>
       </div>
 
       <center><p class="credits"><small>An Interactive Novel</small></p></center>
 
-    </div><!--story-sidebar finish-->
+    </div>
 
-
+    <!-- Main story area -->
     <div class="story-main">
 
       <div class="story-header">
@@ -82,12 +75,7 @@
       <div class="story-content">
 
         <div id="story-text" class="story-text">
-          <p>If you see this, JavaScript is NOT loading. The story should replace this text automatically.</p>
-          <p>Try refreshing the page or checking if JavaScript is enabled in your browser.</p>
-        </div>
-
-        <div id="story-image" class="story-image">
-          <!-- Story images will be dynamically loaded here -->
+          <p>Loading story...</p>
         </div>
 
         <div id="story-choices" class="story-choices">

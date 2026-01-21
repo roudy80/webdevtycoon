@@ -80,7 +80,7 @@ em {
 }
 
 /* ============================================
-   SIDEBAR - Naval Officer's Log Style
+   SIDEBAR
    ============================================ */
 .story-sidebar {
   flex: 0 0 320px;
@@ -298,19 +298,6 @@ em {
   font-weight: bold;
 }
 
-.story-image {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.story-image img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-  border: 2px solid #8b7355;
-}
-
 .story-choices {
   display: flex;
   flex-direction: column;
@@ -364,7 +351,7 @@ em {
 }
 
 /* ============================================
-   NAME ENTRY INPUT
+   NAME INPUT
    ============================================ */
 .name-entry-container {
   margin: 30px 0;
@@ -427,37 +414,6 @@ em {
 }
 
 /* ============================================
-   RESPONSIVE
-   ============================================ */
-@media only screen and (max-width: 768px) {
-  .story-header h1 {
-    font-size: 32px;
-  }
-
-  #chapter-subtitle {
-    font-size: 13px;
-    letter-spacing: 2px;
-  }
-
-  .story-text {
-    padding: 25px;
-  }
-
-  .story-text p {
-    font-size: 16px;
-  }
-
-  .choice-button {
-    padding: 15px 20px;
-    font-size: 15px;
-  }
-
-  .notification {
-    max-width: 280px;
-  }
-}
-
-/* ============================================
    ANIMATIONS
    ============================================ */
 @keyframes fadeIn {
@@ -472,13 +428,12 @@ em {
 }
 
 .story-text,
-.story-image,
 .choice-button {
   animation: fadeIn 0.6s ease;
 }
 
 /* ============================================
-   SCROLLBAR STYLING
+   SCROLLBAR
    ============================================ */
 ::-webkit-scrollbar {
   width: 12px;
