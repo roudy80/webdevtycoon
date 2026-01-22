@@ -15,7 +15,7 @@ const gameState = {
 
   // Career stats
   rank: 'Midshipman',
-  ship: '-',
+  ship: 'HMS Indefatigable',
 
   // Skills
   seamanship: 0,
@@ -23,6 +23,26 @@ const gameState = {
   navigation: 0,
   discipline: 0,
   social: 0,
+
+  // Reputation (affects story branches)
+  crewReputation: 50,      // 0-100, affects morale and loyalty
+  officerReputation: 50,   // 0-100, affects promotions and assignments
+
+  // Resources
+  prizeMoney: 0,           // Earnings from captured ships
+
+  // Ship status
+  morale: 50,              // 0-100, crew morale
+
+  // Key relationships (-10 to +10)
+  relationships: {
+    jenkins: 0,      // Captain of foretop
+    rodgers: 0,      // Friendly midshipman
+    caruthers: 0,    // Aristocratic rival
+    blake: 0,        // Your watch officer
+    harrow: 0,       // First Lieutenant
+    thornton: 0      // The Captain
+  },
 
   // Story flags for branching
   flags: {}
@@ -854,7 +874,7 @@ const scenes = {
       {
         text: "Recover and continue",
         next: 'afterStorm',
-        effects: { social: 2 }
+        effects: { social: 2, crewReputation: 15, officerReputation: 10, jenkins: 5, blake: 2, thornton: 2, morale: 5 }
       }
     ]
   },
@@ -881,7 +901,7 @@ const scenes = {
       {
         text: "The storm passes",
         next: 'afterStorm',
-        effects: { social: 1, seamanship: 1 }
+        effects: { social: 1, seamanship: 1, crewReputation: 10, officerReputation: 5, jenkins: 3, blake: 2, morale: 3 }
       }
     ]
   },
@@ -1027,26 +1047,75 @@ const scenes = {
 
       <p>The French frigate—the <em>Téméraire</em>, thirty-eight guns—is taken as a prize. A prize crew is sent across, led by Lieutenant Blake. "Well done, Mr. {playerName}," he says before he goes. "Your guns kept firing. That's what wins battles—steady fire, faster than the enemy. Remember that."</p>
 
-      <p>That evening, Captain Thornton addresses the ship's company. "You've fought well. You've done your duty to His Majesty and to this ship. The prize will fetch a good sum when we reach port—every man will share in it. But remember the men we've lost. They died serving their country. Honor their memory by serving equally well."</p>
+      <p>That evening, Captain Thornton addresses the ship's company. "The prize will be sold when we reach port. A 38-gun frigate in good condition—that's eight thousand pounds, perhaps more. Every man shares in it. Even a midshipman's portion should be forty pounds or thereabouts." Your eyes widen. Forty pounds! That's more money than you've ever had.</p>
 
-      <p>In the gunroom that night, the mood is subdued. You've seen combat now. You know what it means. The glory and the horror of it.</p>
-
-      <p>Caruthers raises his glass. "To absent friends," he says quietly.</p>
+      <p>In the gunroom that night, the mood is subdued. You've seen combat now. Caruthers raises his glass. "To absent friends," he says quietly.</p>
 
       <p>"Absent friends," you all echo.</p>
 
       <p>The ship sails on, toward the Caribbean. You're a different person than the boy who came aboard in Portsmouth. The sea has begun to make you into something new.</p>
-
-      <p>Your story is just beginning.</p>
     `,
     choices: [
       {
-        text: "Continue your naval career (More to come...)",
+        text: "Continue your naval career",
+        next: 'arriveAntigua',
+        effects: { prizeMoney: 42, gunnery: 1, officerReputation: 5, blake: 3, thornton: 2, rodgers: 1 }
+      }
+    ]
+  },
+
+  arriveAntigua: {
+    title: "Antigua",
+    subtitle: "Caribbean Station",
+    text: `
+      <p>Five weeks after the battle, you sight Antigua. The island rises green from turquoise water, rimmed with white beaches. After weeks at sea, land—any land—looks like paradise.</p>
+
+      <p>English Harbour is crowded with warships: ships of the line, frigates, sloops. The squadron assembled to protect British interests in the Caribbean and prey on French and Spanish shipping. Admiral Boscawen's flag flies from a three-decker at the head of the anchorage.</p>
+
+      <p>The moment the ship anchors, a boat comes alongside. You watch as a post-captain climbs aboard—senior to Captain Thornton, here on the Admiral's business. They speak briefly, then Thornton calls, "Mr. Harrow! Mr. {playerName}! Attend me."</p>
+
+      <p>In his cabin, Thornton looks tired but satisfied. "Gentlemen, the Admiral desires an officer from this ship for a particular service. Mr. {playerName}, you're to report aboard HMS <em>Swift</em>, Captain Morrison commanding. She's a 16-gun brig—fast, handy, perfect for independent cruising. This is a good opportunity. Take it."</p>
+
+      <p>A new ship. A smaller vessel where you'll have more responsibility. It's both exciting and terrifying.</p>
+    `,
+    choices: [
+      {
+        text: "Accept the transfer eagerly",
+        next: 'moreTocome',
+        effects: { discipline: 1, officerReputation: 3 }
+      },
+      {
+        text: "Accept, but express reluctance to leave your shipmates",
+        next: 'moreTocome',
+        effects: { social: 1, rodgers: 1, jenkins: 1 }
+      }
+    ]
+  },
+
+  moreTocome: {
+    title: "To Be Continued",
+    subtitle: "More Adventures Await",
+    text: `
+      <p>Your story continues...</p>
+
+      <p>You've survived your first weeks at sea, weathered a storm, fought your first action, and earned your first prize money. You've made friends and enemies, learned the harsh realities of naval life, and begun to find your place in this wooden world.</p>
+
+      <p>Ahead lie more adventures: service aboard a small, fast brig. Independent cruising in the Caribbean. Chasing privateers and slavers. Shore leave in port towns. Moral dilemmas about the men you must lead and the orders you must follow.</p>
+
+      <p>The sea has more lessons to teach you—if you survive them.</p>
+
+      <p><em>More scenes coming soon...</em></p>
+    `,
+    choices: [
+      {
+        text: "Return to main menu",
         next: 'endOfDemo',
         effects: {}
       }
     ]
   },
+
+  endOfDemo: {
 
   endOfDemo: {
     title: "To Be Continued",
@@ -1158,6 +1227,10 @@ function makeChoice(choice) {
     for (let key in choice.effects) {
       if (key === 'background') {
         gameState.background = choice.effects[key];
+      } else if (gameState.relationships.hasOwnProperty(key)) {
+        // Handle relationship changes
+        gameState.relationships[key] += choice.effects[key];
+        console.log(`Relationship with ${key} changed by ${choice.effects[key]}, now ${gameState.relationships[key]}`);
       } else if (gameState.hasOwnProperty(key)) {
         gameState[key] += choice.effects[key];
         console.log(`${key} changed by ${choice.effects[key]}, now ${gameState[key]}`);
@@ -1179,12 +1252,15 @@ function makeChoice(choice) {
 // ============================================
 function updateUI() {
   document.getElementById('rank').textContent = gameState.rank;
-  document.getElementById('ship').textContent = gameState.ship;
+  document.getElementById('prize').textContent = '£' + gameState.prizeMoney;
   document.getElementById('seamanship').textContent = gameState.seamanship;
   document.getElementById('gunnery').textContent = gameState.gunnery;
   document.getElementById('navigation').textContent = gameState.navigation;
   document.getElementById('discipline').textContent = gameState.discipline;
   document.getElementById('social').textContent = gameState.social;
+  document.getElementById('crew-rep').textContent = gameState.crewReputation;
+  document.getElementById('officer-rep').textContent = gameState.officerReputation;
+  document.getElementById('morale').textContent = gameState.morale;
 }
 
 // ============================================
@@ -1229,12 +1305,24 @@ function restartStory() {
     gameState.background = null;
     gameState.currentScene = 'start';
     gameState.rank = 'Midshipman';
-    gameState.ship = '-';
+    gameState.ship = 'HMS Indefatigable';
     gameState.seamanship = 0;
     gameState.gunnery = 0;
     gameState.navigation = 0;
     gameState.discipline = 0;
     gameState.social = 0;
+    gameState.crewReputation = 50;
+    gameState.officerReputation = 50;
+    gameState.prizeMoney = 0;
+    gameState.morale = 50;
+    gameState.relationships = {
+      jenkins: 0,
+      rodgers: 0,
+      caruthers: 0,
+      blake: 0,
+      harrow: 0,
+      thornton: 0
+    };
     gameState.flags = {};
 
     renderScene('start');
