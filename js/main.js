@@ -1814,7 +1814,233 @@ const scenes = {
     `,
     choices: [
       {
-        text: "Continue to Act Three (Coming soon...)",
+        text: "Begin Act Three",
+        next: 'act3Start',
+        effects: {}
+      }
+    ]
+  },
+
+  act3Start: {
+    title: "HMS Serpent",
+    subtitle: "1754 - Your First Command",
+    text: `
+      <p>Six months after receiving your commission, the Admiralty offers you command of HMS <em>Serpent</em>, a 14-gun sloop. Your own ship. This is what you've worked for.</p>
+
+      <p>She's just 85 feet, fourteen 6-pounder guns, and a crew of 65 when fully manned. But she's <em>yours</em>. You step aboard as her commanding officer, and the remaining crew—forty-five exhausted, underfed men—assemble on deck.</p>
+
+      <p>Your first lieutenant is a man named Hawkins. He's competent but weary. "Congratulations on your command, sir. Now the hard part: we need twenty more men. The press gangs are out, but they're brutal and the men they bring are unwilling. We could also offer bounties for volunteers—£5 per man—but that's £100 out of pocket. Your pocket, most likely, since the Admiralty won't pay."</p>
+
+      <p>He's not wrong. Captains are expected to spend their own money outfitting ships. It's how the system works.</p>
+
+      <p>Option three: turn a blind eye to the crew's "recruiting" methods. They'll find men one way or another—deserters from other ships, criminals fleeing justice. You'll have your crew, but they'll be unreliable.</p>
+
+      <p>You currently have £${gameState.prizeMoney}.</p>
+    `,
+    choices: [
+      {
+        text: "Press men—it's legal, if brutal (free but lowers crew morale)",
+        next: 'crewRecruited',
+        effects: { crewReputation: -15, morale: -15, flags: { pressedCrew: true } }
+      },
+      {
+        text: "Pay bounties for volunteers—£100 of your own money",
+        next: 'crewRecruited',
+        effects: { prizeMoney: -100, crewReputation: 15, morale: 15, flags: { volunteerCrew: true } }
+      },
+      {
+        text: "Let the crew 'recruit' however they can—look the other way",
+        next: 'crewRecruited',
+        effects: { crewReputation: -5, discipline: -5, flags: { shadyRecruiting: true } }
+      }
+    ]
+  },
+
+  crewRecruited: {
+    title: "Full Complement",
+    subtitle: "Ready to Sail",
+    text: `
+      <p>One way or another, you have your sixty-five men. If you pressed them, they're sullen and resentful, dragged from merchant ships and taverns. If you paid bounties, they're willing but expect fair treatment in return. If you looked the other way, your crew is a mix of deserters and questionable characters.</p>
+
+      <p>You sail from Portsmouth with orders: independent cruising in the Channel and Bay of Biscay. Hunt French privateers and protect British commerce. You're on your own—no fleet, no admiral looking over your shoulder. This is both liberating and terrifying.</p>
+
+      <p>Two months pass. You take several small prizes—fishing boats, a coaster with wine and cheese. Your share: £40. The crew begins to shake down into a working unit. Then the Admiralty's pay ship is delayed. Your men haven't been paid in four months.</p>
+
+      <p>They're hungry, angry, and looking to you for answers. You have £${gameState.prizeMoney} in your purse. You could spend £50 to buy food and keep them fed, or tell them to wait for the Navy's pay—which may never come.</p>
+    `,
+    choices: [
+      {
+        text: "Spend £50 of your own money to feed the crew",
+        next: 'afterPayCrisis',
+        effects: { prizeMoney: -50, crewReputation: 20, morale: 20 }
+      },
+      {
+        text: "Tell them to wait—it's not your responsibility",
+        next: 'afterPayCrisis',
+        effects: { crewReputation: -15, morale: -20, discipline: 2 }
+      },
+      {
+        text: "Promise them extra shares of the next prize instead",
+        next: 'afterPayCrisis',
+        effects: { crewReputation: 5, morale: 5, flags: { promisedExtraShares: true } }
+      }
+    ]
+  },
+
+  afterPayCrisis: {
+    title: "Consequences",
+    subtitle: "Trust Earned or Lost",
+    text: `
+      <p>Your choice has consequences. If you fed them from your own pocket, the men look at you with newfound respect. "The Captain takes care of his own," they mutter. If you refused, they're bitter. "Officers get their prize money, but we starve," someone says in the darkness.</p>
+
+      <p>The ship sails on. You're learning what it means to command—not just giving orders, but being responsible for sixty-five lives. Their health, their safety, their morale. It's exhausting.</p>
+
+      <p>Then one morning, you encounter something unexpected: a slave ship. British flag, en route from West Africa to the Caribbean with three hundred enslaved Africans in her hold. Legally, she's legitimate—Parliament hasn't banned the trade yet. But you can smell the ship from a mile away, hear the cries from below decks.</p>
+
+      <p>Your crew is watching you. Some are uncomfortable. Others don't care. What you do now will define who you are as a captain.</p>
+    `,
+    choices: [
+      {
+        text: "Board her and inspect—ensure they're following the law, at least",
+        next: 'slaveShipInspection',
+        effects: { discipline: 1, social: 1 }
+      },
+      {
+        text: "Ignore her—it's legal, not your concern",
+        next: 'continuePatrol',
+        effects: { discipline: 2 }
+      },
+      {
+        text: "Send a signal condemning the trade—make your position clear",
+        next: 'continuePatrol',
+        effects: { social: 2, crewReputation: 5, officerReputation: -5 }
+      }
+    ]
+  },
+
+  slaveShipInspection: {
+    title: "The Hold",
+    subtitle: "Horror",
+    text: `
+      <p>You board the slaver. The captain is defensive but lets you inspect. Below decks is hell: three hundred human beings chained in rows, lying in their own filth. The smell is indescribable. You see children, women, men—all of them staring with eyes that have seen the end of the world.</p>
+
+      <p>"All legal, sir," the captain says. "Got the manifests right here. King's customs approved."</p>
+
+      <p>He's right. It's legal. But standing in that hold, you understand viscerally what the slave trade means. This is the price of sugar, tobacco, cotton—the Empire's wealth built on this horror.</p>
+
+      <p>You can't free them without breaking the law and ending your career. But you've seen it now. You can't unsee it.</p>
+
+      <p>You return to <em>Serpent</em> and order the ship to continue. But something has changed in you.</p>
+    `,
+    choices: [
+      {
+        text: "Continue your patrol, haunted by what you saw",
+        next: 'continuePatrol',
+        effects: { social: 1 }
+      }
+    ]
+  },
+
+  continuePatrol: {
+    title: "Hunting",
+    subtitle: "Months Later",
+    text: `
+      <p>Months of cruising. You take more prizes—small ships, fishing boats, one valuable French privateer worth £80 to your share. Your total wealth grows. The crew either loves you or resents you, depending on how you've treated them.</p>
+
+      <p>Then: war. Official declaration. Britain and France are at war again—the Seven Years' War, though nobody knows it will last that long yet. Your orders change: aggressive action against French shipping.</p>
+
+      <p>You're hunting off the Brittany coast when the lookout calls: "Sail ho! Two ships, bearing east-northeast!"</p>
+
+      <p>Through your glass, you see them: two French frigates, each mounting 32 guns. They've spotted you too. <em>Serpent</em> has 14 guns. You're outnumbered and outgunned.</p>
+
+      <p>This is the moment. Your skills, your crew's loyalty, your ship's readiness—all of it will be tested. Run or fight? And if you run, can you escape?</p>
+    `,
+    choices: [
+      {
+        text: "Run—use your speed and seamanship to escape",
+        next: 'theAmbush',
+        effects: { seamanship: 1 }
+      },
+      {
+        text: "Fight—maybe you can cripple one and escape",
+        next: 'theAmbush',
+        effects: { gunnery: 1, discipline: 1 }
+      },
+      {
+        text: "Bluff—fly French colors and try to sail past them",
+        next: 'theAmbush',
+        effects: { social: 1, navigation: 1 }
+      }
+    ]
+  },
+
+  theAmbush: {
+    title: "The Ambush",
+    subtitle: "Survival",
+    text: `
+      <p>Your choice determines what happens next, but the outcome depends on everything you've built: your skills, your crew's morale, your ship's condition.</p>
+
+      <p>If you run, it's a chase. <em>Serpent</em> is fast, but the frigates are faster. You need every trick: throwing cargo overboard to lighten ship, rigging stunsails for extra speed, using your navigation knowledge to find shallow water where the deep-draft frigates can't follow. Your seamanship skill makes the difference.</p>
+
+      <p>If you fight, it's desperate. You rake one frigate with a perfect broadside—your gunnery training pays off—then use smoke to break away. But you take damage. Men die. It's close.</p>
+
+      <p>If you bluff, you sail straight toward them flying false colors. They hail you in French. If your social skill is high enough, you can fake a response. The deception works just long enough to get within range of British waters, then you run up your true colors and flee.</p>
+
+      <p>However you do it, you escape—barely. <em>Serpent</em> is damaged. You lost eight men. But you survived against odds that should have killed you.</p>
+
+      <p>You limp into Plymouth and make your report. The Admiralty is impressed. Commanding officers who can think fast and survive against superior forces are rare.</p>
+    `,
+    choices: [
+      {
+        text: "Await your next orders",
+        next: 'promotion',
+        effects: { seamanship: 2, discipline: 1, officerReputation: 15 }
+      }
+    ]
+  },
+
+  promotion: {
+    title: "Recognition",
+    subtitle: "1757",
+    text: `
+      <p>The Admiralty promotes you to Commander. It's not post-captain yet—that requires both seniority and a ship of twenty guns or more—but it's close. You've commanded well, survived impossible situations, and earned a reputation.</p>
+
+      <p>Your prize money has grown to £${gameState.prizeMoney}. If you've spent wisely, you're comfortable. If you've been generous to your crew, they love you. If you've been harsh, they fear you. All of it has shaped the officer you've become.</p>
+
+      <p>Your next assignment: second-in-command aboard HMS <em>Thunderer</em>, a 74-gun ship of the line. The ship is joining Admiral Hawke's fleet for major operations. This is the big time—fleet actions, ship-to-ship duels, the kind of warfare that makes or breaks careers.</p>
+
+      <p>You're twenty years old. You've been in the Navy for five years. You've seen storms, battles, death, and moral choices with no good answers. The boy who joined in Portsmouth is gone. In his place stands an officer, hardened and tested.</p>
+
+      <p>Your journey continues...</p>
+    `,
+    choices: [
+      {
+        text: "Report aboard HMS Thunderer",
+        next: 'endAct3',
+        effects: { rank: 'Commander', officerReputation: 10, prizeMoney: 80 }
+      }
+    ]
+  },
+
+  endAct3: {
+    title: "Act Three Complete",
+    subtitle: "Your First Command",
+    text: `
+      <p><strong>1754-1757: The Commander</strong></p>
+
+      <p>You commanded your own ship. Sixty-five men called you "Captain" and looked to you for everything—food, pay, safety, decisions. Some of them died under your command. Others thrived. Your choices shaped their lives and yours.</p>
+
+      <p>You faced impossible situations: outnumbered by enemy frigates, betrayed by bureaucratic delays, confronted with the horrors of the slave trade. You made choices with no right answers. You spent your own money to keep men alive, or you didn't. You pressed men into service, or paid for volunteers, or looked the other way.</p>
+
+      <p>Every decision had consequences. Every shilling spent or saved mattered. Every point of crew loyalty, officer reputation, and skill made the difference between success and disaster.</p>
+
+      <p><strong>Act Four awaits: The Crucible...</strong></p>
+
+      <p><em>Your journey has been shaped by your choices. The officer you've become—for better or worse—is the product of hundreds of decisions across three acts. Check your stats to see where you stand. Everything you've done will matter in the final act.</em></p>
+    `,
+    choices: [
+      {
+        text: "Continue to Act Four (Coming soon...)",
         next: 'endOfDemo',
         effects: {}
       }
