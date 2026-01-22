@@ -1093,29 +1093,343 @@ const scenes = {
   },
 
   moreTocome: {
-    title: "To Be Continued",
-    subtitle: "More Adventures Await",
+    title: "HMS Swift",
+    subtitle: "New Assignment",
     text: `
-      <p>Your story continues...</p>
+      <p>You say your farewells in <em>Indefatigable</em>'s gunroom. Rodgers grips your hand. "Lucky bastard. Independent cruising on a brig—that's the life. Just try not to get your head blown off." Even Caruthers nods coolly. "Good hunting, {playerName}."</p>
 
-      <p>You've survived your first weeks at sea, weathered a storm, fought your first action, and earned your first prize money. You've made friends and enemies, learned the harsh realities of naval life, and begun to find your place in this wooden world.</p>
+      <p>HMS <em>Swift</em> is tiny compared to <em>Indefatigable</em>—just 90 feet long, 16 guns, and 65 souls aboard. But she's fast and handy, perfect for chasing down smugglers and privateers in the islands. Captain Morrison is a hard-eyed man of thirty, a commander waiting for his post-captain promotion. He wastes no time on pleasantries.</p>
 
-      <p>Ahead lie more adventures: service aboard a small, fast brig. Independent cruising in the Caribbean. Chasing privateers and slavers. Shore leave in port towns. Moral dilemmas about the men you must lead and the orders you must follow.</p>
+      <p>"You're senior midshipman, Mr. {playerName}. When I'm ashore or incapacitated, the ship is yours. We cruise independently—no fleet, no admirals watching. That means prize money, but also risk. Questions?"</p>
 
-      <p>The sea has more lessons to teach you—if you survive them.</p>
+      <p>"No, sir."</p>
 
-      <p><em>More scenes coming soon...</em></p>
+      <p>"Good. We sail at dawn. We're hunting a French privateer that's been taking British merchantmen off Guadeloupe. Find her, take her, and we all get rich. Fail, and we all hang. Simple enough."</p>
+
+      <p>Your new life begins.</p>
     `,
     choices: [
       {
-        text: "Return to main menu",
+        text: "Get to work preparing the ship",
+        next: 'swiftCruising',
+        effects: { discipline: 1 }
+      }
+    ]
+  },
+
+  swiftCruising: {
+    title: "Hunting",
+    subtitle: "Three Weeks Later",
+    text: `
+      <p>Three weeks of cruising the Leeward Islands. The work is endless—standing watch, drilling guns, managing stores. The heat is crushing. Men collapse from sun-stroke. The water tastes foul, and weevils infest everything.</p>
+
+      <p>But you're learning. On a small ship, every officer must do everything. You navigate by the stars, command gun drills, settle disputes between the crew. Morrison watches you constantly, judging.</p>
+
+      <p>Then, at dawn on a Tuesday, the lookout calls: "Sail ho! Three points to larboard!"</p>
+
+      <p>Through the glass, you see her—a schooner, low and fast, with too many guns for honest trade. Morrison grins like a wolf. "That's our privateer. Beat to quarters, Mr. {playerName}. Let's see if she'll run or fight."</p>
+
+      <p>The chase lasts four hours. <em>Swift</em> is fast, but the schooner is faster. You're closing, but barely. Morrison turns to you. "We could crowd on more sail—risk carrying away a mast—or we could fire the bow chasers, try to cripple her rigging."</p>
+    `,
+    choices: [
+      {
+        text: "Crowd on more sail—risk it for speed",
+        next: 'privateerTaken',
+        effects: { seamanship: 1, morale: -3 }
+      },
+      {
+        text: "Fire the bow chasers—precision over speed",
+        next: 'privateerTaken',
+        effects: { gunnery: 1, discipline: 1 }
+      }
+    ]
+  },
+
+  privateerTaken: {
+    title: "First Prize",
+    subtitle: "Victory",
+    text: `
+      <p>Your choice works. The privateer's foremast comes down in a tangle of canvas and rope. <em>Swift</em> closes the distance and fires a broadside. The privateer strikes her colors—surrenders—before you can board her.</p>
+
+      <p>She's the <em>Renard</em>, 12 guns, with a hold full of stolen cargo: sugar, rum, tobacco. Morrison is delighted. "A fine prize! Worth three thousand pounds at least. Your share, Mr. {playerName}, will be forty pounds or so." He pauses. "I'm putting you in command of the prize crew. Sail her to Antigua and turn her over to the prize court. It's four days' sailing, and you'll have just eight men. Think you can manage?"</p>
+
+      <p>Eight men to sail a damaged ship across open water, with the possibility of French warships, storms, or mutiny. This is both terrifying and thrilling.</p>
+
+      <p>"Yes, sir. I can manage."</p>
+
+      <p>"Good man. Here's hoping I see you in Antigua. If not—well, the sea claims us all eventually."</p>
+    `,
+    choices: [
+      {
+        text: "Take command of your first ship",
+        next: 'prizeCommand',
+        effects: { discipline: 1, officerReputation: 5, morale: 5 }
+      }
+    ]
+  },
+
+  prizeCommand: {
+    title: "Prize Command",
+    subtitle: "Alone at Sea",
+    text: `
+      <p>Four days alone at sea with eight men, sailing a damaged schooner to port. This is what you trained for, but the reality is harder than you imagined.</p>
+
+      <p>The men are suspicious—half of them are former <em>Swift</em> hands, the other half are French prisoners who agreed to work rather than be locked in the hold. You sleep in two-hour intervals, never fully at rest. Navigation by dead reckoning and sun sights. Constant vigilance for sails on the horizon.</p>
+
+      <p>On the third day, one of the Frenchmen—a wiry man named Dubois—approaches you. "Monsieur," he says quietly, "there is gold hidden aboard. The captain's secret cache. If you help me retrieve it, we split it. Two hundred pounds each. No one needs to know."</p>
+
+      <p>You could use two hundred pounds. But it's theft, and if you're caught, you'll be court-martialed. What Morrison doesn't know won't hurt him... or will it?</p>
+    `,
+    choices: [
+      {
+        text: "Take the gold—you earned it with the risk you're taking",
+        next: 'arriveAntigua2',
+        effects: { prizeMoney: 200, social: -2, officerReputation: -5, discipline: -2 }
+      },
+      {
+        text: "Refuse—you're an officer, not a thief",
+        next: 'arriveAntigua2',
+        effects: { discipline: 2, officerReputation: 5, social: 1 }
+      },
+      {
+        text: "Report it to Morrison when you arrive—let him decide",
+        next: 'arriveAntigua2',
+        effects: { discipline: 1, officerReputation: 3, prizeMoney: 50 }
+      }
+    ]
+  },
+
+  arriveAntigua2: {
+    title: "Safe Arrival",
+    subtitle: "Antigua Harbor",
+    text: `
+      <p>You bring the <em>Renard</em> safely into English Harbour. Morrison greets you at the dock, genuinely pleased. "Well done, {playerName}. I wasn't sure you'd make it."</p>
+
+      <p>The prize is condemned and sold. Your share: £38 from the sale, plus whatever choice you made about the gold. You're richer than you've ever been, but the question is: what do you do with it?</p>
+
+      <p>In the harbor chandleries, you see options: a beautiful telescope (£30, would help your navigation), a fine sword (£25, might save your life in boarding actions), navigation books (£20, help you study for lieutenant). Or you could save it all, invest it in merchant cargo for speculation, or spend it on rum for <em>Swift</em>'s crew to boost morale.</p>
+
+      <p>What you choose now might matter later.</p>
+    `,
+    choices: [
+      {
+        text: "Buy the telescope—invest in your skills",
+        next: 'swiftReturns',
+        effects: { prizeMoney: -30, navigation: 2 }
+      },
+      {
+        text: "Buy the sword and look like a proper officer",
+        next: 'swiftReturns',
+        effects: { prizeMoney: -25, social: 1, discipline: 1 }
+      },
+      {
+        text: "Buy navigation books to study for lieutenant",
+        next: 'swiftReturns',
+        effects: { prizeMoney: -20, navigation: 1, discipline: 1 }
+      },
+      {
+        text: "Spend £15 on rum for the crew—they've earned it",
+        next: 'swiftReturns',
+        effects: { prizeMoney: -15, crewReputation: 10, morale: 10 }
+      },
+      {
+        text: "Save every penny—you'll need it for advancement",
+        next: 'swiftReturns',
+        effects: { discipline: 1 }
+      }
+    ]
+  },
+
+  swiftReturns: {
+    title: "Back to Sea",
+    subtitle: "Two Months Later",
+    text: `
+      <p>Two months of cruising. You take three more prizes—small ones, fishing boats and a Spanish coaster. Your share adds another £30 to your purse. The crew knows you now, respects you. Morrison gives you more responsibility.</p>
+
+      <p>Then one morning, Morrison calls you to his cabin. He looks troubled. "We have orders. Admiral wants us to rejoin the squadron off Martinique in three days. But..." He taps the chart. "I received intelligence. A Spanish merchantman, heavily loaded, is making for Havana. She's fat, slow, and worth ten thousand pounds. We could intercept her—but it means disobeying the Admiral's direct order."</p>
+
+      <p>He looks at you. "What would you do, Mr. {playerName}? Follow orders like a good officer, or chase the prize and claim we had navigational difficulties? Your opinion matters."</p>
+
+      <p>This is a test. What you say will define you.</p>
+    `,
+    choices: [
+      {
+        text: "\"Chase the prize, sir. Fortune favors the bold.\"",
+        next: 'chasePrize',
+        effects: { social: 1, officerReputation: -5 }
+      },
+      {
+        text: "\"Follow orders, sir. Duty before profit.\"",
+        next: 'followOrders',
+        effects: { discipline: 2, officerReputation: 10 }
+      },
+      {
+        text: "\"Split the difference—chase briefly, then rejoin if we don't find her quickly.\"",
+        next: 'compromise',
+        effects: { discipline: 1, social: 1 }
+      }
+    ]
+  },
+
+  chasePrize: {
+    title: "The Chase",
+    subtitle: "Greed and Glory",
+    text: `
+      <p>Morrison grins. "I like your spirit." He orders the course changed. The crew cheers—they know what a ten-thousand-pound prize means. You hunt for two days.</p>
+
+      <p>You find the merchantman. She's everything Morrison promised—huge, wallowing, helpless. <em>Swift</em> fires a warning shot and she strikes immediately. The hold is stuffed with silver ingots from the Mexican mines. Your share will be £150 at least.</p>
+
+      <p>But when you return to the squadron, you're five days late. The Admiral is furious. Morrison is reprimanded in front of the entire fleet. His career takes a blow. He doesn't blame you—you only advised—but you see the cost of greed.</p>
+
+      <p>The money is real. So is the stain on Morrison's record.</p>
+    `,
+    choices: [
+      {
+        text: "Reflect on the choice",
+        next: 'hurricaneWarning',
+        effects: { prizeMoney: 150, officerReputation: -5, morale: 10 }
+      }
+    ]
+  },
+
+  followOrders: {
+    title: "Duty First",
+    subtitle: "The Right Choice?",
+    text: `
+      <p>Morrison nods slowly. "You're right, of course. Orders are orders." He sounds disappointed but not surprised. <em>Swift</em> turns toward Martinique.</p>
+
+      <p>You rejoin the squadron precisely on time. The Admiral personally commends Morrison for punctuality and discipline. You get no prize money, but you've earned a reputation: reliable, trustworthy, the kind of officer who can be counted on.</p>
+
+      <p>Later, you hear the Spanish merchantman was taken by a French privateer. Ten thousand pounds, gone to the enemy. Morrison doesn't say anything, but you can see him wondering: what if?</p>
+
+      <p>You chose duty over wealth. Time will tell if it was wise.</p>
+    `,
+    choices: [
+      {
+        text: "Continue serving",
+        next: 'hurricaneWarning',
+        effects: { officerReputation: 15, discipline: 2 }
+      }
+    ]
+  },
+
+  compromise: {
+    title: "The Middle Path",
+    subtitle: "Splitting the Difference",
+    text: `
+      <p>Morrison considers. "One day's chase. If we don't sight her, we make for Martinique." It's a reasonable compromise.</p>
+
+      <p>You hunt for a day, but the Spanish ship is nowhere to be found—bad intelligence, or she changed course. Morrison turns back toward the squadron. You arrive one day late, not five. The Admiral frowns but accepts Morrison's explanation of contrary winds.</p>
+
+      <p>No prize, but no disgrace either. Morrison respects your judgment—cautious but not cowardly. You've avoided both extremes and maintained your reputation.</p>
+
+      <p>Sometimes the middle path is wisest.</p>
+    `,
+    choices: [
+      {
+        text: "Return to the squadron",
+        next: 'hurricaneWarning',
+        effects: { officerReputation: 5, discipline: 1 }
+      }
+    ]
+  },
+
+  hurricaneWarning: {
+    title: "Storm Season",
+    subtitle: "August 1752",
+    text: `
+      <p>August in the Caribbean. Hurricane season. The air feels heavy, oppressive. The barometer drops steadily. Veteran sailors watch the sky and mutter.</p>
+
+      <p>You're at sea when you see it: a wall of black clouds to the east, moving fast. The wind shifts, then dies completely. An eerie calm settles over the water. Every man aboard knows what this means.</p>
+
+      <p>Morrison's face is grim. "Hurricane. Coming right at us." He turns to you. "We can run before it—try to outrace the storm south. Or we can find shelter—there's a bay on the leeward side of Dominica, thirty miles north. Shelter means we might get caught on a lee shore if we can't anchor properly. Running means we face the open ocean in a hurricane."</p>
+
+      <p>Both options are terrible. Men will die either way. The choice is yours.</p>
+    `,
+    choices: [
+      {
+        text: "\"Run south, sir—open water is safer than a lee shore.\"",
+        next: 'hurricane',
+        effects: { seamanship: 1, flags: { hurricaneChoice: 'run' } }
+      },
+      {
+        text: "\"Make for shelter, sir—we can ride it out at anchor.\"",
+        next: 'hurricane',
+        effects: { navigation: 1, flags: { hurricaneChoice: 'shelter' } }
+      }
+    ]
+  },
+
+  hurricane: {
+    title: "The Hurricane",
+    subtitle: "Survival",
+    text: `
+      <p>The hurricane hits like the wrath of God.</p>
+
+      <p>Wind that screams. Waves forty feet high. Rain so thick you can't breathe. The ship pitches and rolls, timbers groaning. Men lash themselves to the deck to avoid being swept overboard. You can't see ten feet in any direction.</p>
+
+      <p>For eighteen hours, you fight. Every man does his duty or dies. Your skills matter now—seamanship to handle the sails, discipline to keep the crew from panicking, navigation to know where you are in the chaos.</p>
+
+      <p>The mast cracks. A wave carries away two men—you hear their screams for half a second before the wind drowns them. The pumps work constantly, but water pours in faster. If the crew loves you, they'll work until they drop. If they don't, they'll give up.</p>
+
+      <p>You survive because you're skilled, or lucky, or both. When the storm finally passes, the sun rises on a different world.</p>
+    `,
+    choices: [
+      {
+        text: "Assess the damage",
+        next: 'afterHurricane',
+        effects: { seamanship: 2 }
+      }
+    ]
+  },
+
+  afterHurricane: {
+    title: "Aftermath",
+    subtitle: "The Cost",
+    text: `
+      <p><em>Swift</em> is a wreck. The mainmast is cracked, sails torn, rigging in tangles. You lost six men—swept overboard or crushed by falling spars. The survivors are exhausted, traumatized.</p>
+
+      <p>Morrison is alive, but barely. A falling block struck his head. He's conscious but dazed, unable to command. The ship is yours now.</p>
+
+      <p>You limp into Antigua three days later, jury-rigged and barely floating. The harbor is full of wrecks—the hurricane destroyed a dozen ships. You're one of the lucky ones.</p>
+
+      <p>The Admiral summons you. In his cabin, he looks at you with new eyes. "Mr. {playerName}, Captain Morrison speaks highly of you. He's being invalided home—that head injury is serious. I'm giving you an acting promotion to Lieutenant and assigning you to HMS <em>Valiant</em>, a 74-gun ship of the line. You've earned it."</p>
+
+      <p>Lieutenant. You've done it. And it only cost six men's lives.</p>
+    `,
+    choices: [
+      {
+        text: "Accept the promotion",
+        next: 'endAct1',
+        effects: { rank: 'Lieutenant', officerReputation: 10, discipline: 2, ship: 'HMS Valiant' }
+      }
+    ]
+  },
+
+  endAct1: {
+    title: "Act One Complete",
+    subtitle: "The Young Gentleman",
+    text: `
+      <p><strong>1750-1752: Your Journey So Far</strong></p>
+
+      <p>You joined the Navy as a fifteen-year-old midshipman. You survived your first storm, fought your first battle, and commanded your first ship. You've earned prize money and a reputation—good or bad—with officers and crew alike.</p>
+
+      <p>You've been promoted to Lieutenant through a combination of skill, courage, and survival. Six men died in the hurricane. Some of your decisions were wise. Others, you'll question for the rest of your life.</p>
+
+      <p>Now you stand on the threshold of the next chapter: HMS <em>Valiant</em>, a mighty ship of the line. Bigger responsibilities. Higher stakes. The road to post-captain—and your own command—begins here.</p>
+
+      <p><strong>Act Two awaits...</strong></p>
+
+      <p><em>Check your stats in the sidebar to see how your choices shaped you.</em></p>
+    `,
+    choices: [
+      {
+        text: "Continue to Act Two (Coming soon...)",
         next: 'endOfDemo',
         effects: {}
       }
     ]
   },
-
-  endOfDemo: {
 
   endOfDemo: {
     title: "To Be Continued",
@@ -1225,16 +1539,20 @@ function makeChoice(choice) {
   // Apply stat effects
   if (choice.effects) {
     for (let key in choice.effects) {
-      if (key === 'background') {
-        gameState.background = choice.effects[key];
+      if (key === 'background' || key === 'rank' || key === 'ship') {
+        // Direct assignment for string values
+        gameState[key] = choice.effects[key];
+        console.log(`${key} set to: ${choice.effects[key]}`);
       } else if (gameState.relationships.hasOwnProperty(key)) {
-        // Handle relationship changes
+        // Handle relationship changes (numeric)
         gameState.relationships[key] += choice.effects[key];
         console.log(`Relationship with ${key} changed by ${choice.effects[key]}, now ${gameState.relationships[key]}`);
       } else if (gameState.hasOwnProperty(key)) {
+        // Handle numeric stats
         gameState[key] += choice.effects[key];
         console.log(`${key} changed by ${choice.effects[key]}, now ${gameState[key]}`);
       } else {
+        // Everything else goes to flags
         gameState.flags[key] = choice.effects[key];
       }
     }
