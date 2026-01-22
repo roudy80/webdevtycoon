@@ -1424,7 +1424,397 @@ const scenes = {
     `,
     choices: [
       {
-        text: "Continue to Act Two (Coming soon...)",
+        text: "Report aboard HMS Valiant",
+        next: 'act2Start',
+        effects: {}
+      }
+    ]
+  },
+
+  act2Start: {
+    title: "HMS Valiant",
+    subtitle: "Acting Lieutenant",
+    text: `
+      <p>HMS <em>Valiant</em> is enormous—a 74-gun third-rate, one of the Navy's workhorses. Over 500 men, three decks of guns, and a captain who terrifies everyone aboard.</p>
+
+      <p>Captain Sir Edmund Cole is an aristocrat and a perfectionist. His ship is spotless, his crew drilled to mechanical precision. You report to him in his great cabin, a space larger than <em>Swift</em>'s entire wardroom.</p>
+
+      <p>"Acting Lieutenant {playerName}," he says without warmth. "The Admiral speaks well of your conduct during the hurricane. However, <em>acting</em> is not the same as <em>confirmed</em>. You will sit for the Lieutenant's Examination when the board next convenes—six months from now. Pass, and your commission is permanent. Fail, and you return to midshipman's berth. Or worse, you're discharged from the service entirely."</p>
+
+      <p>Six months. Six months to prove you deserve to be an officer.</p>
+
+      <p>"You'll stand watch, command a division of guns, and study. Mr. Parkin, the sailing master, will assist with navigation. For the rest, you're on your own. Dismissed."</p>
+
+      <p>As you leave, another lieutenant stops you in the passageway. "Don't let Cole intimidate you. He's hard but fair. Just don't fail that exam—he's cashiered three acting lieutenants in the past year."</p>
+    `,
+    choices: [
+      {
+        text: "Begin preparing for the examination",
+        next: 'studyChoice',
+        effects: {}
+      }
+    ]
+  },
+
+  studyChoice: {
+    title: "Preparation",
+    subtitle: "The Examination Looms",
+    text: `
+      <p>The Lieutenant's Examination tests everything: navigation, seamanship, gunnery, ship handling, regulations. You must answer questions from a board of senior captains, work navigation problems on the spot, and demonstrate practical knowledge.</p>
+
+      <p>Your accumulated skills will help, but extra preparation could make the difference between passing and disgrace. The sailing master offers to tutor you for £10. A senior lieutenant has old exam questions he'll sell for £15. Or you could simply study on your own and save your money.</p>
+
+      <p>You currently have £${gameState.prizeMoney}. How do you prepare?</p>
+    `,
+    choices: [
+      {
+        text: "Hire the sailing master as tutor (£10) - guaranteed navigation help",
+        next: 'jamaicaShoreLeave',
+        effects: { prizeMoney: -10, navigation: 2, flags: { hasTutor: true } }
+      },
+      {
+        text: "Buy the old exam questions (£15) - learn what they ask",
+        next: 'jamaicaShoreLeave',
+        effects: { prizeMoney: -15, discipline: 1, navigation: 1, seamanship: 1, flags: { hasExamQuestions: true } }
+      },
+      {
+        text: "Spend £25 on both - maximize your chances",
+        next: 'jamaicaShoreLeave',
+        effects: { prizeMoney: -25, navigation: 3, discipline: 1, seamanship: 1, flags: { hasTutor: true, hasExamQuestions: true } }
+      },
+      {
+        text: "Study on your own - you're smart enough, save the money",
+        next: 'jamaicaShoreLeave',
+        effects: { discipline: 2 }
+      }
+    ]
+  },
+
+  jamaicaShoreLeave: {
+    title: "Port Royal, Jamaica",
+    subtitle: "Shore Leave",
+    text: `
+      <p>Three months into your service on <em>Valiant</em>, the ship anchors at Port Royal for reprovisioning. Shore leave is granted for officers. You step onto dry land for the first time in months, your legs unsteady after so long at sea.</p>
+
+      <p>Port Royal is a den of vice—taverns, gambling houses, brothels. It's also where fortunes are made and lost. In a dockside tavern, you encounter a merchant named Blackwood. Over rum, he makes you an offer.</p>
+
+      <p>"I'm shipping sugar to Bristol. If you invest £50, I'll give you a quarter share of the profits. Could double your money in six months. Or you could lose it all if the French take the ship." He grins. "But that's the price of fortune, isn't it?"</p>
+
+      <p>You also hear rumors: the Governor is taking bribes to look the other way on smuggling. Officers who cooperate get rich. Those who don't get bad assignments.</p>
+
+      <p>What do you do?</p>
+    `,
+    choices: [
+      {
+        text: "Invest £50 in the merchant venture - fortune favors the bold",
+        next: 'reunion',
+        effects: { prizeMoney: -50, flags: { merchantInvestment: true } }
+      },
+      {
+        text: "Approach the Governor's aide about 'opportunities' - get rich through corruption",
+        next: 'reunion',
+        effects: { social: 2, officerReputation: -10, prizeMoney: 30, flags: { corruptDeal: true } }
+      },
+      {
+        text: "Avoid both—keep your money and your integrity",
+        next: 'reunion',
+        effects: { discipline: 2, officerReputation: 5 }
+      }
+    ]
+  },
+
+  reunion: {
+    title: "Familiar Faces",
+    subtitle: "The Gunroom",
+    text: `
+      <p>Back aboard <em>Valiant</em>, you discover you're not alone. In the wardroom, you find Rodgers—promoted to Acting Lieutenant like yourself. He grins when he sees you. "New fish! Though I suppose we're both old salts now."</p>
+
+      <p>You also learn that Jenkins, the topman whose life you saved, is now bosun's mate on a frigate in the squadron. He comes aboard on official business and finds you. "Mr. {playerName}, sir. Heard you made lieutenant. Well deserved." There's genuine respect in his voice.</p>
+
+      <p>But there's someone else too: Caruthers. He's also an Acting Lieutenant on HMS <em>Defiant</em>, another 74-gun ship. When you encounter him at a dinner aboard the flagship, his smile is cold.</p>
+
+      <p>"So we're competitors now, {playerName}. Only the best will get permanent commissions. I wonder which of us that will be?" It's not a question—it's a challenge.</p>
+
+      <p>You've made friends. But you've also got a rival who wants to see you fail.</p>
+    `,
+    choices: [
+      {
+        text: "Continue your service",
+        next: 'theFlogging',
+        effects: { rodgers: 2, jenkins: 2, caruthers: -2 }
+      }
+    ]
+  },
+
+  theFlogging: {
+    title: "Punishment",
+    subtitle: "Flogging Through the Fleet",
+    text: `
+      <p>A seaman named Williams tried to desert. He was caught three miles inland, heading for the mountains. The penalty for desertion in wartime is death, but Captain Cole commutes it to something almost as bad: flogging through the fleet.</p>
+
+      <p>Every ship in the squadron assembles boats. Williams is tied to a grating and rowed from ship to ship. At each ship, he receives a dozen lashes from the bosun's mate. Twelve ships. One hundred and forty-four lashes.</p>
+
+      <p>No man survives that conscious. Most don't survive at all.</p>
+
+      <p>You're ordered to attend as a witness—officers must see this to understand the discipline they must enforce. You stand on <em>Valiant</em>'s deck as Williams is brought alongside. He's already a bloody wreck from the other ships. The bosun's mate looks at you, waiting for the order.</p>
+
+      <p>Captain Cole watches you. This is a test.</p>
+
+      <p>"Give him the dozen, Mr. {playerName}," Cole says quietly.</p>
+    `,
+    choices: [
+      {
+        text: "Give the order—duty demands it, no matter how you feel",
+        next: 'afterFlogging',
+        effects: { discipline: 3, officerReputation: 5, crewReputation: -10, morale: -10 }
+      },
+      {
+        text: "Hesitate, then give the order—show your discomfort",
+        next: 'afterFlogging',
+        effects: { discipline: 1, social: 1, crewReputation: -5, morale: -5 }
+      },
+      {
+        text: "Refuse—you won't be part of murder, consequences be damned",
+        next: 'afterFloggingRefuse',
+        effects: { discipline: -3, officerReputation: -15, crewReputation: 10, morale: 5 }
+      }
+    ]
+  },
+
+  afterFlogging: {
+    title: "The Cost of Discipline",
+    subtitle: "Aftermath",
+    text: `
+      <p>Williams receives his dozen lashes. He doesn't even scream—he's beyond that. They row him to the next ship. You learn later that he died before the punishment was complete. Heart gave out.</p>
+
+      <p>That night, you can't sleep. You keep seeing his back, the blood, the way the bosun's mate swung the cat with mechanical efficiency. Rodgers finds you on deck. "First time watching a flogging through the fleet?"</p>
+
+      <p>You nod.</p>
+
+      <p>"It gets easier," he says, but his voice suggests it doesn't. "That's what worries me."</p>
+
+      <p>Captain Cole sends for you the next morning. "You did your duty yesterday, Mr. {playerName}. That's what officers do—the hard, necessary things that keep order aboard ship. Remember: six hundred men on this ship. Discipline keeps them alive. Sentiment kills them."</p>
+
+      <p>You're not sure you believe him. But you nod anyway.</p>
+    `,
+    choices: [
+      {
+        text: "Accept his logic—discipline is necessary",
+        next: 'warNews',
+        effects: { discipline: 2 }
+      },
+      {
+        text: "Question it—there must be better ways",
+        next: 'warNews',
+        effects: { social: 1, discipline: -1 }
+      }
+    ]
+  },
+
+  afterFloggingRefuse: {
+    title: "Insubordination",
+    subtitle: "Consequences",
+    text: `
+      <p>"I cannot in good conscience give that order, sir," you say quietly.</p>
+
+      <p>Silence. Every eye on deck turns to you. Captain Cole's face goes white with rage. "You <em>refuse</em> a direct order?"</p>
+
+      <p>"The man is barely alive, sir. Another dozen lashes will kill him."</p>
+
+      <p>"That is not your decision to make!" Cole's voice could cut steel. "Mr. Harrison, carry out the punishment. Mr. {playerName}, you are confined to quarters. I will deal with you later."</p>
+
+      <p>You're court-martialed the next week. The charge: refusing a lawful order. The sentence: public reprimand and loss of six months' seniority. Your officer reputation takes a massive hit. Some captains will never trust you again.</p>
+
+      <p>But the crew—the common seamen—they look at you differently now. One of them mutters as you pass: "That took stones, sir." It's the highest compliment a sailor can give.</p>
+
+      <p>You chose mercy over discipline. The Navy may not forgive you. But you can live with yourself.</p>
+    `,
+    choices: [
+      {
+        text: "Accept the consequences",
+        next: 'warNews',
+        effects: { discipline: -2, social: 2 }
+      }
+    ]
+  },
+
+  warNews: {
+    title: "War Drums",
+    subtitle: "1754",
+    text: `
+      <p>Tensions with France escalate. Skirmishes in North America, disputes over colonial boundaries. Everyone knows a major war is coming—it's just a question of when.</p>
+
+      <p>The squadron is ordered to patrol aggressively. You're at sea for weeks at a time. Your examination approaches—just one month away. You study every spare moment, working navigation problems, memorizing regulations, drilling seamanship.</p>
+
+      <p>Then: the lookout calls. "Sail ho! Multiple sails, bearing north-northeast!"</p>
+
+      <p>The French fleet. Five ships of the line, two frigates. The British squadron has six ships of the line but is scattered. Captain Cole orders beat to quarters. This will be your first major fleet action, and your performance here could make or break your examination chances.</p>
+
+      <p>The French are closing fast. Battle is inevitable.</p>
+    `,
+    choices: [
+      {
+        text: "Take your station commanding the starboard gun division",
+        next: 'majorBattle',
+        effects: { gunnery: 1 }
+      }
+    ]
+  },
+
+  majorBattle: {
+    title: "Line of Battle",
+    subtitle: "Fleet Action",
+    text: `
+      <p>The two fleets form up in parallel lines, barely half a mile apart. Seven hundred yards. Six hundred. Five hundred. You can see French officers on their quarterdeck, tiny figures in blue coats.</p>
+
+      <p>"Starboard division—as you bear!" Captain Cole's voice is calm as ever. "Fire!"</p>
+
+      <p>Twenty guns roar. The ship shudders. Smoke billows back. You're screaming orders: "Reload! Faster! Keep those guns served!" Your crews work like demons—load, run out, fire, reload. Three broadsides in five minutes, exactly as drilled.</p>
+
+      <p>The French fire back. A ball smashes through the gunport beside you, turning a gun crew into red mist. Another takes down the mainmast. The deck is chaos—smoke, screaming, blood. But your division keeps firing.</p>
+
+      <p>Then Captain Cole is hit. A splinter the size of your arm punches through his chest. He falls, blood spreading. The first lieutenant takes command, but he's overwhelmed. Ships need constant direction in battle, or they lose cohesion.</p>
+
+      <p>The first lieutenant shouts to you: "Mr. {playerName}! Take the quarterdeck! Conn the ship!"</p>
+
+      <p>You're being given command in the middle of a fleet action. This is your moment.</p>
+    `,
+    choices: [
+      {
+        text: "Take command—keep <em>Valiant</em> in the fight",
+        next: 'commandPerformance',
+        effects: { discipline: 2 }
+      }
+    ]
+  },
+
+  commandPerformance: {
+    title: "In Command",
+    subtitle: "Your Moment",
+    text: `
+      <p>You take the quarterdeck. Around you, officers look to you for orders. Six hundred men depend on your decisions. The French ship opposite is heavily damaged but still fighting. Beyond her, you see a gap in the French line—one of their ships has fallen out of formation.</p>
+
+      <p>Your navigation skill tells you the wind is shifting. Your seamanship knowledge says you could break the line there, rake the French flagship from astern—devastating fire with no return. But it's risky—you could lose the mast, become isolated, be surrounded.</p>
+
+      <p>Or you could stay in line, fight it out ship-to-ship. Safer, but less glorious.</p>
+
+      <p>Your skills, accumulated over years, guide your choice. Every lesson learned, every drill practiced, every storm weathered—all of it matters now.</p>
+    `,
+    choices: [
+      {
+        text: "Break the line—use your skills to execute a bold maneuver",
+        next: 'battleVictory',
+        effects: { seamanship: 2, gunnery: 1, officerReputation: 15 }
+      },
+      {
+        text: "Hold position—steady and reliable wins battles",
+        next: 'battleVictory',
+        effects: { discipline: 2, gunnery: 1, officerReputation: 10 }
+      }
+    ]
+  },
+
+  battleVictory: {
+    title: "Victory",
+    subtitle: "Aftermath",
+    text: `
+      <p>Your choice works. <em>Valiant</em> fights magnificently. The French fleet breaks and runs. Three French ships strike their colors, including a 90-gun second-rate worth a fortune in prize money.</p>
+
+      <p>Captain Cole survives—barely. He's invalided home, his career over. But before he goes, he sends for you. "You saved my ship, Mr. {playerName}. Commanded her like you were born to it. I'll tell the examination board exactly that."</p>
+
+      <p>Your share of the prize money: £75. More importantly, you've fought in a major fleet action and performed well. The Admiral himself mentions you in dispatches.</p>
+
+      <p>One week later, you receive your summons. The Lieutenant's Examination board will convene in three days. Your accumulated skills, knowledge, and reputation will be tested. This is the bottleneck—pass, and you're a commissioned lieutenant for life. Fail, and everything you've worked for is gone.</p>
+    `,
+    choices: [
+      {
+        text: "Prepare for the examination",
+        next: 'theExamination',
+        effects: { prizeMoney: 75, officerReputation: 10 }
+      }
+    ]
+  },
+
+  theExamination: {
+    title: "The Lieutenant's Examination",
+    subtitle: "The Moment of Truth",
+    text: `
+      <p>The examination takes place aboard the flagship. Three post-captains sit behind a table: one is the examining captain, the others observe. You stand before them in your best uniform, hat under your arm.</p>
+
+      <p>"Mr. {playerName}," the examining captain begins. "You will demonstrate your knowledge of navigation, seamanship, and the regulations governing His Majesty's Navy. Your performance will determine your fitness to hold a commission."</p>
+
+      <p>They grill you for two hours. Navigation problems worked at a chalkboard. Questions about ship handling, gunnery, discipline. They describe hypothetical situations and demand your response.</p>
+
+      <p>Your accumulated skills matter now:</p>
+      <ul style="text-align: left; color: #e8dcc4;">
+        <li>Navigation: ${gameState.navigation}</li>
+        <li>Seamanship: ${gameState.seamanship}</li>
+        <li>Gunnery: ${gameState.gunnery}</li>
+        <li>Discipline: ${gameState.discipline}</li>
+      </ul>
+
+      <p>If you hired tutors or bought study materials, they help. If you performed well in battle, the captains know it. If you have a good officer reputation, they're inclined to pass you. If you've made enemies, they're looking for reasons to fail you.</p>
+
+      <p>The examining captain confers with the others. You wait, heart pounding.</p>
+
+      <p>Finally: "Mr. {playerName}..."</p>
+    `,
+    choices: [
+      {
+        text: "Hear the verdict",
+        next: 'examinationResult',
+        effects: {}
+      }
+    ]
+  },
+
+  examinationResult: {
+    title: "The Verdict",
+    subtitle: "Your Future Decided",
+    text: `
+      <p>The examining captain looks at you. His expression gives nothing away.</p>
+
+      <p>"Mr. {playerName}, the board has reviewed your performance. We have examined your knowledge, considered your service record, and evaluated your fitness to hold His Majesty's commission."</p>
+
+      <p>A pause. An eternity.</p>
+
+      <p>"Congratulations, Lieutenant {playerName}. You are hereby commissioned as a Lieutenant in His Majesty's Royal Navy. Your commission is dated today, and your seniority begins immediately. May you serve with honor."</p>
+
+      <p>You passed. You're a commissioned officer—not acting, not temporary, but real. It took four years, from midshipman to here. You've survived storms, battles, disease, and politics. You've made choices, good and bad. Men have died because of you and despite you.</p>
+
+      <p>You're seventeen years old, and you're a Lieutenant in the greatest navy in the world.</p>
+
+      <p>Your journey is far from over. But this chapter is complete.</p>
+    `,
+    choices: [
+      {
+        text: "Receive your commission",
+        next: 'endAct2',
+        effects: { rank: 'Lieutenant (Commissioned)', officerReputation: 15, discipline: 2 }
+      }
+    ]
+  },
+
+  endAct2: {
+    title: "Act Two Complete",
+    subtitle: "Proving Ground",
+    text: `
+      <p><strong>1752-1754: The Lieutenant</strong></p>
+
+      <p>You've proven yourself. From Acting Lieutenant to commissioned officer. You've faced moral dilemmas with no right answers, commanded men in battle, and passed the examination that breaks so many careers.</p>
+
+      <p>Your choices have shaped you. The money you spent or saved. The corruption you embraced or rejected. The mercy you showed or withheld. All of it has defined the officer you've become.</p>
+
+      <p>Ahead lie new challenges: your own command, perhaps. Promotion to Commander, then Post-Captain. The Seven Years' War is beginning, and the Navy will need officers like you—tested, proven, willing to do what must be done.</p>
+
+      <p><strong>Act Three awaits: Your First Command...</strong></p>
+
+      <p><em>Your current standing:</em><br>
+      You've accumulated skills, money, and reputation. Check the sidebar to see how your journey has shaped you. The choices you made in Acts 1 and 2 will affect what opportunities—and challenges—await you in Act 3.</p>
+    `,
+    choices: [
+      {
+        text: "Continue to Act Three (Coming soon...)",
         next: 'endOfDemo',
         effects: {}
       }
