@@ -147,10 +147,102 @@ const scenes = {
     `,
     choices: [
       {
-        text: "Confirm and board the ship",
-        next: 'firstBoarding',
+        text: "Confirm and continue",
+        next: 'personalityChoice',
         effects: {},
         requireName: true
+      }
+    ]
+  },
+
+  personalityChoice: {
+    title: "Your Character",
+    subtitle: "Temperament",
+    text: `
+      <p>As you prepare to join your ship, you reflect on what kind of officer you want to be. The Navy needs all types—from by-the-book disciplinarians to natural leaders who inspire loyalty.</p>
+
+      <p>What drives you?</p>
+    `,
+    choices: [
+      {
+        text: "Ambition - You're determined to rise through the ranks, no matter what it takes",
+        next: 'motivationChoice',
+        effects: { discipline: 1, social: 1 }
+      },
+      {
+        text: "Duty - You believe in serving King and Country with honor and integrity",
+        next: 'motivationChoice',
+        effects: { discipline: 2 }
+      },
+      {
+        text: "Brotherhood - You care most about the men you serve alongside",
+        next: 'motivationChoice',
+        effects: { social: 2 }
+      },
+      {
+        text: "Curiosity - The sea itself fascinates you—navigation, weather, the natural world",
+        next: 'motivationChoice',
+        effects: { navigation: 1, seamanship: 1 }
+      }
+    ]
+  },
+
+  motivationChoice: {
+    title: "Preparation",
+    subtitle: "Skills",
+    text: `
+      <p>Before joining the ship, you had time to prepare. What did you focus on learning?</p>
+    `,
+    choices: [
+      {
+        text: "Practiced sword drill and studied tactics - you want to be ready for combat",
+        next: 'finalPrep',
+        effects: { gunnery: 1, discipline: 1 }
+      },
+      {
+        text: "Learned knots, splices, and rigging from an old sailor",
+        next: 'finalPrep',
+        effects: { seamanship: 2 }
+      },
+      {
+        text: "Studied navigation tables and practiced with a sextant",
+        next: 'finalPrep',
+        effects: { navigation: 2 }
+      },
+      {
+        text: "Talked to officers and learned about leadership and command",
+        next: 'finalPrep',
+        effects: { social: 1, discipline: 1 }
+      }
+    ]
+  },
+
+  finalPrep: {
+    title: "One Last Thing",
+    subtitle: "Final Preparation",
+    text: `
+      <p>The morning you leave for Portsmouth, you have time for one last thing.</p>
+    `,
+    choices: [
+      {
+        text: "Visit the dockyards and watch ships being built—learn how they're put together",
+        next: 'firstBoarding',
+        effects: { seamanship: 1 }
+      },
+      {
+        text: "Attend a navigation lecture at the Royal Society",
+        next: 'firstBoarding',
+        effects: { navigation: 1 }
+      },
+      {
+        text: "Watch marines drilling—study their discipline and precision",
+        next: 'firstBoarding',
+        effects: { discipline: 1 }
+      },
+      {
+        text: "Spend time with family—they remind you why you're doing this",
+        next: 'firstBoarding',
+        effects: { social: 1 }
       }
     ]
   },
@@ -1176,6 +1268,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Set up button listeners
   document.getElementById('save-btn').addEventListener('click', saveStory);
+  document.getElementById('load-btn').addEventListener('click', function() {
+    if (loadStory()) {
+      renderScene(gameState.currentScene);
+      showNotification('Progress Loaded');
+    } else {
+      showNotification('No saved game found');
+    }
+  });
   document.getElementById('restart-btn').addEventListener('click', restartStory);
 
   // Try to load saved game, or start new
