@@ -1,6 +1,6 @@
 // ============================================
 // HIS MAJESTY'S SERVICE - Interactive Naval Novel
-// Game Engine
+// Complete Game Engine v2.0
 // ============================================
 
 console.log('=== GAME.JS LOADING ===');
@@ -12,40 +12,136 @@ const gameState = {
   playerName: '',
   background: null,
   currentScene: 'start',
+  year: 1750,
+  location: 'Portsmouth',
 
   // Career stats
   rank: 'Midshipman',
   ship: 'HMS Indefatigable',
 
-  // Skills
+  // Skills (0-30 scale)
   seamanship: 0,
   gunnery: 0,
   navigation: 0,
   discipline: 0,
   social: 0,
 
-  // Reputation (affects story branches)
-  crewReputation: 50,      // 0-100, affects morale and loyalty
-  officerReputation: 50,   // 0-100, affects promotions and assignments
+  // Reputation (0-100)
+  crewReputation: 50,
+  officerReputation: 50,
+  morale: 50,
 
   // Resources
-  prizeMoney: 0,           // Earnings from captured ships
+  prizeMoney: 0,
 
-  // Ship status
-  morale: 50,              // 0-100, crew morale
-
-  // Key relationships (-10 to +10)
+  // Relationships (-10 to +10)
   relationships: {
-    jenkins: 0,      // Captain of foretop
-    rodgers: 0,      // Friendly midshipman
-    caruthers: 0,    // Aristocratic rival
-    blake: 0,        // Your watch officer
-    harrow: 0,       // First Lieutenant
-    thornton: 0      // The Captain
+    jenkins: 0,
+    rodgers: 0,
+    caruthers: 0,
+    blake: 0,
+    harrow: 0,
+    thornton: 0,
+    hawke: 0,
+    elizabeth: 0
   },
 
-  // Story flags for branching
-  flags: {}
+  // Story flags
+  flags: {},
+
+  // Statistics tracking
+  stats: {
+    battlesWon: 0,
+    prizesTaken: 0,
+    menLost: 0,
+    daysAtSea: 0,
+    choicesMade: 0,
+    actCompleted: 0
+  },
+
+  // Achievements
+  achievements: [],
+
+  // Chapters unlocked
+  chaptersUnlocked: ['start']
+};
+
+// ============================================
+// ACHIEVEMENTS DEFINITIONS
+// ============================================
+const achievementsDef = {
+  firstStorm: { name: "Storm Survivor", desc: "Survive your first storm at sea", icon: "⛈️" },
+  firstBattle: { name: "Baptism of Fire", desc: "Fight in your first naval battle", icon: "⚔️" },
+  firstPrize: { name: "Prize Taker", desc: "Capture your first prize ship", icon: "🚢" },
+  rescueMan: { name: "No Man Left Behind", desc: "Save a man from drowning", icon: "🏊" },
+  lieutenant: { name: "King's Officer", desc: "Earn your Lieutenant's commission", icon: "📜" },
+  commander: { name: "Rising Star", desc: "Promoted to Commander", icon: "⭐" },
+  postCaptain: { name: "Post Captain", desc: "Achieve the rank of Post-Captain", icon: "👑" },
+  richMan: { name: "Fortune's Favorite", desc: "Accumulate £500 in prize money", icon: "💰" },
+  crewLove: { name: "Beloved Captain", desc: "Achieve 90+ crew reputation", icon: "❤️" },
+  masterNavigator: { name: "Master Navigator", desc: "Reach 25 Navigation skill", icon: "🧭" },
+  masterGunner: { name: "Master Gunner", desc: "Reach 25 Gunnery skill", icon: "💣" },
+  tactician: { name: "Master Tactician", desc: "Win a battle against superior forces", icon: "🎯" },
+  diplomat: { name: "Silver Tongue", desc: "Resolve a conflict through diplomacy", icon: "🕊️" },
+  survivor: { name: "Against All Odds", desc: "Survive the hurricane", icon: "🌀" },
+  quiberon: { name: "Hero of Quiberon", desc: "Fight in the Battle of Quiberon Bay", icon: "🏆" },
+  romance: { name: "Affairs of the Heart", desc: "Find love", icon: "💕" },
+  admiral: { name: "Flag Officer", desc: "Achieve Admiral rank", icon: "🎖️" },
+  completionist: { name: "Full Career", desc: "Complete all four acts", icon: "📖" }
+};
+
+// ============================================
+// ENCYCLOPEDIA
+// ============================================
+const encyclopedia = {
+  "Ship of the Line": "A warship large enough to stand in the line of battle, typically carrying 60-120 guns on two or three decks.",
+  "Frigate": "A fast, maneuverable warship carrying 28-44 guns on a single deck. Used for scouting and commerce raiding.",
+  "Sloop": "A small warship with 14-18 guns, often used for patrol and messenger duties.",
+  "Midshipman": "A trainee officer, typically a young gentleman learning the naval profession before sitting for the Lieutenant's examination.",
+  "Lieutenant": "A commissioned officer who has passed the examination. Commands watches and gun divisions.",
+  "Commander": "An officer commanding a sloop or small vessel. One step below Post-Captain.",
+  "Post-Captain": "A captain commanding a rated ship (20+ guns). Promotion to Admiral is by seniority from this rank.",
+  "Admiral": "A flag officer commanding a squadron or fleet. Ranks include Rear Admiral, Vice Admiral, and Admiral.",
+  "Quarterdeck": "The raised deck at the stern of the ship, from which the captain commands.",
+  "Forecastle": "The raised deck at the bow of the ship, where the crew often gathers.",
+  "Ratlines": "Rope ladders attached to the shrouds, used to climb the masts.",
+  "Broadside": "All the guns on one side of the ship firing together.",
+  "Weather Gage": "The upwind position relative to an enemy ship - a tactical advantage allowing choice of engagement.",
+  "Lee Shore": "A shore onto which the wind is blowing - dangerous as ships can be driven onto rocks.",
+  "Prize Money": "Money earned from capturing enemy ships, divided among the crew according to rank.",
+  "Press Gang": "A group authorized to forcibly recruit men into naval service.",
+  "Flogging": "Punishment by whipping with a cat-o'-nine-tails. Standard naval discipline.",
+  "Bosun": "Boatswain - a warrant officer responsible for the ship's rigging and deck crew.",
+  "Purser": "Officer responsible for the ship's supplies and accounts.",
+  "Scurvy": "Disease caused by vitamin C deficiency, common on long voyages.",
+  "Grog": "Watered-down rum, the standard naval drink ration."
+};
+
+// ============================================
+// LOCATIONS FOR MAP
+// ============================================
+const locations = {
+  "Portsmouth": { x: 20, y: 35 },
+  "Plymouth": { x: 15, y: 40 },
+  "London": { x: 25, y: 30 },
+  "Antigua": { x: 75, y: 90 },
+  "Jamaica": { x: 65, y: 92 },
+  "Havana": { x: 60, y: 88 },
+  "Brest": { x: 72, y: 45 },
+  "Quiberon": { x: 70, y: 48 },
+  "At Sea - Atlantic": { x: 50, y: 60 },
+  "At Sea - Caribbean": { x: 70, y: 85 },
+  "At Sea - Channel": { x: 45, y: 40 }
+};
+
+// ============================================
+// CHAPTER DEFINITIONS
+// ============================================
+const chapters = {
+  act1: { name: "Act I: The Young Gentleman", scene: "start", desc: "1750 - Your naval career begins" },
+  act2: { name: "Act II: Proving Ground", scene: "act2Start", desc: "1752 - Rise to Lieutenant" },
+  act3: { name: "Act III: First Command", scene: "act3Start", desc: "1754 - Command HMS Serpent" },
+  act4: { name: "Act IV: The Crucible", scene: "act4Start", desc: "1757 - The Seven Years' War" }
 };
 
 // ============================================
@@ -56,6 +152,8 @@ const scenes = {
   start: {
     title: "His Majesty's Service",
     subtitle: "Your Journey Begins",
+    year: 1750,
+    location: "Portsmouth",
     text: `
       <p>The year is 1750. The age of sail is at its zenith, and His Majesty's Royal Navy rules the waves from the sugar islands of the Caribbean to the spice routes of the East Indies. For a young gentleman of fifteen, there is no finer calling than to serve King and Country upon the quarterdeck of a ship of the line.</p>
 
@@ -97,11 +195,7 @@ const scenes = {
       <p>The carriage awaits to take you to Portsmouth, where HMS <em>Indefatigable</em>, a 64-gun ship of the line, lies at anchor.</p>
     `,
     choices: [
-      {
-        text: "Enter your name to begin your naval career",
-        next: 'nameEntry',
-        effects: {}
-      }
+      { text: "Enter your name to begin your naval career", next: 'nameEntry', effects: {} }
     ]
   },
 
@@ -120,11 +214,7 @@ const scenes = {
       <p>You say goodbye to your mother at the dockyard gate. She grips your hands, tears streaming down her weathered face. "Your father would be so proud," she says. "Come back safe, my boy."</p>
     `,
     choices: [
-      {
-        text: "Enter your name to begin your naval career",
-        next: 'nameEntry',
-        effects: {}
-      }
+      { text: "Enter your name to begin your naval career", next: 'nameEntry', effects: {} }
     ]
   },
 
@@ -145,11 +235,7 @@ const scenes = {
       <p>He presses a leather satchel into your hands. Inside are your sextant, your charts, and your precious books. "God keep you safe, my son."</p>
     `,
     choices: [
-      {
-        text: "Enter your name to begin your naval career",
-        next: 'nameEntry',
-        effects: {}
-      }
+      { text: "Enter your name to begin your naval career", next: 'nameEntry', effects: {} }
     ]
   },
 
@@ -166,12 +252,7 @@ const scenes = {
       </div>
     `,
     choices: [
-      {
-        text: "Confirm and continue",
-        next: 'personalityChoice',
-        effects: {},
-        requireName: true
-      }
+      { text: "Confirm and continue", next: 'personalityChoice', effects: {}, requireName: true }
     ]
   },
 
@@ -184,92 +265,41 @@ const scenes = {
       <p>What drives you?</p>
     `,
     choices: [
-      {
-        text: "Ambition - You're determined to rise through the ranks, no matter what it takes",
-        next: 'motivationChoice',
-        effects: { discipline: 1, social: 1 }
-      },
-      {
-        text: "Duty - You believe in serving King and Country with honor and integrity",
-        next: 'motivationChoice',
-        effects: { discipline: 2 }
-      },
-      {
-        text: "Brotherhood - You care most about the men you serve alongside",
-        next: 'motivationChoice',
-        effects: { social: 2 }
-      },
-      {
-        text: "Curiosity - The sea itself fascinates you—navigation, weather, the natural world",
-        next: 'motivationChoice',
-        effects: { navigation: 1, seamanship: 1 }
-      }
+      { text: "Ambition - You're determined to rise through the ranks, no matter what it takes", next: 'motivationChoice', effects: { discipline: 1, social: 1 } },
+      { text: "Duty - You believe in serving King and Country with honor and integrity", next: 'motivationChoice', effects: { discipline: 2 } },
+      { text: "Brotherhood - You care most about the men you serve alongside", next: 'motivationChoice', effects: { social: 2 } },
+      { text: "Curiosity - The sea itself fascinates you—navigation, weather, the natural world", next: 'motivationChoice', effects: { navigation: 1, seamanship: 1 } }
     ]
   },
 
   motivationChoice: {
     title: "Preparation",
     subtitle: "Skills",
-    text: `
-      <p>Before joining the ship, you had time to prepare. What did you focus on learning?</p>
-    `,
+    text: `<p>Before joining the ship, you had time to prepare. What did you focus on learning?</p>`,
     choices: [
-      {
-        text: "Practiced sword drill and studied tactics - you want to be ready for combat",
-        next: 'finalPrep',
-        effects: { gunnery: 1, discipline: 1 }
-      },
-      {
-        text: "Learned knots, splices, and rigging from an old sailor",
-        next: 'finalPrep',
-        effects: { seamanship: 2 }
-      },
-      {
-        text: "Studied navigation tables and practiced with a sextant",
-        next: 'finalPrep',
-        effects: { navigation: 2 }
-      },
-      {
-        text: "Talked to officers and learned about leadership and command",
-        next: 'finalPrep',
-        effects: { social: 1, discipline: 1 }
-      }
+      { text: "Practiced sword drill and studied tactics - you want to be ready for combat", next: 'finalPrep', effects: { gunnery: 1, discipline: 1 } },
+      { text: "Learned knots, splices, and rigging from an old sailor", next: 'finalPrep', effects: { seamanship: 2 } },
+      { text: "Studied navigation tables and practiced with a sextant", next: 'finalPrep', effects: { navigation: 2 } },
+      { text: "Talked to officers and learned about leadership and command", next: 'finalPrep', effects: { social: 1, discipline: 1 } }
     ]
   },
 
   finalPrep: {
     title: "One Last Thing",
     subtitle: "Final Preparation",
-    text: `
-      <p>The morning you leave for Portsmouth, you have time for one last thing.</p>
-    `,
+    text: `<p>The morning you leave for Portsmouth, you have time for one last thing.</p>`,
     choices: [
-      {
-        text: "Visit the dockyards and watch ships being built—learn how they're put together",
-        next: 'firstBoarding',
-        effects: { seamanship: 1 }
-      },
-      {
-        text: "Attend a navigation lecture at the Royal Society",
-        next: 'firstBoarding',
-        effects: { navigation: 1 }
-      },
-      {
-        text: "Watch marines drilling—study their discipline and precision",
-        next: 'firstBoarding',
-        effects: { discipline: 1 }
-      },
-      {
-        text: "Spend time with family—they remind you why you're doing this",
-        next: 'firstBoarding',
-        effects: { social: 1 }
-      }
+      { text: "Visit the dockyards and watch ships being built—learn how they're put together", next: 'firstBoarding', effects: { seamanship: 1 } },
+      { text: "Attend a navigation lecture at the Royal Society", next: 'firstBoarding', effects: { navigation: 1 } },
+      { text: "Watch marines drilling—study their discipline and precision", next: 'firstBoarding', effects: { discipline: 1 } },
+      { text: "Spend time with family—they remind you why you're doing this", next: 'firstBoarding', effects: { social: 1 } }
     ]
   },
 
   firstBoarding: {
     title: "HMS Indefatigable",
     subtitle: "First Boarding",
+    location: "Portsmouth",
     text: `
       <p>The smell hits you first—a mixture of tar, hemp, salt water, and something less definable. Humanity, packed close. Sweat and unwashed bodies. The ship is a city of wood and canvas, home to six hundred men.</p>
 
@@ -286,21 +316,9 @@ const scenes = {
       <p>Your new life begins here.</p>
     `,
     choices: [
-      {
-        text: "Find the first lieutenant immediately, as ordered",
-        next: 'meetFirstLieutenant',
-        effects: { discipline: 1 }
-      },
-      {
-        text: "Take a moment to observe the deck and learn the layout",
-        next: 'observeDeck',
-        effects: { seamanship: 1 }
-      },
-      {
-        text: "Introduce yourself to some of the crew members nearby",
-        next: 'meetCrew',
-        effects: { social: 1 }
-      }
+      { text: "Find the first lieutenant immediately, as ordered", next: 'meetFirstLieutenant', effects: { discipline: 1 } },
+      { text: "Take a moment to observe the deck and learn the layout", next: 'observeDeck', effects: { seamanship: 1 } },
+      { text: "Introduce yourself to some of the crew members nearby", next: 'meetCrew', effects: { social: 1 } }
     ]
   },
 
@@ -323,11 +341,7 @@ const scenes = {
       <p>But at least you made a good first impression by following orders promptly.</p>
     `,
     choices: [
-      {
-        text: "Find the gunroom and meet your fellow midshipmen",
-        next: 'gunroom',
-        effects: {}
-      }
+      { text: "Find the gunroom and meet your fellow midshipmen", next: 'gunroom', effects: { harrow: 1 } }
     ]
   },
 
@@ -346,11 +360,7 @@ const scenes = {
       <p>After a few minutes, you remember you were ordered to report to the first lieutenant. You'd better find the wardroom before your absence is noted.</p>
     `,
     choices: [
-      {
-        text: "Head below to find the first lieutenant",
-        next: 'meetFirstLieutenantLate',
-        effects: {}
-      }
+      { text: "Head below to find the first lieutenant", next: 'meetFirstLieutenantLate', effects: {} }
     ]
   },
 
@@ -371,11 +381,7 @@ const scenes = {
       <p>With that friendly warning, you excuse yourself and hurry below to find the wardroom. You've made a good first impression with the crew, but you'd better not be late for the officers.</p>
     `,
     choices: [
-      {
-        text: "Report to the first lieutenant",
-        next: 'meetFirstLieutenantLate',
-        effects: {}
-      }
+      { text: "Report to the first lieutenant", next: 'meetFirstLieutenantLate', effects: { jenkins: 2, crewReputation: 5 } }
     ]
   },
 
@@ -398,11 +404,7 @@ const scenes = {
       <p>You've been reprimanded, but mildly. You make a mental note: in the Navy, orders are absolute.</p>
     `,
     choices: [
-      {
-        text: "Find the gunroom and meet your fellow midshipmen",
-        next: 'gunroom',
-        effects: {}
-      }
+      { text: "Find the gunroom and meet your fellow midshipmen", next: 'gunroom', effects: {} }
     ]
   },
 
@@ -421,11 +423,7 @@ const scenes = {
       <p>You're about to respond when a whistle sounds on deck—the bosun's call. All three midshipmen immediately scramble for the ladder. "All hands!" Rodgers shouts. "Come on, new fish—time to earn your keep!"</p>
     `,
     choices: [
-      {
-        text: "Scramble up to the deck with the others",
-        next: 'allHandsDrill',
-        effects: { discipline: 1 }
-      }
+      { text: "Scramble up to the deck with the others", next: 'allHandsDrill', effects: { discipline: 1, rodgers: 1, caruthers: -1 } }
     ]
   },
 
@@ -444,16 +442,8 @@ const scenes = {
       <p>It takes twenty minutes of exhausting work. When it's done, you're breathing hard and your arms ache. Rodgers grins at you. "Welcome to the Navy, new fish. Hope you're ready for months of this."</p>
     `,
     choices: [
-      {
-        text: "Ask Rodgers to teach you more about the ship's operation",
-        next: 'learnFromRodgers',
-        effects: { seamanship: 1 }
-      },
-      {
-        text: "Report to the first lieutenant as ordered",
-        next: 'reportToHarrow',
-        effects: { discipline: 1 }
-      }
+      { text: "Ask Rodgers to teach you more about the ship's operation", next: 'learnFromRodgers', effects: { seamanship: 1, rodgers: 1 } },
+      { text: "Report to the first lieutenant as ordered", next: 'reportToHarrow', effects: { discipline: 1 } }
     ]
   },
 
@@ -463,7 +453,7 @@ const scenes = {
     text: `
       <p>"What's all this for?" you ask Rodgers, gesturing at the maze of ropes. "There must be hundreds of them."</p>
 
-      <p>"Thousands," Rodgers says cheerfully. "And every man jack aboard needs to know which is which, in daylight or darkness, in calm or storm. That's the halyard—raises the yard. That's the brace—swings it round. The sheet controls the lower corner of the sail, the clew line the upper."</p>
+      <p>"Thousands," Rodgers says cheerfully. "And every man jack aboard needs to know which is which, in daylight or darkness, in calm or storm. That there's the halyard—raises the yard. That's the brace—swings it round. The sheet controls the lower corner of the sail, the clew line the upper."</p>
 
       <p>He points aloft. "Three masts—foremast forward, mainmast center, mizzenmast aft. Each carries squares'ls—courses, tops'ls, t'gallants. Plus the jibs forward and the spanker aft." He rattles it off with the ease of long practice.</p>
 
@@ -474,11 +464,7 @@ const scenes = {
       <p>Rodgers winces. "You're late. Better run."</p>
     `,
     choices: [
-      {
-        text: "Hurry below to report to Lieutenant Harrow",
-        next: 'reportToHarrowLate',
-        effects: {}
-      }
+      { text: "Hurry below to report to Lieutenant Harrow", next: 'reportToHarrowLate', effects: {} }
     ]
   },
 
@@ -497,11 +483,7 @@ const scenes = {
       <p>You touch your hat and turn to go. This is real now. Tomorrow, HMS <em>Indefatigable</em> weighs anchor and you begin your life at sea.</p>
     `,
     choices: [
-      {
-        text: "Return to the gunroom to prepare for tomorrow",
-        next: 'gunroomEvening',
-        effects: {}
-      }
+      { text: "Return to the gunroom to prepare for tomorrow", next: 'gunroomEvening', effects: { harrow: 1 } }
     ]
   },
 
@@ -522,11 +504,7 @@ const scenes = {
       <p>As you're dismissed, you make a mental note: aboard ship, punctuality isn't just courtesy—it's survival.</p>
     `,
     choices: [
-      {
-        text: "Return to the gunroom",
-        next: 'gunroomEvening',
-        effects: { discipline: -1 }
-      }
+      { text: "Return to the gunroom", next: 'gunroomEvening', effects: { discipline: -1, harrow: -1 } }
     ]
   },
 
@@ -543,21 +521,9 @@ const scenes = {
       <p>The question is casual, but there's a challenge in it. He's establishing the pecking order.</p>
     `,
     choices: [
-      {
-        text: "Answer honestly about your background",
-        next: 'gunroomHonest',
-        effects: { social: 1 }
-      },
-      {
-        text: "Turn the conversation to naval matters",
-        next: 'gunroomDeflect',
-        effects: { discipline: 1 }
-      },
-      {
-        text: "Challenge Caruthers' superiority",
-        next: 'gunroomChallenge',
-        effects: { social: -1, discipline: 1 }
-      }
+      { text: "Answer honestly about your background", next: 'gunroomHonest', effects: { social: 1 } },
+      { text: "Turn the conversation to naval matters", next: 'gunroomDeflect', effects: { discipline: 1 } },
+      { text: "Challenge Caruthers' superiority", next: 'gunroomChallenge', effects: { social: -1, discipline: 1, caruthers: -2 } }
     ]
   },
 
@@ -578,11 +544,7 @@ const scenes = {
       <p>The conversation moves on, but you've learned something: the gunroom is its own small world, with its own politics and resentments.</p>
     `,
     choices: [
-      {
-        text: "Get some rest before tomorrow's big day",
-        next: 'firstNight',
-        effects: {}
-      }
+      { text: "Get some rest before tomorrow's big day", next: 'firstNight', effects: { rodgers: 1 } }
     ]
   },
 
@@ -601,11 +563,7 @@ const scenes = {
       <p>The conversation continues—war stories, complaints about the food, speculation about where the ship is bound. You listen and learn. This is your world now.</p>
     `,
     choices: [
-      {
-        text: "Get some rest before tomorrow",
-        next: 'firstNight',
-        effects: {}
-      }
+      { text: "Get some rest before tomorrow", next: 'firstNight', effects: {} }
     ]
   },
 
@@ -626,11 +584,7 @@ const scenes = {
       <p>The toast is drunk, but you've made an enemy. Caruthers will be watching for any mistake, any weakness. You'll have to prove yourself the hard way.</p>
     `,
     choices: [
-      {
-        text: "Get some rest before tomorrow",
-        next: 'firstNight',
-        effects: {}
-      }
+      { text: "Get some rest before tomorrow", next: 'firstNight', effects: { rodgers: 2 } }
     ]
   },
 
@@ -647,11 +601,7 @@ const scenes = {
       <p>Eventually, rocked by the ship's motion, you sleep.</p>
     `,
     choices: [
-      {
-        text: "Wake to your first full day aboard",
-        next: 'captainBoards',
-        effects: {}
-      }
+      { text: "Wake to your first full day aboard", next: 'captainBoards', effects: {} }
     ]
   },
 
@@ -674,17 +624,17 @@ const scenes = {
       <p>He disappears below to his cabin. The tension on deck releases like a held breath.</p>
     `,
     choices: [
-      {
-        text: "Continue your first day of duties",
-        next: 'firstWatch',
-        effects: {}
-      }
+      { text: "Continue your first day of duties", next: 'firstWatch', effects: { thornton: 1 } }
     ]
   },
+
+  // Continue with more scenes...
+  // [SCENES CONTINUE - Adding placeholder to keep file manageable]
 
   firstWatch: {
     title: "First Watch",
     subtitle: "On Duty",
+    location: "At Sea - Channel",
     text: `
       <p>Your first watch begins at noon. Lieutenant Blake is the officer of the watch—a young man of twenty-five with a competent air. "Stay by me, Mr. {playerName}, and keep your eyes open. Your job is to learn, and to relay my orders to the hands when required."</p>
 
@@ -697,11 +647,7 @@ const scenes = {
       <p>It's a lesson worth remembering.</p>
     `,
     choices: [
-      {
-        text: "Continue learning your duties",
-        next: 'navigationLesson',
-        effects: { discipline: 1 }
-      }
+      { text: "Continue learning your duties", next: 'navigationLesson', effects: { discipline: 1, blake: 1 } }
     ]
   },
 
@@ -720,11 +666,7 @@ const scenes = {
       <p>"You've a good head for it," Dalton says finally. "Keep studying. Navigation is the skill that'll get you promoted, if you live long enough. Every captain needs officers who can find their way home."</p>
     `,
     choices: [
-      {
-        text: "Continue your education",
-        next: 'gunneryLesson',
-        effects: { navigation: 2 }
-      }
+      { text: "Continue your education", next: 'gunneryLesson', effects: { navigation: 2 } }
     ]
   },
 
@@ -743,17 +685,14 @@ const scenes = {
       <p>Hawkins grins with his remaining teeth. "Example, sir. They see you steady, they stay steady. You panic, they panic. Simple as that."</p>
     `,
     choices: [
-      {
-        text: "The ship prepares to sail",
-        next: 'weighAnchor',
-        effects: { gunnery: 2 }
-      }
+      { text: "The ship prepares to sail", next: 'weighAnchor', effects: { gunnery: 2 } }
     ]
   },
 
   weighAnchor: {
     title: "Weighing Anchor",
     subtitle: "Departure",
+    location: "At Sea - Channel",
     text: `
       <p>Dawn. The tide is high and the wind is fair. All hands are called. You take your station on the quarterdeck, heart pounding. This is it. You're going to sea.</p>
 
@@ -770,17 +709,16 @@ const scenes = {
       <p>And you're at sea.</p>
     `,
     choices: [
-      {
-        text: "Your first days at sea",
-        next: 'daysAtSea',
-        effects: { seamanship: 1 }
-      }
-    ]
+      { text: "Your first days at sea", next: 'daysAtSea', effects: { seamanship: 1 } }
+    ],
+    onEnter: function() { unlockAchievement('firstVoyage'); }
   },
 
   daysAtSea: {
     title: "Life at Sea",
     subtitle: "First Week",
+    location: "At Sea - Atlantic",
+    year: 1750,
     text: `
       <p>The first week is a blur of watch-keeping, drills, and sea-sickness. You discover that you have good sea legs—the motion doesn't bother you much. Pembrook is not so lucky. He spends three days hanging over the rail, green-faced and miserable.</p>
 
@@ -793,11 +731,7 @@ const scenes = {
       <p>Then, on the eighth day out, the weather changes.</p>
     `,
     choices: [
-      {
-        text: "The storm arrives",
-        next: 'storm',
-        effects: { seamanship: 1 }
-      }
+      { text: "The storm arrives", next: 'storm', effects: { seamanship: 1 } }
     ]
   },
 
@@ -816,12 +750,9 @@ const scenes = {
       <p>Rodgers claps you on the shoulder, rain streaming down his face. "Now you're a sailor, new fish!"</p>
     `,
     choices: [
-      {
-        text: "The storm worsens",
-        next: 'stormCrisis',
-        effects: { seamanship: 2 }
-      }
-    ]
+      { text: "The storm worsens", next: 'stormCrisis', effects: { seamanship: 2 } }
+    ],
+    onEnter: function() { unlockAchievement('firstStorm'); }
   },
 
   stormCrisis: {
@@ -837,16 +768,8 @@ const scenes = {
       <p>Your heart hammers. This is insane. The sea is chaos, the water cold enough to kill in minutes. But that's a man out there, drowning.</p>
     `,
     choices: [
-      {
-        text: "Volunteer to go in after him",
-        next: 'rescueAttempt',
-        effects: { discipline: 2, seamanship: 1 }
-      },
-      {
-        text: "Suggest throwing him a line instead",
-        next: 'throwLine',
-        effects: { discipline: 1 }
-      }
+      { text: "Volunteer to go in after him", next: 'rescueAttempt', effects: { discipline: 2, seamanship: 1 } },
+      { text: "Suggest throwing him a line instead", next: 'throwLine', effects: { discipline: 1 } }
     ]
   },
 
@@ -871,12 +794,9 @@ const scenes = {
       <p>Captain Thornton himself appears. "Well done, Mr. {playerName}. That was bravely done." Coming from him, it's the highest praise imaginable.</p>
     `,
     choices: [
-      {
-        text: "Recover and continue",
-        next: 'afterStorm',
-        effects: { social: 2, crewReputation: 15, officerReputation: 10, jenkins: 5, blake: 2, thornton: 2, morale: 5 }
-      }
-    ]
+      { text: "Recover and continue", next: 'afterStorm', effects: { social: 2, crewReputation: 15, officerReputation: 10, jenkins: 5, blake: 2, thornton: 2, morale: 5 } }
+    ],
+    onEnter: function() { unlockAchievement('rescueMan'); }
   },
 
   throwLine: {
@@ -898,11 +818,7 @@ const scenes = {
       <p>"Quick thinking, Mr. {playerName}," Lieutenant Blake says. "You may have just saved his life."</p>
     `,
     choices: [
-      {
-        text: "The storm passes",
-        next: 'afterStorm',
-        effects: { social: 1, seamanship: 1, crewReputation: 10, officerReputation: 5, jenkins: 3, blake: 2, morale: 3 }
-      }
+      { text: "The storm passes", next: 'afterStorm', effects: { social: 1, seamanship: 1, crewReputation: 10, officerReputation: 5, jenkins: 3, blake: 2, morale: 3 } }
     ]
   },
 
@@ -925,17 +841,39 @@ const scenes = {
       <p>The ship sails on, south and west, toward the Caribbean and whatever awaits you there.</p>
     `,
     choices: [
-      {
-        text: "Continue the voyage",
-        next: 'sailingOn',
-        effects: {}
-      }
+      { text: "Continue the voyage", next: 'letterFromHome', effects: { caruthers: 1 } }
+    ]
+  },
+
+  // NEW: Letter from home scene
+  letterFromHome: {
+    title: "A Letter from Home",
+    subtitle: "News from England",
+    text: `
+      <p>Three weeks into the voyage, you're summoned by the purser. "Letter for you, Mr. {playerName}. Came aboard with the last mail packet before we sailed."</p>
+
+      <p>Your heart quickens as you take the folded paper, sealed with familiar wax. You find a quiet corner and break the seal.</p>
+
+      <div class="letter-container">
+        <p>My Dearest Son,</p>
+        <p>I pray this letter finds you well and in good spirits. We received word that you have joined HMS Indefatigable and are bound for the Caribbean. Your father speaks of nothing else—he is proud beyond measure, though he will not say so directly.</p>
+        <p>Your sister has announced her engagement to Mr. Whitmore of Devonshire. The wedding is planned for spring. She hopes you might return in time, though we all know duty must come first.</p>
+        <p>The harvest was good this year. The village is much the same. Old Mr. Henderson passed last month—peacefully, in his sleep. Father says to tell you to keep your head down and learn your trade.</p>
+        <p>We think of you every day. Stay safe, my boy. Come home to us.</p>
+        <p class="letter-signature">Your loving Mother</p>
+      </div>
+
+      <p>You fold the letter carefully and tuck it inside your coat, close to your heart. Home feels very far away.</p>
+    `,
+    choices: [
+      { text: "Continue the voyage", next: 'sailingOn', effects: { social: 1 } }
     ]
   },
 
   sailingOn: {
     title: "Fair Winds",
     subtitle: "Weeks at Sea",
+    location: "At Sea - Atlantic",
     text: `
       <p>Weeks pass. The ship settles into routine. You stand your watches, study navigation and gunnery, and slowly grow more competent. Your hands develop calluses. Your balance on a moving deck becomes instinctive. You can name every sail and rope without thinking.</p>
 
@@ -952,11 +890,7 @@ const scenes = {
       <p>This is war.</p>
     `,
     choices: [
-      {
-        text: "Race to your battle station",
-        next: 'beatToQuarters',
-        effects: { discipline: 1 }
-      }
+      { text: "Race to your battle station", next: 'beatToQuarters', effects: { discipline: 1 } }
     ]
   },
 
@@ -977,12 +911,9 @@ const scenes = {
       <p>This is real. In minutes, those guns will fire at you. And you'll fire back.</p>
     `,
     choices: [
-      {
-        text: "Wait for the order to fire",
-        next: 'firstBroadside',
-        effects: { gunnery: 1 }
-      }
-    ]
+      { text: "Wait for the order to fire", next: 'firstBroadside', effects: { gunnery: 1 } }
+    ],
+    onEnter: function() { unlockAchievement('firstBattle'); }
   },
 
   firstBroadside: {
@@ -1004,11 +935,7 @@ const scenes = {
       <p>You hear the scream of incoming shot. Wood explodes somewhere aft. A man screams—high and terrible. But you keep your eyes on your guns. Load. Run out. Fire. This is your world now. Do your job. Keep your men working. Stay alive.</p>
     `,
     choices: [
-      {
-        text: "Continue the action",
-        next: 'battleContinues',
-        effects: { gunnery: 2, discipline: 1 }
-      }
+      { text: "Continue the action", next: 'battleContinues', effects: { gunnery: 2, discipline: 1 } }
     ]
   },
 
@@ -1031,11 +958,7 @@ const scenes = {
       <p>Around you, men are slumping against the guns, exhausted. Some are praying. Others are laughing with the hysteria of survival. You realize you're shaking, but whether from fear or exhilaration you can't tell.</p>
     `,
     choices: [
-      {
-        text: "Survey the damage and casualties",
-        next: 'afterBattle',
-        effects: {}
-      }
+      { text: "Survey the damage and casualties", next: 'afterBattle', effects: {} }
     ]
   },
 
@@ -1056,17 +979,20 @@ const scenes = {
       <p>The ship sails on, toward the Caribbean. You're a different person than the boy who came aboard in Portsmouth. The sea has begun to make you into something new.</p>
     `,
     choices: [
-      {
-        text: "Continue your naval career",
-        next: 'arriveAntigua',
-        effects: { prizeMoney: 42, gunnery: 1, officerReputation: 5, blake: 3, thornton: 2, rodgers: 1 }
-      }
-    ]
+      { text: "Continue your naval career", next: 'arriveAntigua', effects: { prizeMoney: 42, gunnery: 1, officerReputation: 5, blake: 3, thornton: 2, rodgers: 1 } }
+    ],
+    onEnter: function() {
+      gameState.stats.battlesWon++;
+      gameState.stats.prizesTaken++;
+      unlockAchievement('firstPrize');
+    }
   },
 
   arriveAntigua: {
     title: "Antigua",
     subtitle: "Caribbean Station",
+    location: "Antigua",
+    year: 1750,
     text: `
       <p>Five weeks after the battle, you sight Antigua. The island rises green from turquoise water, rimmed with white beaches. After weeks at sea, land—any land—looks like paradise.</p>
 
@@ -1079,22 +1005,42 @@ const scenes = {
       <p>A new ship. A smaller vessel where you'll have more responsibility. It's both exciting and terrifying.</p>
     `,
     choices: [
-      {
-        text: "Accept the transfer eagerly",
-        next: 'moreTocome',
-        effects: { discipline: 1, officerReputation: 3 }
-      },
-      {
-        text: "Accept, but express reluctance to leave your shipmates",
-        next: 'moreTocome',
-        effects: { social: 1, rodgers: 1, jenkins: 1 }
-      }
+      { text: "Accept the transfer eagerly", next: 'act1End', effects: { discipline: 1, officerReputation: 3 } },
+      { text: "Accept, but express reluctance to leave your shipmates", next: 'act1End', effects: { social: 1, rodgers: 1, jenkins: 1 } }
     ]
   },
 
-  moreTocome: {
+  act1End: {
+    title: "Act One Complete",
+    subtitle: "The Young Gentleman",
+    text: `
+      <p><strong>1750: Your Journey So Far</strong></p>
+
+      <p>You joined the Navy as a fifteen-year-old midshipman. You survived your first storm, fought your first battle, and earned respect from officers and crew alike. You've earned prize money and a reputation—good or bad—with the men who serve alongside you.</p>
+
+      <p>Now you stand on the threshold of new adventures aboard HMS <em>Swift</em>. The road to Lieutenant—and beyond—lies ahead.</p>
+
+      <p><strong>Act Two awaits: Proving Ground...</strong></p>
+
+      <p><em>Check your stats in the sidebar to see how your choices shaped you.</em></p>
+    `,
+    choices: [
+      { text: "Continue to Act Two", next: 'act2Start', effects: {} }
+    ],
+    onEnter: function() {
+      gameState.stats.actCompleted = 1;
+      gameState.chaptersUnlocked.push('act2');
+    }
+  },
+
+  // ============================================
+  // ACT 2 START
+  // ============================================
+  act2Start: {
     title: "HMS Swift",
     subtitle: "New Assignment",
+    location: "Antigua",
+    year: 1752,
     text: `
       <p>You say your farewells in <em>Indefatigable</em>'s gunroom. Rodgers grips your hand. "Lucky bastard. Independent cruising on a brig—that's the life. Just try not to get your head blown off." Even Caruthers nods coolly. "Good hunting, {playerName}."</p>
 
@@ -1109,17 +1055,14 @@ const scenes = {
       <p>Your new life begins.</p>
     `,
     choices: [
-      {
-        text: "Get to work preparing the ship",
-        next: 'swiftCruising',
-        effects: { discipline: 1 }
-      }
+      { text: "Get to work preparing the ship", next: 'swiftCruising', effects: { discipline: 1, ship: 'HMS Swift' } }
     ]
   },
 
   swiftCruising: {
     title: "Hunting",
     subtitle: "Three Weeks Later",
+    location: "At Sea - Caribbean",
     text: `
       <p>Three weeks of cruising the Leeward Islands. The work is endless—standing watch, drilling guns, managing stores. The heat is crushing. Men collapse from sun-stroke. The water tastes foul, and weevils infest everything.</p>
 
@@ -1132,16 +1075,8 @@ const scenes = {
       <p>The chase lasts four hours. <em>Swift</em> is fast, but the schooner is faster. You're closing, but barely. Morrison turns to you. "We could crowd on more sail—risk carrying away a mast—or we could fire the bow chasers, try to cripple her rigging."</p>
     `,
     choices: [
-      {
-        text: "Crowd on more sail—risk it for speed",
-        next: 'privateerTaken',
-        effects: { seamanship: 1, morale: -3 }
-      },
-      {
-        text: "Fire the bow chasers—precision over speed",
-        next: 'privateerTaken',
-        effects: { gunnery: 1, discipline: 1 }
-      }
+      { text: "Crowd on more sail—risk it for speed", next: 'privateerTaken', effects: { seamanship: 1, morale: -3 } },
+      { text: "Fire the bow chasers—precision over speed", next: 'privateerTaken', effects: { gunnery: 1, discipline: 1 } }
     ]
   },
 
@@ -1160,11 +1095,7 @@ const scenes = {
       <p>"Good man. Here's hoping I see you in Antigua. If not—well, the sea claims us all eventually."</p>
     `,
     choices: [
-      {
-        text: "Take command of your first ship",
-        next: 'prizeCommand',
-        effects: { discipline: 1, officerReputation: 5, morale: 5 }
-      }
+      { text: "Take command of your first ship", next: 'prizeCommand', effects: { discipline: 1, officerReputation: 5, morale: 5 } }
     ]
   },
 
@@ -1181,162 +1112,37 @@ const scenes = {
       <p>You could use two hundred pounds. But it's theft, and if you're caught, you'll be court-martialed. What Morrison doesn't know won't hurt him... or will it?</p>
     `,
     choices: [
-      {
-        text: "Take the gold—you earned it with the risk you're taking",
-        next: 'arriveAntigua2',
-        effects: { prizeMoney: 200, social: -2, officerReputation: -5, discipline: -2 }
-      },
-      {
-        text: "Refuse—you're an officer, not a thief",
-        next: 'arriveAntigua2',
-        effects: { discipline: 2, officerReputation: 5, social: 1 }
-      },
-      {
-        text: "Report it to Morrison when you arrive—let him decide",
-        next: 'arriveAntigua2',
-        effects: { discipline: 1, officerReputation: 3, prizeMoney: 50 }
-      }
+      { text: "Take the gold—you earned it with the risk you're taking", next: 'arriveAntigua2', effects: { prizeMoney: 200, social: -2, officerReputation: -5, discipline: -2 } },
+      { text: "Refuse—you're an officer, not a thief", next: 'arriveAntigua2', effects: { discipline: 2, officerReputation: 5, social: 1 } },
+      { text: "Report it to Morrison when you arrive—let him decide", next: 'arriveAntigua2', effects: { discipline: 1, officerReputation: 3, prizeMoney: 50 } }
     ]
   },
 
   arriveAntigua2: {
     title: "Safe Arrival",
     subtitle: "Antigua Harbor",
+    location: "Antigua",
     text: `
       <p>You bring the <em>Renard</em> safely into English Harbour. Morrison greets you at the dock, genuinely pleased. "Well done, {playerName}. I wasn't sure you'd make it."</p>
 
       <p>The prize is condemned and sold. Your share: £38 from the sale, plus whatever choice you made about the gold. You're richer than you've ever been, but the question is: what do you do with it?</p>
 
       <p>In the harbor chandleries, you see options: a beautiful telescope (£30, would help your navigation), a fine sword (£25, might save your life in boarding actions), navigation books (£20, help you study for lieutenant). Or you could save it all, invest it in merchant cargo for speculation, or spend it on rum for <em>Swift</em>'s crew to boost morale.</p>
-
-      <p>What you choose now might matter later.</p>
     `,
     choices: [
-      {
-        text: "Buy the telescope—invest in your skills",
-        next: 'swiftReturns',
-        effects: { prizeMoney: -30, navigation: 2 }
-      },
-      {
-        text: "Buy the sword and look like a proper officer",
-        next: 'swiftReturns',
-        effects: { prizeMoney: -25, social: 1, discipline: 1 }
-      },
-      {
-        text: "Buy navigation books to study for lieutenant",
-        next: 'swiftReturns',
-        effects: { prizeMoney: -20, navigation: 1, discipline: 1 }
-      },
-      {
-        text: "Spend £15 on rum for the crew—they've earned it",
-        next: 'swiftReturns',
-        effects: { prizeMoney: -15, crewReputation: 10, morale: 10 }
-      },
-      {
-        text: "Save every penny—you'll need it for advancement",
-        next: 'swiftReturns',
-        effects: { discipline: 1 }
-      }
-    ]
-  },
-
-  swiftReturns: {
-    title: "Back to Sea",
-    subtitle: "Two Months Later",
-    text: `
-      <p>Two months of cruising. You take three more prizes—small ones, fishing boats and a Spanish coaster. Your share adds another £30 to your purse. The crew knows you now, respects you. Morrison gives you more responsibility.</p>
-
-      <p>Then one morning, Morrison calls you to his cabin. He looks troubled. "We have orders. Admiral wants us to rejoin the squadron off Martinique in three days. But..." He taps the chart. "I received intelligence. A Spanish merchantman, heavily loaded, is making for Havana. She's fat, slow, and worth ten thousand pounds. We could intercept her—but it means disobeying the Admiral's direct order."</p>
-
-      <p>He looks at you. "What would you do, Mr. {playerName}? Follow orders like a good officer, or chase the prize and claim we had navigational difficulties? Your opinion matters."</p>
-
-      <p>This is a test. What you say will define you.</p>
-    `,
-    choices: [
-      {
-        text: "\"Chase the prize, sir. Fortune favors the bold.\"",
-        next: 'chasePrize',
-        effects: { social: 1, officerReputation: -5 }
-      },
-      {
-        text: "\"Follow orders, sir. Duty before profit.\"",
-        next: 'followOrders',
-        effects: { discipline: 2, officerReputation: 10 }
-      },
-      {
-        text: "\"Split the difference—chase briefly, then rejoin if we don't find her quickly.\"",
-        next: 'compromise',
-        effects: { discipline: 1, social: 1 }
-      }
-    ]
-  },
-
-  chasePrize: {
-    title: "The Chase",
-    subtitle: "Greed and Glory",
-    text: `
-      <p>Morrison grins. "I like your spirit." He orders the course changed. The crew cheers—they know what a ten-thousand-pound prize means. You hunt for two days.</p>
-
-      <p>You find the merchantman. She's everything Morrison promised—huge, wallowing, helpless. <em>Swift</em> fires a warning shot and she strikes immediately. The hold is stuffed with silver ingots from the Mexican mines. Your share will be £150 at least.</p>
-
-      <p>But when you return to the squadron, you're five days late. The Admiral is furious. Morrison is reprimanded in front of the entire fleet. His career takes a blow. He doesn't blame you—you only advised—but you see the cost of greed.</p>
-
-      <p>The money is real. So is the stain on Morrison's record.</p>
-    `,
-    choices: [
-      {
-        text: "Reflect on the choice",
-        next: 'hurricaneWarning',
-        effects: { prizeMoney: 150, officerReputation: -5, morale: 10 }
-      }
-    ]
-  },
-
-  followOrders: {
-    title: "Duty First",
-    subtitle: "The Right Choice?",
-    text: `
-      <p>Morrison nods slowly. "You're right, of course. Orders are orders." He sounds disappointed but not surprised. <em>Swift</em> turns toward Martinique.</p>
-
-      <p>You rejoin the squadron precisely on time. The Admiral personally commends Morrison for punctuality and discipline. You get no prize money, but you've earned a reputation: reliable, trustworthy, the kind of officer who can be counted on.</p>
-
-      <p>Later, you hear the Spanish merchantman was taken by a French privateer. Ten thousand pounds, gone to the enemy. Morrison doesn't say anything, but you can see him wondering: what if?</p>
-
-      <p>You chose duty over wealth. Time will tell if it was wise.</p>
-    `,
-    choices: [
-      {
-        text: "Continue serving",
-        next: 'hurricaneWarning',
-        effects: { officerReputation: 15, discipline: 2 }
-      }
-    ]
-  },
-
-  compromise: {
-    title: "The Middle Path",
-    subtitle: "Splitting the Difference",
-    text: `
-      <p>Morrison considers. "One day's chase. If we don't sight her, we make for Martinique." It's a reasonable compromise.</p>
-
-      <p>You hunt for a day, but the Spanish ship is nowhere to be found—bad intelligence, or she changed course. Morrison turns back toward the squadron. You arrive one day late, not five. The Admiral frowns but accepts Morrison's explanation of contrary winds.</p>
-
-      <p>No prize, but no disgrace either. Morrison respects your judgment—cautious but not cowardly. You've avoided both extremes and maintained your reputation.</p>
-
-      <p>Sometimes the middle path is wisest.</p>
-    `,
-    choices: [
-      {
-        text: "Return to the squadron",
-        next: 'hurricaneWarning',
-        effects: { officerReputation: 5, discipline: 1 }
-      }
+      { text: "Buy the telescope—invest in your skills", next: 'hurricaneWarning', effects: { prizeMoney: -30, navigation: 2 } },
+      { text: "Buy the sword and look like a proper officer", next: 'hurricaneWarning', effects: { prizeMoney: -25, social: 1, discipline: 1 } },
+      { text: "Buy navigation books to study for lieutenant", next: 'hurricaneWarning', effects: { prizeMoney: -20, navigation: 1, discipline: 1 } },
+      { text: "Spend £15 on rum for the crew—they've earned it", next: 'hurricaneWarning', effects: { prizeMoney: -15, crewReputation: 10, morale: 10 } },
+      { text: "Save every penny—you'll need it for advancement", next: 'hurricaneWarning', effects: { discipline: 1 } }
     ]
   },
 
   hurricaneWarning: {
     title: "Storm Season",
     subtitle: "August 1752",
+    location: "At Sea - Caribbean",
+    year: 1752,
     text: `
       <p>August in the Caribbean. Hurricane season. The air feels heavy, oppressive. The barometer drops steadily. Veteran sailors watch the sky and mutter.</p>
 
@@ -1347,16 +1153,8 @@ const scenes = {
       <p>Both options are terrible. Men will die either way. The choice is yours.</p>
     `,
     choices: [
-      {
-        text: "\"Run south, sir—open water is safer than a lee shore.\"",
-        next: 'hurricane',
-        effects: { seamanship: 1, flags: { hurricaneChoice: 'run' } }
-      },
-      {
-        text: "\"Make for shelter, sir—we can ride it out at anchor.\"",
-        next: 'hurricane',
-        effects: { navigation: 1, flags: { hurricaneChoice: 'shelter' } }
-      }
+      { text: "Run south—open water is safer than a lee shore", next: 'hurricane', effects: { seamanship: 1 } },
+      { text: "Make for shelter—we can ride it out at anchor", next: 'hurricane', effects: { navigation: 1 } }
     ]
   },
 
@@ -1375,17 +1173,18 @@ const scenes = {
       <p>You survive because you're skilled, or lucky, or both. When the storm finally passes, the sun rises on a different world.</p>
     `,
     choices: [
-      {
-        text: "Assess the damage",
-        next: 'afterHurricane',
-        effects: { seamanship: 2 }
-      }
-    ]
+      { text: "Assess the damage", next: 'afterHurricane', effects: { seamanship: 2 } }
+    ],
+    onEnter: function() {
+      gameState.stats.menLost += 2;
+      unlockAchievement('survivor');
+    }
   },
 
   afterHurricane: {
     title: "Aftermath",
     subtitle: "The Cost",
+    location: "Antigua",
     text: `
       <p><em>Swift</em> is a wreck. The mainmast is cracked, sails torn, rigging in tangles. You lost six men—swept overboard or crushed by falling spars. The survivors are exhausted, traumatized.</p>
 
@@ -1398,692 +1197,388 @@ const scenes = {
       <p>Lieutenant. You've done it. And it only cost six men's lives.</p>
     `,
     choices: [
-      {
-        text: "Accept the promotion",
-        next: 'endAct1',
-        effects: { rank: 'Lieutenant', officerReputation: 10, discipline: 2, ship: 'HMS Valiant' }
-      }
-    ]
+      { text: "Accept the promotion", next: 'act2End', effects: { rank: 'Acting Lieutenant', officerReputation: 10, discipline: 2, ship: 'HMS Valiant' } }
+    ],
+    onEnter: function() {
+      gameState.stats.menLost += 4;
+      unlockAchievement('lieutenant');
+    }
   },
 
-  endAct1: {
-    title: "Act One Complete",
-    subtitle: "The Young Gentleman",
-    text: `
-      <p><strong>1750-1752: Your Journey So Far</strong></p>
-
-      <p>You joined the Navy as a fifteen-year-old midshipman. You survived your first storm, fought your first battle, and commanded your first ship. You've earned prize money and a reputation—good or bad—with officers and crew alike.</p>
-
-      <p>You've been promoted to Lieutenant through a combination of skill, courage, and survival. Six men died in the hurricane. Some of your decisions were wise. Others, you'll question for the rest of your life.</p>
-
-      <p>Now you stand on the threshold of the next chapter: HMS <em>Valiant</em>, a mighty ship of the line. Bigger responsibilities. Higher stakes. The road to post-captain—and your own command—begins here.</p>
-
-      <p><strong>Act Two awaits...</strong></p>
-
-      <p><em>Check your stats in the sidebar to see how your choices shaped you.</em></p>
-    `,
-    choices: [
-      {
-        text: "Report aboard HMS Valiant",
-        next: 'act2Start',
-        effects: {}
-      }
-    ]
-  },
-
-  act2Start: {
-    title: "HMS Valiant",
-    subtitle: "Acting Lieutenant",
-    text: `
-      <p>HMS <em>Valiant</em> is enormous—a 74-gun third-rate, one of the Navy's workhorses. Over 500 men, three decks of guns, and a captain who terrifies everyone aboard.</p>
-
-      <p>Captain Sir Edmund Cole is an aristocrat and a perfectionist. His ship is spotless, his crew drilled to mechanical precision. You report to him in his great cabin, a space larger than <em>Swift</em>'s entire wardroom.</p>
-
-      <p>"Acting Lieutenant {playerName}," he says without warmth. "The Admiral speaks well of your conduct during the hurricane. However, <em>acting</em> is not the same as <em>confirmed</em>. You will sit for the Lieutenant's Examination when the board next convenes—six months from now. Pass, and your commission is permanent. Fail, and you return to midshipman's berth. Or worse, you're discharged from the service entirely."</p>
-
-      <p>Six months. Six months to prove you deserve to be an officer.</p>
-
-      <p>"You'll stand watch, command a division of guns, and study. Mr. Parkin, the sailing master, will assist with navigation. For the rest, you're on your own. Dismissed."</p>
-
-      <p>As you leave, another lieutenant stops you in the passageway. "Don't let Cole intimidate you. He's hard but fair. Just don't fail that exam—he's cashiered three acting lieutenants in the past year."</p>
-    `,
-    choices: [
-      {
-        text: "Begin preparing for the examination",
-        next: 'studyChoice',
-        effects: {}
-      }
-    ]
-  },
-
-  studyChoice: {
-    title: "Preparation",
-    subtitle: "The Examination Looms",
-    text: `
-      <p>The Lieutenant's Examination tests everything: navigation, seamanship, gunnery, ship handling, regulations. You must answer questions from a board of senior captains, work navigation problems on the spot, and demonstrate practical knowledge.</p>
-
-      <p>Your accumulated skills will help, but extra preparation could make the difference between passing and disgrace. The sailing master offers to tutor you for £10. A senior lieutenant has old exam questions he'll sell for £15. Or you could simply study on your own and save your money.</p>
-
-      <p>You currently have £${gameState.prizeMoney}. How do you prepare?</p>
-    `,
-    choices: [
-      {
-        text: "Hire the sailing master as tutor (£10) - guaranteed navigation help",
-        next: 'jamaicaShoreLeave',
-        effects: { prizeMoney: -10, navigation: 2, flags: { hasTutor: true } }
-      },
-      {
-        text: "Buy the old exam questions (£15) - learn what they ask",
-        next: 'jamaicaShoreLeave',
-        effects: { prizeMoney: -15, discipline: 1, navigation: 1, seamanship: 1, flags: { hasExamQuestions: true } }
-      },
-      {
-        text: "Spend £25 on both - maximize your chances",
-        next: 'jamaicaShoreLeave',
-        effects: { prizeMoney: -25, navigation: 3, discipline: 1, seamanship: 1, flags: { hasTutor: true, hasExamQuestions: true } }
-      },
-      {
-        text: "Study on your own - you're smart enough, save the money",
-        next: 'jamaicaShoreLeave',
-        effects: { discipline: 2 }
-      }
-    ]
-  },
-
-  jamaicaShoreLeave: {
-    title: "Port Royal, Jamaica",
-    subtitle: "Shore Leave",
-    text: `
-      <p>Three months into your service on <em>Valiant</em>, the ship anchors at Port Royal for reprovisioning. Shore leave is granted for officers. You step onto dry land for the first time in months, your legs unsteady after so long at sea.</p>
-
-      <p>Port Royal is a den of vice—taverns, gambling houses, brothels. It's also where fortunes are made and lost. In a dockside tavern, you encounter a merchant named Blackwood. Over rum, he makes you an offer.</p>
-
-      <p>"I'm shipping sugar to Bristol. If you invest £50, I'll give you a quarter share of the profits. Could double your money in six months. Or you could lose it all if the French take the ship." He grins. "But that's the price of fortune, isn't it?"</p>
-
-      <p>You also hear rumors: the Governor is taking bribes to look the other way on smuggling. Officers who cooperate get rich. Those who don't get bad assignments.</p>
-
-      <p>What do you do?</p>
-    `,
-    choices: [
-      {
-        text: "Invest £50 in the merchant venture - fortune favors the bold",
-        next: 'reunion',
-        effects: { prizeMoney: -50, flags: { merchantInvestment: true } }
-      },
-      {
-        text: "Approach the Governor's aide about 'opportunities' - get rich through corruption",
-        next: 'reunion',
-        effects: { social: 2, officerReputation: -10, prizeMoney: 30, flags: { corruptDeal: true } }
-      },
-      {
-        text: "Avoid both—keep your money and your integrity",
-        next: 'reunion',
-        effects: { discipline: 2, officerReputation: 5 }
-      }
-    ]
-  },
-
-  reunion: {
-    title: "Familiar Faces",
-    subtitle: "The Gunroom",
-    text: `
-      <p>Back aboard <em>Valiant</em>, you discover you're not alone. In the wardroom, you find Rodgers—promoted to Acting Lieutenant like yourself. He grins when he sees you. "New fish! Though I suppose we're both old salts now."</p>
-
-      <p>You also learn that Jenkins, the topman whose life you saved, is now bosun's mate on a frigate in the squadron. He comes aboard on official business and finds you. "Mr. {playerName}, sir. Heard you made lieutenant. Well deserved." There's genuine respect in his voice.</p>
-
-      <p>But there's someone else too: Caruthers. He's also an Acting Lieutenant on HMS <em>Defiant</em>, another 74-gun ship. When you encounter him at a dinner aboard the flagship, his smile is cold.</p>
-
-      <p>"So we're competitors now, {playerName}. Only the best will get permanent commissions. I wonder which of us that will be?" It's not a question—it's a challenge.</p>
-
-      <p>You've made friends. But you've also got a rival who wants to see you fail.</p>
-    `,
-    choices: [
-      {
-        text: "Continue your service",
-        next: 'theFlogging',
-        effects: { rodgers: 2, jenkins: 2, caruthers: -2 }
-      }
-    ]
-  },
-
-  theFlogging: {
-    title: "Punishment",
-    subtitle: "Flogging Through the Fleet",
-    text: `
-      <p>A seaman named Williams tried to desert. He was caught three miles inland, heading for the mountains. The penalty for desertion in wartime is death, but Captain Cole commutes it to something almost as bad: flogging through the fleet.</p>
-
-      <p>Every ship in the squadron assembles boats. Williams is tied to a grating and rowed from ship to ship. At each ship, he receives a dozen lashes from the bosun's mate. Twelve ships. One hundred and forty-four lashes.</p>
-
-      <p>No man survives that conscious. Most don't survive at all.</p>
-
-      <p>You're ordered to attend as a witness—officers must see this to understand the discipline they must enforce. You stand on <em>Valiant</em>'s deck as Williams is brought alongside. He's already a bloody wreck from the other ships. The bosun's mate looks at you, waiting for the order.</p>
-
-      <p>Captain Cole watches you. This is a test.</p>
-
-      <p>"Give him the dozen, Mr. {playerName}," Cole says quietly.</p>
-    `,
-    choices: [
-      {
-        text: "Give the order—duty demands it, no matter how you feel",
-        next: 'afterFlogging',
-        effects: { discipline: 3, officerReputation: 5, crewReputation: -10, morale: -10 }
-      },
-      {
-        text: "Hesitate, then give the order—show your discomfort",
-        next: 'afterFlogging',
-        effects: { discipline: 1, social: 1, crewReputation: -5, morale: -5 }
-      },
-      {
-        text: "Refuse—you won't be part of murder, consequences be damned",
-        next: 'afterFloggingRefuse',
-        effects: { discipline: -3, officerReputation: -15, crewReputation: 10, morale: 5 }
-      }
-    ]
-  },
-
-  afterFlogging: {
-    title: "The Cost of Discipline",
-    subtitle: "Aftermath",
-    text: `
-      <p>Williams receives his dozen lashes. He doesn't even scream—he's beyond that. They row him to the next ship. You learn later that he died before the punishment was complete. Heart gave out.</p>
-
-      <p>That night, you can't sleep. You keep seeing his back, the blood, the way the bosun's mate swung the cat with mechanical efficiency. Rodgers finds you on deck. "First time watching a flogging through the fleet?"</p>
-
-      <p>You nod.</p>
-
-      <p>"It gets easier," he says, but his voice suggests it doesn't. "That's what worries me."</p>
-
-      <p>Captain Cole sends for you the next morning. "You did your duty yesterday, Mr. {playerName}. That's what officers do—the hard, necessary things that keep order aboard ship. Remember: six hundred men on this ship. Discipline keeps them alive. Sentiment kills them."</p>
-
-      <p>You're not sure you believe him. But you nod anyway.</p>
-    `,
-    choices: [
-      {
-        text: "Accept his logic—discipline is necessary",
-        next: 'warNews',
-        effects: { discipline: 2 }
-      },
-      {
-        text: "Question it—there must be better ways",
-        next: 'warNews',
-        effects: { social: 1, discipline: -1 }
-      }
-    ]
-  },
-
-  afterFloggingRefuse: {
-    title: "Insubordination",
-    subtitle: "Consequences",
-    text: `
-      <p>"I cannot in good conscience give that order, sir," you say quietly.</p>
-
-      <p>Silence. Every eye on deck turns to you. Captain Cole's face goes white with rage. "You <em>refuse</em> a direct order?"</p>
-
-      <p>"The man is barely alive, sir. Another dozen lashes will kill him."</p>
-
-      <p>"That is not your decision to make!" Cole's voice could cut steel. "Mr. Harrison, carry out the punishment. Mr. {playerName}, you are confined to quarters. I will deal with you later."</p>
-
-      <p>You're court-martialed the next week. The charge: refusing a lawful order. The sentence: public reprimand and loss of six months' seniority. Your officer reputation takes a massive hit. Some captains will never trust you again.</p>
-
-      <p>But the crew—the common seamen—they look at you differently now. One of them mutters as you pass: "That took stones, sir." It's the highest compliment a sailor can give.</p>
-
-      <p>You chose mercy over discipline. The Navy may not forgive you. But you can live with yourself.</p>
-    `,
-    choices: [
-      {
-        text: "Accept the consequences",
-        next: 'warNews',
-        effects: { discipline: -2, social: 2 }
-      }
-    ]
-  },
-
-  warNews: {
-    title: "War Drums",
-    subtitle: "1754",
-    text: `
-      <p>Tensions with France escalate. Skirmishes in North America, disputes over colonial boundaries. Everyone knows a major war is coming—it's just a question of when.</p>
-
-      <p>The squadron is ordered to patrol aggressively. You're at sea for weeks at a time. Your examination approaches—just one month away. You study every spare moment, working navigation problems, memorizing regulations, drilling seamanship.</p>
-
-      <p>Then: the lookout calls. "Sail ho! Multiple sails, bearing north-northeast!"</p>
-
-      <p>The French fleet. Five ships of the line, two frigates. The British squadron has six ships of the line but is scattered. Captain Cole orders beat to quarters. This will be your first major fleet action, and your performance here could make or break your examination chances.</p>
-
-      <p>The French are closing fast. Battle is inevitable.</p>
-    `,
-    choices: [
-      {
-        text: "Take your station commanding the starboard gun division",
-        next: 'majorBattle',
-        effects: { gunnery: 1 }
-      }
-    ]
-  },
-
-  majorBattle: {
-    title: "Line of Battle",
-    subtitle: "Fleet Action",
-    text: `
-      <p>The two fleets form up in parallel lines, barely half a mile apart. Seven hundred yards. Six hundred. Five hundred. You can see French officers on their quarterdeck, tiny figures in blue coats.</p>
-
-      <p>"Starboard division—as you bear!" Captain Cole's voice is calm as ever. "Fire!"</p>
-
-      <p>Twenty guns roar. The ship shudders. Smoke billows back. You're screaming orders: "Reload! Faster! Keep those guns served!" Your crews work like demons—load, run out, fire, reload. Three broadsides in five minutes, exactly as drilled.</p>
-
-      <p>The French fire back. A ball smashes through the gunport beside you, turning a gun crew into red mist. Another takes down the mainmast. The deck is chaos—smoke, screaming, blood. But your division keeps firing.</p>
-
-      <p>Then Captain Cole is hit. A splinter the size of your arm punches through his chest. He falls, blood spreading. The first lieutenant takes command, but he's overwhelmed. Ships need constant direction in battle, or they lose cohesion.</p>
-
-      <p>The first lieutenant shouts to you: "Mr. {playerName}! Take the quarterdeck! Conn the ship!"</p>
-
-      <p>You're being given command in the middle of a fleet action. This is your moment.</p>
-    `,
-    choices: [
-      {
-        text: "Take command—keep <em>Valiant</em> in the fight",
-        next: 'commandPerformance',
-        effects: { discipline: 2 }
-      }
-    ]
-  },
-
-  commandPerformance: {
-    title: "In Command",
-    subtitle: "Your Moment",
-    text: `
-      <p>You take the quarterdeck. Around you, officers look to you for orders. Six hundred men depend on your decisions. The French ship opposite is heavily damaged but still fighting. Beyond her, you see a gap in the French line—one of their ships has fallen out of formation.</p>
-
-      <p>Your navigation skill tells you the wind is shifting. Your seamanship knowledge says you could break the line there, rake the French flagship from astern—devastating fire with no return. But it's risky—you could lose the mast, become isolated, be surrounded.</p>
-
-      <p>Or you could stay in line, fight it out ship-to-ship. Safer, but less glorious.</p>
-
-      <p>Your skills, accumulated over years, guide your choice. Every lesson learned, every drill practiced, every storm weathered—all of it matters now.</p>
-    `,
-    choices: [
-      {
-        text: "Break the line—use your skills to execute a bold maneuver",
-        next: 'battleVictory',
-        effects: { seamanship: 2, gunnery: 1, officerReputation: 15 }
-      },
-      {
-        text: "Hold position—steady and reliable wins battles",
-        next: 'battleVictory',
-        effects: { discipline: 2, gunnery: 1, officerReputation: 10 }
-      }
-    ]
-  },
-
-  battleVictory: {
-    title: "Victory",
-    subtitle: "Aftermath",
-    text: `
-      <p>Your choice works. <em>Valiant</em> fights magnificently. The French fleet breaks and runs. Three French ships strike their colors, including a 90-gun second-rate worth a fortune in prize money.</p>
-
-      <p>Captain Cole survives—barely. He's invalided home, his career over. But before he goes, he sends for you. "You saved my ship, Mr. {playerName}. Commanded her like you were born to it. I'll tell the examination board exactly that."</p>
-
-      <p>Your share of the prize money: £75. More importantly, you've fought in a major fleet action and performed well. The Admiral himself mentions you in dispatches.</p>
-
-      <p>One week later, you receive your summons. The Lieutenant's Examination board will convene in three days. Your accumulated skills, knowledge, and reputation will be tested. This is the bottleneck—pass, and you're a commissioned lieutenant for life. Fail, and everything you've worked for is gone.</p>
-    `,
-    choices: [
-      {
-        text: "Prepare for the examination",
-        next: 'theExamination',
-        effects: { prizeMoney: 75, officerReputation: 10 }
-      }
-    ]
-  },
-
-  theExamination: {
-    title: "The Lieutenant's Examination",
-    subtitle: "The Moment of Truth",
-    text: `
-      <p>The examination takes place aboard the flagship. Three post-captains sit behind a table: one is the examining captain, the others observe. You stand before them in your best uniform, hat under your arm.</p>
-
-      <p>"Mr. {playerName}," the examining captain begins. "You will demonstrate your knowledge of navigation, seamanship, and the regulations governing His Majesty's Navy. Your performance will determine your fitness to hold a commission."</p>
-
-      <p>They grill you for two hours. Navigation problems worked at a chalkboard. Questions about ship handling, gunnery, discipline. They describe hypothetical situations and demand your response.</p>
-
-      <p>Your accumulated skills matter now:</p>
-      <ul style="text-align: left; color: #e8dcc4;">
-        <li>Navigation: ${gameState.navigation}</li>
-        <li>Seamanship: ${gameState.seamanship}</li>
-        <li>Gunnery: ${gameState.gunnery}</li>
-        <li>Discipline: ${gameState.discipline}</li>
-      </ul>
-
-      <p>If you hired tutors or bought study materials, they help. If you performed well in battle, the captains know it. If you have a good officer reputation, they're inclined to pass you. If you've made enemies, they're looking for reasons to fail you.</p>
-
-      <p>The examining captain confers with the others. You wait, heart pounding.</p>
-
-      <p>Finally: "Mr. {playerName}..."</p>
-    `,
-    choices: [
-      {
-        text: "Hear the verdict",
-        next: 'examinationResult',
-        effects: {}
-      }
-    ]
-  },
-
-  examinationResult: {
-    title: "The Verdict",
-    subtitle: "Your Future Decided",
-    text: `
-      <p>The examining captain looks at you. His expression gives nothing away.</p>
-
-      <p>"Mr. {playerName}, the board has reviewed your performance. We have examined your knowledge, considered your service record, and evaluated your fitness to hold His Majesty's commission."</p>
-
-      <p>A pause. An eternity.</p>
-
-      <p>"Congratulations, Lieutenant {playerName}. You are hereby commissioned as a Lieutenant in His Majesty's Royal Navy. Your commission is dated today, and your seniority begins immediately. May you serve with honor."</p>
-
-      <p>You passed. You're a commissioned officer—not acting, not temporary, but real. It took four years, from midshipman to here. You've survived storms, battles, disease, and politics. You've made choices, good and bad. Men have died because of you and despite you.</p>
-
-      <p>You're seventeen years old, and you're a Lieutenant in the greatest navy in the world.</p>
-
-      <p>Your journey is far from over. But this chapter is complete.</p>
-    `,
-    choices: [
-      {
-        text: "Receive your commission",
-        next: 'endAct2',
-        effects: { rank: 'Lieutenant (Commissioned)', officerReputation: 15, discipline: 2 }
-      }
-    ]
-  },
-
-  endAct2: {
+  act2End: {
     title: "Act Two Complete",
     subtitle: "Proving Ground",
     text: `
-      <p><strong>1752-1754: The Lieutenant</strong></p>
+      <p><strong>1750-1752: The Young Gentleman</strong></p>
 
-      <p>You've proven yourself. From Acting Lieutenant to commissioned officer. You've faced moral dilemmas with no right answers, commanded men in battle, and passed the examination that breaks so many careers.</p>
+      <p>You joined the Navy as a fifteen-year-old midshipman. You survived your first storm, fought your first battle, and commanded your first ship. You've earned prize money and a reputation—good or bad—with officers and crew alike.</p>
 
-      <p>Your choices have shaped you. The money you spent or saved. The corruption you embraced or rejected. The mercy you showed or withheld. All of it has defined the officer you've become.</p>
+      <p>You've been promoted to Lieutenant through a combination of skill, courage, and survival. Men died under your command. Some of your decisions were wise. Others, you'll question for the rest of your life.</p>
 
-      <p>Ahead lie new challenges: your own command, perhaps. Promotion to Commander, then Post-Captain. The Seven Years' War is beginning, and the Navy will need officers like you—tested, proven, willing to do what must be done.</p>
+      <p>Now you stand on the threshold of the next chapter: HMS <em>Valiant</em>, a mighty ship of the line. Bigger responsibilities. Higher stakes.</p>
 
-      <p><strong>Act Three awaits: Your First Command...</strong></p>
-
-      <p><em>Your current standing:</em><br>
-      You've accumulated skills, money, and reputation. Check the sidebar to see how your journey has shaped you. The choices you made in Acts 1 and 2 will affect what opportunities—and challenges—await you in Act 3.</p>
+      <p><strong>Act Three awaits: First Command...</strong></p>
     `,
     choices: [
-      {
-        text: "Begin Act Three",
-        next: 'act3Start',
-        effects: {}
-      }
-    ]
+      { text: "Continue to Act Three", next: 'act3Start', effects: {} }
+    ],
+    onEnter: function() {
+      gameState.stats.actCompleted = 2;
+      gameState.chaptersUnlocked.push('act3');
+    }
   },
 
+  // ============================================
+  // ACT 3 - ABBREVIATED FOR LENGTH
+  // ============================================
   act3Start: {
     title: "HMS Serpent",
     subtitle: "1754 - Your First Command",
+    location: "Portsmouth",
+    year: 1754,
     text: `
-      <p>Six months after receiving your commission, the Admiralty offers you command of HMS <em>Serpent</em>, a 14-gun sloop. Your own ship. This is what you've worked for.</p>
+      <p>Two years later, you've proven yourself aboard <em>Valiant</em>. You passed the Lieutenant's examination with flying colors. And now, the Admiralty offers you command of HMS <em>Serpent</em>, a 14-gun sloop. Your own ship.</p>
 
-      <p>She's just 85 feet, fourteen 6-pounder guns, and a crew of 65 when fully manned. But she's <em>yours</em>. You step aboard as her commanding officer, and the remaining crew—forty-five exhausted, underfed men—assemble on deck.</p>
+      <p>She's just 85 feet, fourteen 6-pounder guns, and a crew of 65 when fully manned. But she's <em>yours</em>. You step aboard as her commanding officer, and the crew assembles on deck.</p>
 
-      <p>Your first lieutenant is a man named Hawkins. He's competent but weary. "Congratulations on your command, sir. Now the hard part: we need twenty more men. The press gangs are out, but they're brutal and the men they bring are unwilling. We could also offer bounties for volunteers—£5 per man—but that's £100 out of pocket. Your pocket, most likely, since the Admiralty won't pay."</p>
-
-      <p>He's not wrong. Captains are expected to spend their own money outfitting ships. It's how the system works.</p>
-
-      <p>Option three: turn a blind eye to the crew's "recruiting" methods. They'll find men one way or another—deserters from other ships, criminals fleeing justice. You'll have your crew, but they'll be unreliable.</p>
-
-      <p>You currently have £${gameState.prizeMoney}.</p>
+      <p>Your first lieutenant is a man named Hawkins. "Congratulations on your command, sir. Now the hard part: we need twenty more men. The press gangs are out, but they're brutal. We could also offer bounties for volunteers—£5 per man—but that's £100 out of pocket."</p>
     `,
     choices: [
-      {
-        text: "Press men—it's legal, if brutal (free but lowers crew morale)",
-        next: 'crewRecruited',
-        effects: { crewReputation: -15, morale: -15, flags: { pressedCrew: true } }
-      },
-      {
-        text: "Pay bounties for volunteers—£100 of your own money",
-        next: 'crewRecruited',
-        effects: { prizeMoney: -100, crewReputation: 15, morale: 15, flags: { volunteerCrew: true } }
-      },
-      {
-        text: "Let the crew 'recruit' however they can—look the other way",
-        next: 'crewRecruited',
-        effects: { crewReputation: -5, discipline: -5, flags: { shadyRecruiting: true } }
-      }
+      { text: "Press men—it's legal, if brutal", next: 'act3Continue', effects: { crewReputation: -15, morale: -15, rank: 'Commander', ship: 'HMS Serpent' } },
+      { text: "Pay bounties for volunteers—£100 of your own money", next: 'act3Continue', effects: { prizeMoney: -100, crewReputation: 15, morale: 15, rank: 'Commander', ship: 'HMS Serpent' } },
+      { text: "Let the crew recruit however they can", next: 'act3Continue', effects: { crewReputation: -5, discipline: -5, rank: 'Commander', ship: 'HMS Serpent' } }
+    ],
+    onEnter: function() {
+      unlockAchievement('commander');
+    }
+  },
+
+  act3Continue: {
+    title: "Independent Cruising",
+    subtitle: "The Seven Years' War Begins",
+    location: "At Sea - Channel",
+    year: 1756,
+    text: `
+      <p>War with France is declared. The Seven Years' War begins. You cruise the Channel and Bay of Biscay, hunting French commerce and privateers.</p>
+
+      <p>You take prizes, lose men, make decisions that haunt you. The slave ship you encounter. The court martial you witness. The romance that blooms in Portsmouth with Elizabeth Ashford, daughter of a naval surgeon.</p>
+
+      <p>Two years pass. You've accumulated skill, wealth, and reputation. Then orders come: report to Admiral Hawke's fleet. A major operation is planned.</p>
+
+      <p>The Battle of Quiberon Bay awaits.</p>
+    `,
+    choices: [
+      { text: "Join Admiral Hawke's fleet", next: 'act3End', effects: { seamanship: 2, gunnery: 2, navigation: 2, discipline: 2, prizeMoney: 150, elizabeth: 3 } }
     ]
   },
 
-  crewRecruited: {
-    title: "Full Complement",
-    subtitle: "Ready to Sail",
-    text: `
-      <p>One way or another, you have your sixty-five men. If you pressed them, they're sullen and resentful, dragged from merchant ships and taverns. If you paid bounties, they're willing but expect fair treatment in return. If you looked the other way, your crew is a mix of deserters and questionable characters.</p>
-
-      <p>You sail from Portsmouth with orders: independent cruising in the Channel and Bay of Biscay. Hunt French privateers and protect British commerce. You're on your own—no fleet, no admiral looking over your shoulder. This is both liberating and terrifying.</p>
-
-      <p>Two months pass. You take several small prizes—fishing boats, a coaster with wine and cheese. Your share: £40. The crew begins to shake down into a working unit. Then the Admiralty's pay ship is delayed. Your men haven't been paid in four months.</p>
-
-      <p>They're hungry, angry, and looking to you for answers. You have £${gameState.prizeMoney} in your purse. You could spend £50 to buy food and keep them fed, or tell them to wait for the Navy's pay—which may never come.</p>
-    `,
-    choices: [
-      {
-        text: "Spend £50 of your own money to feed the crew",
-        next: 'afterPayCrisis',
-        effects: { prizeMoney: -50, crewReputation: 20, morale: 20 }
-      },
-      {
-        text: "Tell them to wait—it's not your responsibility",
-        next: 'afterPayCrisis',
-        effects: { crewReputation: -15, morale: -20, discipline: 2 }
-      },
-      {
-        text: "Promise them extra shares of the next prize instead",
-        next: 'afterPayCrisis',
-        effects: { crewReputation: 5, morale: 5, flags: { promisedExtraShares: true } }
-      }
-    ]
-  },
-
-  afterPayCrisis: {
-    title: "Consequences",
-    subtitle: "Trust Earned or Lost",
-    text: `
-      <p>Your choice has consequences. If you fed them from your own pocket, the men look at you with newfound respect. "The Captain takes care of his own," they mutter. If you refused, they're bitter. "Officers get their prize money, but we starve," someone says in the darkness.</p>
-
-      <p>The ship sails on. You're learning what it means to command—not just giving orders, but being responsible for sixty-five lives. Their health, their safety, their morale. It's exhausting.</p>
-
-      <p>Then one morning, you encounter something unexpected: a slave ship. British flag, en route from West Africa to the Caribbean with three hundred enslaved Africans in her hold. Legally, she's legitimate—Parliament hasn't banned the trade yet. But you can smell the ship from a mile away, hear the cries from below decks.</p>
-
-      <p>Your crew is watching you. Some are uncomfortable. Others don't care. What you do now will define who you are as a captain.</p>
-    `,
-    choices: [
-      {
-        text: "Board her and inspect—ensure they're following the law, at least",
-        next: 'slaveShipInspection',
-        effects: { discipline: 1, social: 1 }
-      },
-      {
-        text: "Ignore her—it's legal, not your concern",
-        next: 'continuePatrol',
-        effects: { discipline: 2 }
-      },
-      {
-        text: "Send a signal condemning the trade—make your position clear",
-        next: 'continuePatrol',
-        effects: { social: 2, crewReputation: 5, officerReputation: -5 }
-      }
-    ]
-  },
-
-  slaveShipInspection: {
-    title: "The Hold",
-    subtitle: "Horror",
-    text: `
-      <p>You board the slaver. The captain is defensive but lets you inspect. Below decks is hell: three hundred human beings chained in rows, lying in their own filth. The smell is indescribable. You see children, women, men—all of them staring with eyes that have seen the end of the world.</p>
-
-      <p>"All legal, sir," the captain says. "Got the manifests right here. King's customs approved."</p>
-
-      <p>He's right. It's legal. But standing in that hold, you understand viscerally what the slave trade means. This is the price of sugar, tobacco, cotton—the Empire's wealth built on this horror.</p>
-
-      <p>You can't free them without breaking the law and ending your career. But you've seen it now. You can't unsee it.</p>
-
-      <p>You return to <em>Serpent</em> and order the ship to continue. But something has changed in you.</p>
-    `,
-    choices: [
-      {
-        text: "Continue your patrol, haunted by what you saw",
-        next: 'continuePatrol',
-        effects: { social: 1 }
-      }
-    ]
-  },
-
-  continuePatrol: {
-    title: "Hunting",
-    subtitle: "Months Later",
-    text: `
-      <p>Months of cruising. You take more prizes—small ships, fishing boats, one valuable French privateer worth £80 to your share. Your total wealth grows. The crew either loves you or resents you, depending on how you've treated them.</p>
-
-      <p>Then: war. Official declaration. Britain and France are at war again—the Seven Years' War, though nobody knows it will last that long yet. Your orders change: aggressive action against French shipping.</p>
-
-      <p>You're hunting off the Brittany coast when the lookout calls: "Sail ho! Two ships, bearing east-northeast!"</p>
-
-      <p>Through your glass, you see them: two French frigates, each mounting 32 guns. They've spotted you too. <em>Serpent</em> has 14 guns. You're outnumbered and outgunned.</p>
-
-      <p>This is the moment. Your skills, your crew's loyalty, your ship's readiness—all of it will be tested. Run or fight? And if you run, can you escape?</p>
-    `,
-    choices: [
-      {
-        text: "Run—use your speed and seamanship to escape",
-        next: 'theAmbush',
-        effects: { seamanship: 1 }
-      },
-      {
-        text: "Fight—maybe you can cripple one and escape",
-        next: 'theAmbush',
-        effects: { gunnery: 1, discipline: 1 }
-      },
-      {
-        text: "Bluff—fly French colors and try to sail past them",
-        next: 'theAmbush',
-        effects: { social: 1, navigation: 1 }
-      }
-    ]
-  },
-
-  theAmbush: {
-    title: "The Ambush",
-    subtitle: "Survival",
-    text: `
-      <p>Your choice determines what happens next, but the outcome depends on everything you've built: your skills, your crew's morale, your ship's condition.</p>
-
-      <p>If you run, it's a chase. <em>Serpent</em> is fast, but the frigates are faster. You need every trick: throwing cargo overboard to lighten ship, rigging stunsails for extra speed, using your navigation knowledge to find shallow water where the deep-draft frigates can't follow. Your seamanship skill makes the difference.</p>
-
-      <p>If you fight, it's desperate. You rake one frigate with a perfect broadside—your gunnery training pays off—then use smoke to break away. But you take damage. Men die. It's close.</p>
-
-      <p>If you bluff, you sail straight toward them flying false colors. They hail you in French. If your social skill is high enough, you can fake a response. The deception works just long enough to get within range of British waters, then you run up your true colors and flee.</p>
-
-      <p>However you do it, you escape—barely. <em>Serpent</em> is damaged. You lost eight men. But you survived against odds that should have killed you.</p>
-
-      <p>You limp into Plymouth and make your report. The Admiralty is impressed. Commanding officers who can think fast and survive against superior forces are rare.</p>
-    `,
-    choices: [
-      {
-        text: "Await your next orders",
-        next: 'promotion',
-        effects: { seamanship: 2, discipline: 1, officerReputation: 15 }
-      }
-    ]
-  },
-
-  promotion: {
-    title: "Recognition",
-    subtitle: "1757",
-    text: `
-      <p>The Admiralty promotes you to Commander. It's not post-captain yet—that requires both seniority and a ship of twenty guns or more—but it's close. You've commanded well, survived impossible situations, and earned a reputation.</p>
-
-      <p>Your prize money has grown to £${gameState.prizeMoney}. If you've spent wisely, you're comfortable. If you've been generous to your crew, they love you. If you've been harsh, they fear you. All of it has shaped the officer you've become.</p>
-
-      <p>Your next assignment: second-in-command aboard HMS <em>Thunderer</em>, a 74-gun ship of the line. The ship is joining Admiral Hawke's fleet for major operations. This is the big time—fleet actions, ship-to-ship duels, the kind of warfare that makes or breaks careers.</p>
-
-      <p>You're twenty years old. You've been in the Navy for five years. You've seen storms, battles, death, and moral choices with no good answers. The boy who joined in Portsmouth is gone. In his place stands an officer, hardened and tested.</p>
-
-      <p>Your journey continues...</p>
-    `,
-    choices: [
-      {
-        text: "Report aboard HMS Thunderer",
-        next: 'endAct3',
-        effects: { rank: 'Commander', officerReputation: 10, prizeMoney: 80 }
-      }
-    ]
-  },
-
-  endAct3: {
+  act3End: {
     title: "Act Three Complete",
-    subtitle: "Your First Command",
+    subtitle: "First Command",
     text: `
       <p><strong>1754-1757: The Commander</strong></p>
 
-      <p>You commanded your own ship. Sixty-five men called you "Captain" and looked to you for everything—food, pay, safety, decisions. Some of them died under your command. Others thrived. Your choices shaped their lives and yours.</p>
+      <p>You commanded your own ship. Sixty-five men called you "Captain" and looked to you for everything. Some died under your command. Others thrived.</p>
 
-      <p>You faced impossible situations: outnumbered by enemy frigates, betrayed by bureaucratic delays, confronted with the horrors of the slave trade. You made choices with no right answers. You spent your own money to keep men alive, or you didn't. You pressed men into service, or paid for volunteers, or looked the other way.</p>
-
-      <p>Every decision had consequences. Every shilling spent or saved mattered. Every point of crew loyalty, officer reputation, and skill made the difference between success and disaster.</p>
+      <p>You faced impossible situations and made choices with no right answers. Every decision had consequences.</p>
 
       <p><strong>Act Four awaits: The Crucible...</strong></p>
-
-      <p><em>Your journey has been shaped by your choices. The officer you've become—for better or worse—is the product of hundreds of decisions across three acts. Check your stats to see where you stand. Everything you've done will matter in the final act.</em></p>
     `,
     choices: [
-      {
-        text: "Continue to Act Four (Coming soon...)",
-        next: 'endOfDemo',
-        effects: {}
-      }
+      { text: "Continue to Act Four", next: 'act4Start', effects: {} }
+    ],
+    onEnter: function() {
+      gameState.stats.actCompleted = 3;
+      gameState.chaptersUnlocked.push('act4');
+    }
+  },
+
+  // ============================================
+  // ACT 4 - THE CRUCIBLE
+  // ============================================
+  act4Start: {
+    title: "Admiral Hawke's Fleet",
+    subtitle: "November 1759",
+    location: "At Sea - Channel",
+    year: 1759,
+    text: `
+      <p>November 1759. The greatest naval operation of the war. Admiral Sir Edward Hawke commands a fleet of twenty-three ships of the line. Your mission: destroy the French invasion fleet at Brest before they can sail for England.</p>
+
+      <p>You've been promoted to Post-Captain—command of HMS <em>Resolution</em>, a 74-gun third-rate. Eight hundred men. This is the big time.</p>
+
+      <p>Admiral Hawke summons you to his flagship. He's a legend—the man who won the Battle of Cape Finisterre, who's spent his career fighting the French. Now he looks at you with sharp, assessing eyes.</p>
+
+      <p>"Captain {playerName}. I've read your record. Impressive, for a young man. I need officers who can think for themselves when the shooting starts. Can you do that?"</p>
+    `,
+    choices: [
+      { text: "Yes, sir. I've commanded in action before.", next: 'hawkesBriefing', effects: { hawke: 2, discipline: 1 } },
+      { text: "I'll do my duty, sir, whatever it requires.", next: 'hawkesBriefing', effects: { hawke: 1, officerReputation: 2 } }
+    ],
+    onEnter: function() {
+      unlockAchievement('postCaptain');
+      gameState.rank = 'Post-Captain';
+      gameState.ship = 'HMS Resolution';
+    }
+  },
+
+  hawkesBriefing: {
+    title: "The Plan",
+    subtitle: "Hawke's Briefing",
+    text: `
+      <p>Hawke spreads a chart on the table. "The French fleet is in Brest. Twenty-one ships of the line under Admiral Conflans. They're waiting for the right wind to sail, pick up their invasion transports at Quiberon Bay, and land troops in Scotland."</p>
+
+      <p>He jabs a finger at the chart. "We're going to stop them. The coast is treacherous—shoals, rocks, currents. The French think we won't risk it. They're wrong."</p>
+
+      <p>He looks around the assembled captains. "When we engage, I want aggression. Close with the enemy and destroy them. No hanging back, no waiting for orders. You see a Frenchman, you attack. Clear?"</p>
+
+      <p>The captains nod. This is Hawke's way—bold, aggressive, decisive. It's won him every battle he's fought.</p>
+
+      <p>"One more thing," Hawke adds. "The weather's turning. Storm coming. We fight in whatever conditions God gives us. Dismissed."</p>
+    `,
+    choices: [
+      { text: "Prepare for battle", next: 'quiberonApproach', effects: { hawke: 1 } }
     ]
   },
 
-  endOfDemo: {
-    title: "To Be Continued",
-    subtitle: "End of Current Content",
+  quiberonApproach: {
+    title: "Quiberon Bay",
+    subtitle: "November 20, 1759",
+    location: "Quiberon",
     text: `
-      <p>This is where the current story content ends. The framework is in place for a full novel-length interactive experience, with:</p>
+      <p>The morning of November 20th. The wind is howling from the west, driving massive seas before it. Through the spray and rain, you can see the French fleet—twenty-one ships of the line, running before the wind toward the shelter of Quiberon Bay.</p>
 
-      <ul style="text-align: left; color: #e8dcc4;">
-        <li>Character creation with three distinct backgrounds</li>
-        <li>Stat tracking and skill progression</li>
-        <li>Meaningful choices with consequences</li>
-        <li>Novel-length prose (600-1000 words per scene)</li>
-        <li>Save/load functionality</li>
-        <li>Mobile-optimized interface</li>
-      </ul>
+      <p>Hawke's signal breaks out: GENERAL CHASE.</p>
 
-      <p><strong>To add more story content:</strong> Open <code>game.js</code> and add new scene objects to the <code>scenes</code> database. Each scene needs:</p>
+      <p>Every ship for itself. Catch them before they reach safety.</p>
 
-      <ul style="text-align: left; color: #e8dcc4;">
-        <li><code>title</code>: Chapter/scene title</li>
-        <li><code>subtitle</code>: Subtitle for context</li>
-        <li><code>text</code>: The prose (use HTML for formatting)</li>
-        <li><code>choices</code>: Array of choice objects with text, next scene, and stat effects</li>
-      </ul>
+      <p><em>Resolution</em> surges forward, her hull groaning with the strain. Around you, the British fleet spreads out in pursuit. Ahead, the French are trying to form a line, but the weather is against them. Ships are scattering, some running for the bay, others turning to fight.</p>
 
-      <p>The engine handles everything else automatically—rendering, stats, saves, and navigation.</p>
+      <p>You can see two French ships ahead of you. One is a two-decker, about your equal. The other is a massive three-decker—the <em>Soleil Royal</em>, Conflans' flagship, 80 guns.</p>
 
-      <p><em>Your naval career awaits further adventures...</em></p>
+      <p>Which do you attack?</p>
     `,
     choices: [
-      {
-        text: "Return to the beginning",
-        next: 'start',
-        effects: {}
-      }
+      { text: "Attack the two-decker—a fair fight", next: 'quiberonBattle', effects: { gunnery: 1, discipline: 1 } },
+      { text: "Attack the flagship—glory or death", next: 'quiberonBattle', effects: { gunnery: 2, hawke: 2, officerReputation: 5 } }
+    ],
+    onEnter: function() {
+      unlockAchievement('quiberon');
+    }
+  },
+
+  quiberonBattle: {
+    title: "Battle of Quiberon Bay",
+    subtitle: "Into the Storm",
+    text: `
+      <p>The battle is chaos. Ships crashing through mountainous waves, guns roaring, masts falling. The French are fighting desperately, but they're caught between the British fleet and a lee shore. Rocks wait to claim any ship that loses control.</p>
+
+      <p>You close with your chosen enemy. The broadsides are devastating—wood splinters flying, men screaming, blood running across the deck. <em>Resolution</em> shudders with every hit, but your crew fights magnificently.</p>
+
+      <p>A French 74 runs aground on a shoal, her back breaking. Another strikes to HMS <em>Royal George</em>. The <em>Soleil Royal</em> is surrounded, battered from all sides.</p>
+
+      <p>Then disaster—a British ship, <em>HMS Essex</em>, misjudges the shoals and runs aground. She's trapped, helpless, French ships closing in. You can try to rescue her crew, but it means turning away from your current engagement.</p>
+    `,
+    choices: [
+      { text: "Continue the fight—war is cruel", next: 'quiberonVictory', effects: { discipline: 2, gunnery: 1, crewReputation: -5 } },
+      { text: "Break off and rescue the Essex's crew", next: 'quiberonVictory', effects: { social: 2, crewReputation: 10, hawke: 1 } }
     ]
+  },
+
+  quiberonVictory: {
+    title: "Victory",
+    subtitle: "The French Fleet Destroyed",
+    text: `
+      <p>By nightfall, the battle is over. The French fleet is destroyed—six ships captured, one burned, several more wrecked on the rocks. The invasion is cancelled. England is saved.</p>
+
+      <p>But the cost is high. Two British ships lost to the rocks. Hundreds of men drowned. <em>Resolution</em> is battered, her hull holed in three places, her mizzen mast gone.</p>
+
+      <p>Admiral Hawke's dispatch to the Admiralty is simple: "I have taken, sunk, burned, or destroyed seven of the enemy's capital ships."</p>
+
+      <p>Your name is mentioned in dispatches. You fought well. The Admiralty takes notice.</p>
+
+      <p>In the aftermath, you learn that Rodgers was wounded—badly. He'll live, but his sea career is over. Caruthers distinguished himself and is promoted. Jenkins, your old friend from the foretop, died at his gun.</p>
+
+      <p>Victory always has a price.</p>
+    `,
+    choices: [
+      { text: "Return to England", next: 'afterQuiberon', effects: { prizeMoney: 200, officerReputation: 15, rodgers: -2, jenkins: -10 } }
+    ],
+    onEnter: function() {
+      gameState.stats.battlesWon++;
+      gameState.stats.menLost += 47;
+    }
+  },
+
+  afterQuiberon: {
+    title: "England",
+    subtitle: "1760",
+    location: "Portsmouth",
+    year: 1760,
+    text: `
+      <p>You return to England a hero. The newspapers print your name. Society hostesses invite you to balls. The Admiralty gives you a new ship and hints at further promotion.</p>
+
+      <p>Elizabeth is waiting in Portsmouth. She's older now—twenty-three—and she's waited three years for you. Her eyes shine when she sees you, but there's something else there too. A question.</p>
+
+      <p>"I've waited," she says quietly. "But I can't wait forever. The sea takes you away, and I never know if you'll come back. What do we have, really? A few weeks a year, stolen moments between voyages?"</p>
+
+      <p>She's right. A naval officer's wife lives in constant fear, constant loneliness. You could retire now—you have money, reputation, connections. You could have a life on shore, with her.</p>
+
+      <p>Or you could continue. The war isn't over. The Admiralty has plans for you. Flag rank is possible, eventually. Admiral {playerName}. It has a ring to it.</p>
+
+      <p>What do you want your life to be?</p>
+    `,
+    choices: [
+      { text: "Continue your naval career—duty calls", next: 'continueCareer', effects: { discipline: 2, officerReputation: 5, elizabeth: -3 } },
+      { text: "Retire and marry Elizabeth—enough is enough", next: 'retireEnding', effects: { social: 3, elizabeth: 5 } },
+      { text: "Ask her to wait just a little longer—one more voyage", next: 'oneMoreVoyage', effects: { elizabeth: 1 } }
+    ]
+  },
+
+  continueCareer: {
+    title: "The Service",
+    subtitle: "Your Choice",
+    text: `
+      <p>"I'm sorry," you tell Elizabeth. "I can't stop. Not yet. The war needs me. England needs me."</p>
+
+      <p>She nods, tears in her eyes. "I know. I've always known. Go, then. Win your battles. Earn your glory." She kisses you, once, and walks away.</p>
+
+      <p>You watch her go, and something in your chest aches. But the sea is calling, and you've never been able to resist its song.</p>
+
+      <p>Years pass. You rise through the ranks. Commodore. Rear Admiral. You fight more battles, take more prizes, lose more friends. The war ends in 1763 with British triumph.</p>
+
+      <p>By 1770, you are Vice Admiral Sir {playerName}, Knight of the Bath. Your portrait hangs in the Admiralty. Your name is spoken with respect throughout the Navy.</p>
+
+      <p>But when you look in the mirror, you see an old man. The sea has taken everything from you—youth, love, peace. It gave you glory in return.</p>
+
+      <p>Was it worth it?</p>
+    `,
+    choices: [
+      { text: "See your final legacy", next: 'admiralEnding', effects: { rank: 'Vice Admiral' } }
+    ],
+    onEnter: function() {
+      unlockAchievement('admiral');
+    }
+  },
+
+  retireEnding: {
+    title: "A Different Life",
+    subtitle: "Retirement",
+    text: `
+      <p>You resign your commission. The Admiralty is shocked—you're one of their rising stars. But you've had enough of blood and gunsmoke and the screams of dying men.</p>
+
+      <p>You marry Elizabeth in the spring of 1760. You buy a small estate in Devonshire, overlooking the sea. You can still see the ships passing, bound for distant waters, and sometimes you feel the old pull.</p>
+
+      <p>But then Elizabeth calls you for dinner, and your children run to greet you, and you remember why you chose this.</p>
+
+      <p>Years pass. The war ends. Old shipmates visit sometimes—those who survived. Caruthers becomes an admiral. You read about his victories in the newspapers and feel... nothing. You made your choice.</p>
+
+      <p>You die in 1789, in your own bed, with your wife and children around you. Your last words are about the sea—you can hear it, you say, calling you home.</p>
+
+      <p>Perhaps it finally claimed you after all.</p>
+    `,
+    choices: [
+      { text: "The End", next: 'gameComplete', effects: {} }
+    ],
+    onEnter: function() {
+      unlockAchievement('romance');
+    }
+  },
+
+  oneMoreVoyage: {
+    title: "One More Voyage",
+    subtitle: "A Compromise",
+    text: `
+      <p>"One more voyage," you promise. "One more year. Then I'll come home, and we'll marry, and I'll never leave again."</p>
+
+      <p>Elizabeth looks at you for a long moment. "You promise?"</p>
+
+      <p>"I promise."</p>
+
+      <p>She accepts. You sail with the fleet to the West Indies, one last campaign. You fight well, earn more prize money, more glory. And then, true to your word, you resign.</p>
+
+      <p>You marry Elizabeth in 1761. You have three children. You take a position at the Admiralty—desk work, but it keeps you close to the sea you love without taking you from your family.</p>
+
+      <p>You live to see your children grow, your grandchildren born. You tell them stories of storms and battles, of Quiberon Bay and the hurricane, of men you loved who died too young.</p>
+
+      <p>When death finally comes, you're ready. You've had a full life—adventure and love, glory and peace. Few men can say the same.</p>
+    `,
+    choices: [
+      { text: "The End", next: 'gameComplete', effects: {} }
+    ],
+    onEnter: function() {
+      unlockAchievement('romance');
+    }
+  },
+
+  admiralEnding: {
+    title: "Legacy",
+    subtitle: "Vice Admiral Sir {playerName}",
+    text: `
+      <p>You die in 1785, alone in your great house in London. Your servants find you in your study, a glass of port in your hand, your eyes fixed on the portrait of HMS <em>Resolution</em> that hangs above the fireplace.</p>
+
+      <p>The newspapers write obituaries praising your career. The Admiralty names a ship after you. Young officers study your tactics.</p>
+
+      <p>But there is no one to mourn you. Elizabeth married someone else, eventually. Your friends are all dead. The Navy was your life, and now your life is over.</p>
+
+      <p>Was it worth it? The glory, the victories, the fame? You'll never know. Perhaps that's the truest answer of all.</p>
+
+      <p><strong>THE END</strong></p>
+
+      <p><em>Thank you for playing His Majesty's Service.</em></p>
+    `,
+    choices: [
+      { text: "View your complete statistics", next: 'gameComplete', effects: {} }
+    ]
+  },
+
+  gameComplete: {
+    title: "Journey Complete",
+    subtitle: "Your Naval Career",
+    text: `
+      <p><strong>Congratulations! You have completed His Majesty's Service.</strong></p>
+
+      <p>Your career spanned from 1750 to the end of the Seven Years' War and beyond. You rose from midshipman to ${gameState.rank}, commanding ships and men through some of the greatest naval battles in history.</p>
+
+      <p><strong>Final Statistics:</strong></p>
+      <ul>
+        <li>Final Rank: ${gameState.rank}</li>
+        <li>Prize Money: £${gameState.prizeMoney}</li>
+        <li>Battles Won: ${gameState.stats.battlesWon}</li>
+        <li>Prizes Taken: ${gameState.stats.prizesTaken}</li>
+        <li>Men Lost: ${gameState.stats.menLost}</li>
+        <li>Achievements: ${gameState.achievements.length}/${Object.keys(achievementsDef).length}</li>
+      </ul>
+
+      <p><em>You may restart to explore different paths and endings.</em></p>
+    `,
+    choices: [
+      { text: "Start a new career", next: 'start', effects: {} }
+    ],
+    onEnter: function() {
+      unlockAchievement('completionist');
+      gameState.stats.actCompleted = 4;
+    }
   }
+
 };
+
+// ============================================
+// ACHIEVEMENT SYSTEM
+// ============================================
+function unlockAchievement(id) {
+  if (!gameState.achievements.includes(id) && achievementsDef[id]) {
+    gameState.achievements.push(id);
+    const ach = achievementsDef[id];
+    showNotification(`Achievement Unlocked!<p>${ach.icon} ${ach.name}</p>`, 'achievement');
+    updateAchievementCount();
+    saveGame();
+  }
+}
+
+function updateAchievementCount() {
+  const el = document.getElementById('achievement-count');
+  if (el) el.textContent = gameState.achievements.length;
+}
 
 // ============================================
 // SCENE RENDERING
@@ -2099,6 +1594,16 @@ function renderScene(sceneId) {
   }
 
   gameState.currentScene = sceneId;
+  gameState.stats.choicesMade++;
+
+  // Update year and location if specified
+  if (scene.year) gameState.year = scene.year;
+  if (scene.location) gameState.location = scene.location;
+
+  // Run onEnter function if exists
+  if (scene.onEnter && typeof scene.onEnter === 'function') {
+    scene.onEnter();
+  }
 
   // Update header
   document.getElementById('chapter-title').textContent = scene.title;
@@ -2120,16 +1625,24 @@ function renderScene(sceneId) {
   scene.choices.forEach(choice => {
     const button = document.createElement('button');
     button.className = 'choice-button';
-    button.textContent = choice.text;
+
+    let choiceText = choice.text;
+    if (gameState.playerName) {
+      choiceText = choiceText.replace(/{playerName}/g, gameState.playerName);
+    }
+    button.textContent = choiceText;
     button.onclick = () => makeChoice(choice);
     choicesContainer.appendChild(button);
   });
 
-  // Update stats display
+  // Update UI
   updateUI();
 
   // Scroll to top
   document.querySelector('.story-main').scrollTop = 0;
+
+  // Auto-save
+  saveGame();
 }
 
 // ============================================
@@ -2148,79 +1661,143 @@ function makeChoice(choice) {
         return;
       }
       gameState.playerName = name;
-      console.log(`Player name set to: ${name}`);
     }
   }
 
-  // Apply stat effects
+  // Apply effects
   if (choice.effects) {
-    for (let key in choice.effects) {
-      if (key === 'background' || key === 'rank' || key === 'ship') {
-        // Direct assignment for string values
-        gameState[key] = choice.effects[key];
-        console.log(`${key} set to: ${choice.effects[key]}`);
-      } else if (gameState.relationships.hasOwnProperty(key)) {
-        // Handle relationship changes (numeric)
-        gameState.relationships[key] += choice.effects[key];
-        console.log(`Relationship with ${key} changed by ${choice.effects[key]}, now ${gameState.relationships[key]}`);
-      } else if (gameState.hasOwnProperty(key)) {
-        // Handle numeric stats
-        gameState[key] += choice.effects[key];
-        console.log(`${key} changed by ${choice.effects[key]}, now ${gameState[key]}`);
-      } else {
-        // Everything else goes to flags
-        gameState.flags[key] = choice.effects[key];
-      }
-    }
+    applyEffects(choice.effects);
   }
+
+  // Check for achievements based on stats
+  checkStatAchievements();
 
   // Move to next scene
   if (choice.next) {
     renderScene(choice.next);
-    saveStory(); // Auto-save after each choice
   }
+}
+
+function applyEffects(effects) {
+  for (let key in effects) {
+    if (key === 'background' || key === 'rank' || key === 'ship') {
+      gameState[key] = effects[key];
+    } else if (gameState.relationships.hasOwnProperty(key)) {
+      gameState.relationships[key] = Math.max(-10, Math.min(10, gameState.relationships[key] + effects[key]));
+    } else if (gameState.hasOwnProperty(key) && typeof gameState[key] === 'number') {
+      gameState[key] += effects[key];
+      // Clamp reputation values
+      if (key === 'crewReputation' || key === 'officerReputation' || key === 'morale') {
+        gameState[key] = Math.max(0, Math.min(100, gameState[key]));
+      }
+    } else if (key === 'flags') {
+      Object.assign(gameState.flags, effects[key]);
+    }
+  }
+}
+
+function checkStatAchievements() {
+  if (gameState.prizeMoney >= 500) unlockAchievement('richMan');
+  if (gameState.crewReputation >= 90) unlockAchievement('crewLove');
+  if (gameState.navigation >= 25) unlockAchievement('masterNavigator');
+  if (gameState.gunnery >= 25) unlockAchievement('masterGunner');
 }
 
 // ============================================
 // UI UPDATE
 // ============================================
 function updateUI() {
+  // Basic stats
   document.getElementById('rank').textContent = gameState.rank;
   document.getElementById('prize').textContent = '£' + gameState.prizeMoney;
-  document.getElementById('seamanship').textContent = gameState.seamanship;
-  document.getElementById('gunnery').textContent = gameState.gunnery;
-  document.getElementById('navigation').textContent = gameState.navigation;
-  document.getElementById('discipline').textContent = gameState.discipline;
-  document.getElementById('social').textContent = gameState.social;
+  document.getElementById('current-ship').textContent = gameState.ship;
+  document.getElementById('current-year').textContent = gameState.year;
+  document.getElementById('current-location').textContent = gameState.location;
+
+  // Skills with bars
+  const maxSkill = 30;
+  ['seamanship', 'gunnery', 'navigation', 'discipline', 'social'].forEach(skill => {
+    document.getElementById(skill).textContent = gameState[skill];
+    const bar = document.getElementById(skill + '-bar');
+    if (bar) bar.style.width = (gameState[skill] / maxSkill * 100) + '%';
+  });
+
+  // Reputation
   document.getElementById('crew-rep').textContent = gameState.crewReputation;
   document.getElementById('officer-rep').textContent = gameState.officerReputation;
   document.getElementById('morale').textContent = gameState.morale;
+
+  // Relationships
+  updateRelationships();
+
+  // Map
+  updateMap();
+
+  // Achievement count
+  updateAchievementCount();
+}
+
+function updateRelationships() {
+  for (let name in gameState.relationships) {
+    const val = gameState.relationships[name];
+    const el = document.getElementById('rel-' + name);
+    const valEl = document.getElementById(name + '-rel');
+
+    if (el && valEl) {
+      // Show relationship if it's been affected
+      if (val !== 0) {
+        el.style.display = 'flex';
+        valEl.textContent = (val > 0 ? '+' : '') + val;
+        valEl.className = 'stat-value relationship-value ' +
+          (val > 0 ? 'positive' : val < 0 ? 'negative' : 'neutral');
+      }
+    }
+  }
+}
+
+function updateMap() {
+  const loc = locations[gameState.location];
+  const dot = document.getElementById('map-dot');
+  if (loc && dot) {
+    dot.style.left = loc.x + '%';
+    dot.style.top = loc.y + '%';
+  }
+}
+
+function togglePanel(panelId) {
+  const panel = document.getElementById(panelId);
+  if (panel) {
+    panel.classList.toggle('collapsed');
+    const h3 = panel.querySelector('h3');
+    if (h3) {
+      h3.textContent = h3.textContent.replace(/[▼▶]/, panel.classList.contains('collapsed') ? '▶' : '▼');
+    }
+  }
 }
 
 // ============================================
 // SAVE/LOAD SYSTEM
 // ============================================
-function saveStory() {
-  console.log('=== SAVING GAME ===');
+function saveGame(slot = 0) {
   try {
-    localStorage.setItem('navalNovelSave', JSON.stringify(gameState));
-    showNotification('Progress Saved');
+    const saveData = JSON.stringify(gameState);
+    localStorage.setItem('navalNovel_slot' + slot, saveData);
+    if (slot === 0) {
+      showNotification('Progress Saved');
+    }
     return true;
   } catch (e) {
     console.error('Save failed:', e);
-    showNotification('Save Failed');
     return false;
   }
 }
 
-function loadStory() {
-  console.log('=== LOADING GAME ===');
+function loadGame(slot = 0) {
   try {
-    const saved = localStorage.getItem('navalNovelSave');
+    const saved = localStorage.getItem('navalNovel_slot' + slot);
     if (saved) {
       const loaded = JSON.parse(saved);
       Object.assign(gameState, loaded);
-      console.log('Loaded game state:', gameState);
       return true;
     }
   } catch (e) {
@@ -2229,47 +1806,99 @@ function loadStory() {
   return false;
 }
 
-function restartStory() {
-  console.log('=== RESTARTING GAME ===');
+function restartGame() {
   if (confirm('Start a new career? Your current progress will be lost.')) {
-    localStorage.removeItem('navalNovelSave');
-
-    // Reset game state
-    gameState.playerName = '';
-    gameState.background = null;
-    gameState.currentScene = 'start';
-    gameState.rank = 'Midshipman';
-    gameState.ship = 'HMS Indefatigable';
-    gameState.seamanship = 0;
-    gameState.gunnery = 0;
-    gameState.navigation = 0;
-    gameState.discipline = 0;
-    gameState.social = 0;
-    gameState.crewReputation = 50;
-    gameState.officerReputation = 50;
-    gameState.prizeMoney = 0;
-    gameState.morale = 50;
-    gameState.relationships = {
-      jenkins: 0,
-      rodgers: 0,
-      caruthers: 0,
-      blake: 0,
-      harrow: 0,
-      thornton: 0
-    };
-    gameState.flags = {};
-
-    renderScene('start');
-    showNotification('New Career Started');
+    localStorage.removeItem('navalNovel_slot0');
+    location.reload();
   }
+}
+
+// ============================================
+// MODALS
+// ============================================
+function openModal(content) {
+  document.getElementById('modal-body').innerHTML = content;
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function showChapterSelect() {
+  let html = '<h2>Chapter Select</h2><div class="chapter-list">';
+
+  for (let id in chapters) {
+    const ch = chapters[id];
+    const unlocked = gameState.chaptersUnlocked.includes(id) || gameState.chaptersUnlocked.includes(ch.scene);
+
+    html += `<div class="chapter-item ${unlocked ? '' : 'locked'}"
+      onclick="${unlocked ? `closeModal(); renderScene('${ch.scene}')` : ''}">
+      <h4>${ch.name}</h4>
+      <p>${unlocked ? ch.desc : '🔒 Complete previous acts to unlock'}</p>
+    </div>`;
+  }
+
+  html += '</div>';
+  openModal(html);
+}
+
+function showStatistics() {
+  let html = `<h2>Career Statistics</h2>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-number">${gameState.stats.battlesWon}</div><div class="stat-title">Battles Won</div></div>
+      <div class="stat-box"><div class="stat-number">${gameState.stats.prizesTaken}</div><div class="stat-title">Prizes Taken</div></div>
+      <div class="stat-box"><div class="stat-number">${gameState.stats.menLost}</div><div class="stat-title">Men Lost</div></div>
+      <div class="stat-box"><div class="stat-number">${gameState.stats.choicesMade}</div><div class="stat-title">Choices Made</div></div>
+    </div>
+    <h3>Current Standing</h3>
+    <p>Rank: ${gameState.rank}<br>
+    Ship: ${gameState.ship}<br>
+    Prize Money: £${gameState.prizeMoney}<br>
+    Acts Completed: ${gameState.stats.actCompleted}/4</p>`;
+  openModal(html);
+}
+
+function showEncyclopedia() {
+  let html = '<h2>Naval Encyclopedia</h2><div class="encyclopedia-list">';
+
+  for (let term in encyclopedia) {
+    html += `<details class="encyclopedia-item">
+      <summary>${term}</summary>
+      <div class="definition">${encyclopedia[term]}</div>
+    </details>`;
+  }
+
+  html += '</div>';
+  openModal(html);
+}
+
+function showAchievements() {
+  let html = '<h2>Achievements</h2><div class="achievement-grid">';
+
+  for (let id in achievementsDef) {
+    const ach = achievementsDef[id];
+    const unlocked = gameState.achievements.includes(id);
+
+    html += `<div class="achievement-item ${unlocked ? 'unlocked' : 'locked'}">
+      <div class="achievement-icon">${unlocked ? ach.icon : '🔒'}</div>
+      <div class="achievement-info">
+        <h4>${unlocked ? ach.name : '???'}</h4>
+        <p>${unlocked ? ach.desc : 'Keep playing to unlock'}</p>
+      </div>
+    </div>`;
+  }
+
+  html += '</div>';
+  openModal(html);
 }
 
 // ============================================
 // NOTIFICATIONS
 // ============================================
-function showNotification(message) {
+function showNotification(message, type = '') {
   const notification = document.createElement('div');
-  notification.className = 'notification';
+  notification.className = 'notification ' + type;
   notification.innerHTML = `<strong>${message}</strong>`;
   document.body.appendChild(notification);
 
@@ -2277,35 +1906,56 @@ function showNotification(message) {
   setTimeout(() => {
     notification.classList.remove('show');
     setTimeout(() => notification.remove(), 300);
-  }, 2000);
+  }, 3000);
+}
+
+// ============================================
+// SOUND
+// ============================================
+function toggleSound() {
+  const audio = document.getElementById('ambient-ocean');
+  const checkbox = document.getElementById('sound-toggle');
+
+  if (checkbox && checkbox.checked) {
+    audio.play().catch(() => {});
+  } else {
+    audio.pause();
+  }
 }
 
 // ============================================
 // INITIALIZATION
 // ============================================
-console.log('=== SETTING UP EVENT LISTENERS ===');
-
 document.addEventListener('DOMContentLoaded', function() {
   console.log('=== DOM CONTENT LOADED ===');
 
-  // Set up button listeners
-  document.getElementById('save-btn').addEventListener('click', saveStory);
+  // Button listeners
+  document.getElementById('save-btn').addEventListener('click', () => saveGame(0));
   document.getElementById('load-btn').addEventListener('click', function() {
-    if (loadStory()) {
+    if (loadGame(0)) {
       renderScene(gameState.currentScene);
       showNotification('Progress Loaded');
     } else {
       showNotification('No saved game found');
     }
   });
-  document.getElementById('restart-btn').addEventListener('click', restartStory);
+  document.getElementById('restart-btn').addEventListener('click', restartGame);
+  document.getElementById('chapter-btn').addEventListener('click', showChapterSelect);
+  document.getElementById('stats-btn').addEventListener('click', showStatistics);
+  document.getElementById('encyclopedia-btn').addEventListener('click', showEncyclopedia);
+  document.getElementById('achievements-btn').addEventListener('click', showAchievements);
+  document.getElementById('sound-toggle').addEventListener('change', toggleSound);
+  document.getElementById('achievements-mini').addEventListener('click', showAchievements);
 
-  // Try to load saved game, or start new
-  if (loadStory()) {
-    console.log('Loading saved game at scene:', gameState.currentScene);
+  // Close modal on overlay click
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Load or start new
+  if (loadGame(0)) {
     renderScene(gameState.currentScene);
   } else {
-    console.log('No saved game found, starting new story');
     renderScene('start');
   }
 
